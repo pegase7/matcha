@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Photos{% endblock %}
+
+{% block content %}
+{% include 'nav.html' %}
+<br><br>
+<h1>J'ajoute des photos </h1>
+<br><br><br><br>
+
+<div class="row">
+    <div class="col-12 col-sm-4 col-md-3 col-lg">Photo 1</div>
+    <div class="col-12 col-sm-4 col-md-3 col-lg">Photo 2</div>
+    <div class="col-12 col-sm-4 col-md-3 col-lg">Photo 3</div>
+    <div class="col-12 col-sm-4 col-md-3 col-lg">Photo 4</div>
+    <div class="col-12 col-sm-4 col-md-3 col-lg">Photo 5</div>
+ </div>
+ <br><br>
+ Importer une photographie
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="maphoto" id="choix">
+    <button type="submit" class="btn btn-primary btn-lg mb-2" >charger la photo</button>
+</form>
+
+{% endblock %}

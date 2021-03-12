@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Bienvenue{% endblock %}
+{% block content %}
+<div id="center">
+<br>
+<h1>Bienvenue </h1>
+<br><br><br><br>
+<h2>
+<form method="post" >
+
+    <p>Login<br><input type="text" name="login" /></p>
+    <p>Mot de passe<br><input type="password" name="password" /></p>
+    <h3>
+    <a href="{{ url_for('forgot')}}">J'ai oublié mon mot de passe</a></h3><br>
+    <button type="submit" class="btn btn-primary btn-lg mb-2" >Connexion</button>
+    <br><br>
+    <a href="{{ url_for('registration')}}">
+    <button type="button" class="btn btn-primary btn-lg mb-2" >Inscription</button></a>
+ </form>
+
+</h2></div>
+{% endblock %}
+
