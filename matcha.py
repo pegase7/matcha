@@ -1,12 +1,12 @@
 from flask import *
 from PIL import Image  
 import os
-from flask_mail import Mail, Message
-from config import ConfigMail
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
-app.config.from_object(ConfigMail)
-mail = Mail(app)
+app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
 
@@ -48,7 +48,8 @@ def recherche():
 def registration():
     if request.method=="POST":
         user=request.form.get('login')
-        session['user']= {'name' : user}   
+        mail=request.form.get('courriel')
+        session['user']= {'name' : user, 'email' : mail}   
         return redirect(url_for('send'))
     else:
         return render_template('registration.html')
@@ -64,7 +65,20 @@ def logout():
 
 @app.route('/send/')
 def send():
-    msg=Message("confirmation d'inscription",recipients=['ogasnier@gmail.com'])
-    msg.body="Bravo vous venez de vous inscrire !"
-    mail.send(msg)
+    Fromadd = "matcha@ik.me"
+    Toadd = session['user']['email']   ##  Spécification du destinataire
+    message = MIMEMultipart()    
+    message['From'] = Fromadd   
+    message['To'] = Toadd   
+    message['Subject'] = "inscription" 
+    msg = "Bravo, " + session['user']['name'] +" vous êtes maintenant inscrit"    
+    message.attach(MIMEText(msg.encode('utf-8'), 'plain', 'utf-8'))  
+    serveur = smtplib.SMTP('mail.infomaniak.com', 587)  ## Connexion au serveur sortant 
+    serveur.starttls()    ## Spécification de la sécurisation
+    serveur.login(Fromadd, "42Flask@lyon")    ## Authentification
+    texte= message.as_string().encode('utf-8')    
+    Toadds = [Toadd]
+    serveur.sendmail(Fromadd, Toadds, texte)    ## Envoi du mail
+    serveur.quit() 
     return redirect(url_for('accueil'))
+    
