@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Validation photo{% endblock %}
+{% block content %}
+{% include 'nav.html' %}
+<br><br>
+<h1>Ma photo 
+<br><br>
+<img src="{{url_for('static', filename='photo/temp.jpg')}}" alt="">
+<br>
+<a href="{{ url_for('photo')}}">
+    <button type="button" class="btn btn-primary btn-lg mb-2" >Annuler</button></a>  
+    <a href="{{ url_for('photo')}}">
+        <button type="button" class="btn btn-primary btn-lg mb-2" >OK</button></a> 
+<br></h1>
+
+{% endblock %}

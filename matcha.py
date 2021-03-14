@@ -23,8 +23,11 @@ def homepage():
 def photo():
     if request.method=="POST":
         f = request.files['maphoto']
-        #size = os.path.getsize(f)
-        return f.filename
+        b=f.filename
+        path = 'static/photo'
+        f.save(os.path.join(path, 'temp.jpg'))
+        
+        return redirect(url_for('okphoto'))
     else:
         return render_template('photo.html')
 
@@ -82,3 +85,7 @@ def send():
     serveur.quit() 
     return redirect(url_for('accueil'))
     
+@app.route('/okphoto')
+def okphoto():
+    os.remove('static/photo/temp.jpg')
+    return render_template('okphoto.html')
