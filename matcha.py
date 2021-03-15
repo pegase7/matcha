@@ -4,18 +4,35 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import psycopg2
+from UserManager import USERS_MANAGER
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
 
+
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
+    users = USERS_MANAGER().get_users()
     if request.method=="POST":
         user=request.form.get('login')
-        session['user']= {'name' : user}
-        return redirect(url_for('accueil'))
+        pwd=request.form.get('password')
+        rep='unknown'
+        for u in users:
+            if u[3] == user:
+                rep = 'ok'
+                if u[4] == pwd:
+                    session['user']= {'name' : user}
+                    return redirect(url_for('accueil'))
+                else:
+                    rep = "Mauvais mot de passe"
+        if rep == 'unknown':
+            rep = 'Utilisateur inconnu, merci de vous inscrire'
+        else:
+            rep = 'Mauvais mot de passe, merci de réessayer'
+        return  render_template('home.html', rep = rep)
     else:   
         return render_template('home.html')
 
@@ -41,7 +58,15 @@ def test():
 
 @app.route('/profil/')
 def profil():
-    return render_template('profil.html')
+    users = USERS_MANAGER().get_users()
+    user = session['user']['name']
+    for u in users:
+        if u[3] == user:
+            nom = u[2]
+            prenom = u[1]
+            sexe= u[5]
+            orientation = u[6]
+    return render_template('profil.html', nom = nom, prenom = prenom, sexe=sexe, orientation=orientation )
 
 @app.route('/recherche/')
 def recherche():
@@ -87,5 +112,5 @@ def send():
     
 @app.route('/okphoto')
 def okphoto():
-    os.remove('static/photo/temp.jpg')
+    #os.remove('static/photo/temp.jpg')
     return render_template('okphoto.html')

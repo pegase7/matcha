@@ -5,6 +5,53 @@
 {% include 'nav.html' %}
 <br><br>
 <h1>Mon profil </h1>
-<br><br><br><br>
+<br><br>
+<h3>
+    
+    <div class="row"><div class="col-1"></div>
+        <div class="col-2">
+            Nom : 
+        </div>
+        <div class="col-9">
+            {{nom}}
+        </div>
+    </div>
+    <div class="row"><div class="col-1"></div>
+        <div class="col-2">
+            Prénom: 
+        </div>
+        <div class="col-9">
+            {{prenom}}
+        </div>
+    </div></h3>
+    <div class="row"> -</div>
+    <h4><div class="row"><div class="col-1"></div>
+        <div class="col-2">
+            Sexe :
+        </div>
+        <div class="col-9">
+            {{sexe}}
+        </div>
+    </div>
+    <div class="row"><div class="col-1"></div>
+        <div class="col-2">
+            Orientation sexuelle :
+        </div>
+        <div class="col-9">
+            {{orientation}}
+        </div>
+    </div>
+        <div class="row"><div class="col-1"></div>
+        <div class="col-2">
+            Présentation :
+        </div>
+        <div class="col-9">
+            
+        </div>
+    </div></h4>
+     <br>
+     <h1>
+     <button type="button" class="btn btn-primary btn-lg mb-2" >Modifier</button></h1>
+<br><br>
 
 {% endblock %}
