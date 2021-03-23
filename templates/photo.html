@@ -3,9 +3,9 @@
 
 {% block content %}
 {% include 'nav.html' %}
-<br><br>
-<h1>J'ajoute des photos </h1>
-<br><br><br><br>
+<br>
+<h1>Mes photos</h1>
+<br><br><br>
 
 <div class="row">
     <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph1}} alt="" width="200"><br> Photo 1 (profil)</div>
@@ -24,8 +24,12 @@
         <OPTION>5
         </SELECT><br>
     <input type="file" name="maphoto" id="choix">
-    <button type="submit" class="btn btn-primary btn-lg mb-2" >charger la photo</button>
-    <button type="submit" class="btn btn-primary btn-lg mb-2" >effacer la photo</button>
+    <button type="submit" class="btn btn-primary btn-lg mb-2" name='save' onClick="refresh() ">charger la photo </button>
+    <button type="submit" class="btn btn-primary btn-lg mb-2" name="raz">effacer la photo</button>
+    
 </form>
-
+<script>function refresh(){
+    history.go(0);
+    window.location.href = window.location.href;
+}</script>
 {% endblock %}

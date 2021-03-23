@@ -1,3 +1,21 @@
+<?php
+  /**
+   * Empêcher la mise en cache des pages avec PHP
+   *
+   * La fonction doit-être appellée avant toute balise HTML,
+   * espace blanc, echo(), print()...
+   *
+   * @param : void
+   * @return : void
+   */
+  function empecherLaMiseEnCache()
+  {
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+    header('Cache-Control: no-cache, must-revalidate');
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +64,7 @@
 }
       </style>
     <title>{% block title %}{% endblock %} </title>
-</head>
+ </head>
     
     <header>le site de Matcha</header><br>
    

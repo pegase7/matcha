@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Modification du profil{% endblock %}
+{% block content %}
+{% include 'nav.html' %}
+<br><br>
+<h1>bonjour {{session['user']['name']}}</h1>
+<br>
+<form method="post">
+    <p>Nom<br><input type="text" name="name" placeholder={{nom}} /></p>
+    <p>Prénom<br><input type="text" name="first_name" placeholder={{prenom}} /></p>
+    <p>E-Mail<br><input type="email" name="courriel" placeholder={{email}} /></p>
+    
+    <p>Sexe</p>
+<div>
+  <input type="radio" id="Male" name="sexe" value="Male"
+         checked>
+  <label for="Male">Male</label>
+</div>
+
+<div>
+  <input type="radio" id="Female" name="sexe" value="Female">
+  <label for="Female">Female</label>
+</div><br>
+
+<p>Orientation</p>
+<div>
+  <input type="radio" id="Bi" name="orientation" value="Bi"
+         checked>
+  <label for="Bi">Bi</label>
+</div>
+<div>
+  <input type="radio" id="Hetero" name="orientation" value="Hetero">
+  <label for="Hetero">Hetero</label>
+</div>
+<div>
+    <input type="radio" id="Homo" name="orientation" value="Homo">
+    <label for="Homo">Homo</label>
+  </div>
+  <p>Présentation<br><textarea  name="bio" id='bio' cols="50"  rows= "5" {{bio}} >{{bio}}</textarea>
+ 
+    <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
+    <a href="{{ url_for('profil')}}">
+    <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a>  
+</form>
+
+{% endblock %}
