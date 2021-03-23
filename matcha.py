@@ -89,12 +89,13 @@ def photo():
         b=f.filename
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
+        if request.form.get('bou')=='raz':
+            os.remove('static/photo/'+photo_name)
+            return render_template('photo.html',ph1 = ph1, ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5)
         path = 'static/photo'
-        f.save(os.path.join(path, photo_name))
-        
-        return redirect(url_for('okphoto'))
-    else:
-        return render_template('photo.html',ph1 = ph1, ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5)
+        f.save(os.path.join(path, photo_name))     
+    return render_template('photo.html',ph1 = ph1, ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5)
+    
 
 @app.route('/accueil/')
 def accueil():
@@ -106,6 +107,13 @@ def accueil():
 @app.route('/test/')
 def test():
     return render_template('test.html')
+
+@app.route('/test2/',methods=['GET', 'POST'])
+def test2():
+    if request.method=="POST":
+        a=request.form.get('bou')
+        return a
+    return render_template('test2.html')
 
 @app.route('/profil/')
 def profil():
@@ -125,7 +133,6 @@ def profil():
             sexe=u[9]
             b=str(u[11]) #champ date transformé en texte
             naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
-
     return render_template('profil.html',ph1=ph1, nom = nom, prenom = prenom, sexe=sexe, orientation=orientation,bio=bio,email =email, naissance=naissance)
 
 @app.route('/recherche/',methods=['GET', 'POST'])
@@ -146,7 +153,6 @@ def registration():
         return redirect(url_for('accueil'))
     else:
         return render_template('registration.html')
-
 @app.route('/forgot/',methods=['GET', 'POST'])
 def forgot():
     try:
@@ -177,13 +183,6 @@ def logout():
     session.clear()
     return redirect(url_for('homepage'))
     
-@app.route('/okphoto')
-def okphoto():
-    if "user" not in session:
-        return redirect(url_for('homepage')) 
-    #os.remove('static/photo/temp.jpg')
-    return render_template('okphoto.html')
-
 @app.route('/validation/<code>')
 def validation(code):
     return render_template('validation.html', code =code)
@@ -191,3 +190,37 @@ def validation(code):
 @app.route('/newpassword/<code>', methods=['GET','POST'])
 def newpassword(code):
     return render_template('newpassword.html', code =code)
+
+@app.route('/profilmodif/',methods=['GET', 'POST'])
+def profilmodif():
+    if "user" not in session:
+        return redirect(url_for('homepage')) 
+    users = USERS_MANAGER().get_users()
+    user = session['user']['name']
+    ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    for u in users:
+        if u[3] == user:
+            nom = u[2]
+            login =u[3]
+            prenom = u[1]
+            bio= u[5]
+            orientation = u[10]
+            email=u[6]
+            sexe=u[9]
+            b=str(u[11]) #champ date transformé en texte
+            naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if request.method=="POST":
+        return redirect(url_for('profil'))
+    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance)
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
