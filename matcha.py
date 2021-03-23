@@ -9,13 +9,17 @@ import psycopg2
 from UserManager import USERS_MANAGER
 from datetime import datetime
 from random import *
+from flask_socketio import SocketIO, join_room, send, emit, leave_room
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
+app.debug = True  # a supprimer en production
+socketio = SocketIO(app)
+ROOMS = ["lounge", "news", "games", "coding"]
 
-def send(unique, nature):
+def ft_send(unique, nature):
     lien = 'http://127.0.0.1:5000/validation/'+unique
     f_time = time.asctime(time.localtime(time.time())).split()
     
@@ -100,7 +104,8 @@ def photo():
 @app.route('/accueil/')
 def accueil():
     if "user" in session:
-        return render_template('accueil.html')
+        username = session['user']['name']
+        return render_template('accueil.html', username=username, rooms=ROOMS
     else:
         return redirect(url_for('homepage'))   
 
@@ -149,7 +154,7 @@ def registration():
         session['user']= {'name' : user, 'email' : mail}   
         lien=lien_unique()
         #ici enregistre le lien dans la fiche membre
-        send(lien,'registration')
+        ft_send(lien,'registration')
         return redirect(url_for('accueil'))
     else:
         return render_template('registration.html')
@@ -174,7 +179,7 @@ def forgot():
             lien=lien_unique()
             nature='password'
             #ici enregistre le lien dans la fiche membre
-            send(lien, 'nature')
+            ft_send(lien, 'nature')
             return redirect(url_for('logout')) 
     return render_template('forgot_password.html',user=user)
 
