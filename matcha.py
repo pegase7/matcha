@@ -10,17 +10,20 @@ from UserManager import USERS_MANAGER
 from datetime import datetime
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
+from hashage import *
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
-app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
 ROOMS = ["lounge", "news", "games", "coding"]
 
 def ft_send(unique, nature):
-    lien = 'http://127.0.0.1:5000/validation/'+unique
+    if nature == 'registration':
+        lien = 'http://127.0.0.1:5000/validation/'+unique
+    elif nature = 'password':
+        lien = 'http://127.0.0.1:5000/newpassword/'+unique
     f_time = time.asctime(time.localtime(time.time())).split()
     
     Fromadd = "matcha@ik.me"
@@ -57,6 +60,43 @@ def lien_unique():
         a=a+chr(x)
     return(a)
 
+def verif_login(login):
+    message ='ok'
+    if len(login) < 3:
+        message = 'Le login doit comporter au moins 3 caractéres et etre uniquement compose de lettres et chiffres'
+    for letter in login:
+        if not(letter >='a' and letter <='z' or letter >='A' and letter<='Z' or letter >='0' and letter <='9'): 
+         message = 'Le login doit comporter au moins 3 caractéres et etre uniquement compose de lettres et chiffres'
+    users = USERS_MANAGER().get_users()
+    for u in users:
+        if u[3].lower()==login.lower():
+            message = 'Le login '+login+" est deja utilisé, merci d'en choisir un autre !"
+    return message   
+
+def verif_password(pwd,pwd2):
+    message = 'ok'
+    if len(pwd) < 8:
+        message = 'Le mot de passe doit avoir au moins 8 caracteres !!!'
+    if pwd != pwd2:
+        message = 'Les 2 mots de passe ne sont pas vraiment identiques !!!'
+    maj=min=nbr=0
+    for letter in pwd:
+        if letter >='a' and letter <='z':
+            min=min+1
+        if letter >='A' and letter <='Z':
+            maj=maj+1
+        if letter >='0' and letter <='9':
+            nbr=nbr+1
+    if maj== 0 or min == 0 or nbr == 0:
+        message='Votre mot de passe doit comporter au moins une minuscule, une majuscule et un chiffre'
+    return message
+
+def verif_identity(nom,prenom):
+    message = 'ok'
+    if len(nom) <2 or len(prenom) <2:
+        message "Nom et prénom doivent obligatoirement comporter au moins 2 caracteres"
+    return message
+
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
     users = USERS_MANAGER().get_users()
@@ -66,7 +106,7 @@ def homepage():
         rep='Utilisateur inconnu, merci de vous inscrire'
         for u in users:
             if u[3] == user:
-                if u[4] == pwd:
+                if u[4] == pwd:#if u[4] ==hash_pwd(pwd,user):
                     if u[7]:#verifier si l'utilisateur est actif
                         session['user']= {'name' : user}
                         date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment
@@ -105,7 +145,7 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        return render_template('accueil.html', username=username, rooms=ROOMS
+        return render_template('accueil.html', username=username, rooms=ROOMS)
     else:
         return redirect(url_for('homepage'))   
 
@@ -150,7 +190,17 @@ def recherche():
 def registration():
     if request.method=="POST":
         user=request.form.get('login')
+        if verif_login(user) !='ok':
+            return render_template('registration.html', message = verif_login(user))
         mail=request.form.get('courriel')
+        pwd=request.form.get('password')
+        pwd2 =request.form.get('password2')
+        nom=request.form.get('password2')
+        prenom=request.form.get('prenom')
+        if verif_password(pwd,pwd2) !='ok':
+            return render_template('registration.html', message = verif_password(pwd,pwd2))
+        if verif_identity(nom,prenom) !='ok':
+            return render_template('registration.html', message = verif_identity(nom,prenom))
         session['user']= {'name' : user, 'email' : mail}   
         lien=lien_unique()
         #ici enregistre le lien dans la fiche membre
@@ -158,6 +208,7 @@ def registration():
         return redirect(url_for('accueil'))
     else:
         return render_template('registration.html')
+
 @app.route('/forgot/',methods=['GET', 'POST'])
 def forgot():
     try:
@@ -190,10 +241,31 @@ def logout():
     
 @app.route('/validation/<code>')
 def validation(code):
+    users = USERS_MANAGER().get_users()
+    for u in users:
+        if u[8]=code:
+            #passer l'utilisateur en mode actif
+            #supprimer confirm
+            
+               
     return render_template('validation.html', code =code)
 
 @app.route('/newpassword/<code>', methods=['GET','POST'])
 def newpassword(code):
+    users = USERS_MANAGER().get_users()
+    for u in users:
+        if u[8]=code:
+            login=u[3]
+    if request.method=="POST":
+        pwd=request.form.get('password')
+        pwd2=request.form.get('password2')
+        if verif_password(pwd,pwd2) !='ok':
+            return render_template('newpassword.html', message = verif_password(pwd,pwd2))
+        else:
+            #hash=hash_pwd(pwd,login)
+            #sauvegarder ce pwd hashé
+            #supprimer confirm
+            return redirect(url_for('logout'))
     return render_template('newpassword.html', code =code)
 
 @app.route('/profilmodif/',methods=['GET', 'POST'])
