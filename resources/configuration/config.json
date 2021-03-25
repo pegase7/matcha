@@ -1,0 +1,8 @@
+{
+	"postgresql":{
+		"host":"localhost",
+		"database":"matchadb",
+		"user":"matchaadmin",
+		"password":"matchapass"
+    }
+ }
