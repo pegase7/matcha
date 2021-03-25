@@ -11,6 +11,11 @@ from datetime import datetime
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from hashage import *
+from matcho.orm.data_access import DataAccess
+from matcho.model.Users import Users
+from matcho.model.Connection import Connection
+import logging
+from pickle import NONE
 
 app = Flask(__name__)
 app.config.from_object(Config)
