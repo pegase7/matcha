@@ -22,7 +22,7 @@ ROOMS = ["lounge", "news", "games", "coding"]
 def ft_send(unique, nature):
     if nature == 'registration':
         lien = 'http://127.0.0.1:5000/validation/'+unique
-    elif nature = 'password':
+    elif nature == 'password':
         lien = 'http://127.0.0.1:5000/newpassword/'+unique
     f_time = time.asctime(time.localtime(time.time())).split()
     
@@ -94,7 +94,7 @@ def verif_password(pwd,pwd2):
 def verif_identity(nom,prenom):
     message = 'ok'
     if len(nom) <2 or len(prenom) <2:
-        message "Nom et prénom doivent obligatoirement comporter au moins 2 caracteres"
+        message = "Nom et prénom doivent obligatoirement comporter au moins 2 caracteres"
     return message
 
 @app.route('/',methods=['GET', 'POST'])
@@ -140,7 +140,6 @@ def photo():
         f.save(os.path.join(path, photo_name))     
     return render_template('photo.html',ph1 = ph1, ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5)
     
-
 @app.route('/accueil/')
 def accueil():
     if "user" in session:
@@ -195,15 +194,15 @@ def registration():
         mail=request.form.get('courriel')
         pwd=request.form.get('password')
         pwd2 =request.form.get('password2')
-        nom=request.form.get('password2')
-        prenom=request.form.get('prenom')
+        nom=request.form.get('name')
+        prenom=request.form.get('first_name')
         if verif_password(pwd,pwd2) !='ok':
             return render_template('registration.html', message = verif_password(pwd,pwd2))
         if verif_identity(nom,prenom) !='ok':
             return render_template('registration.html', message = verif_identity(nom,prenom))
         session['user']= {'name' : user, 'email' : mail}   
         lien=lien_unique()
-        #ici enregistre le lien dans la fiche membre
+        #ici enregistre le lien et la fiche membre en non actif
         ft_send(lien,'registration')
         return redirect(url_for('accueil'))
     else:
@@ -230,7 +229,7 @@ def forgot():
             lien=lien_unique()
             nature='password'
             #ici enregistre le lien dans la fiche membre
-            ft_send(lien, 'nature')
+            ft_send(lien, nature)
             return redirect(url_for('logout')) 
     return render_template('forgot_password.html',user=user)
 
@@ -242,19 +241,18 @@ def logout():
 @app.route('/validation/<code>')
 def validation(code):
     users = USERS_MANAGER().get_users()
-    for u in users:
-        if u[8]=code:
+    #for u in users:
+        #if u[8]==code:
             #passer l'utilisateur en mode actif
-            #supprimer confirm
-            
-               
-    return render_template('validation.html', code =code)
+            #supprimer confirm  
+            #return redirect(url_for('logout'))        
+    return render_template('validation.html', code = code)
 
 @app.route('/newpassword/<code>', methods=['GET','POST'])
 def newpassword(code):
     users = USERS_MANAGER().get_users()
     for u in users:
-        if u[8]=code:
+        if u[8]==code:
             login=u[3]
     if request.method=="POST":
         pwd=request.form.get('password')
