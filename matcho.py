@@ -6,7 +6,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import time
 import psycopg2
-from UserManager import USERS_MANAGER # a supprimer a terme et progressivement
 from datetime import datetime
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
@@ -72,10 +71,8 @@ def verif_login(login):
     for letter in login:
         if not(letter >='a' and letter <='z' or letter >='A' and letter<='Z' or letter >='0' and letter <='9'): 
          message = 'Le login doit comporter au moins 3 caractéres et etre uniquement compose de lettres et chiffres'
-    users = USERS_MANAGER().get_users()
-    for u in users:
-        if u[3].lower()==login.lower():
-            message = 'Le login '+login+" est deja utilisé, merci d'en choisir un autre !"
+    if 0 != len(DataAccess().fetch("Users", conditions=('user_name',login))):
+         message = 'Le login '+login+" est deja utilisé, merci d'en choisir un autre !"
     return message   
 
 def verif_password(pwd,pwd2):
@@ -190,6 +187,11 @@ def profil():
 def recherche():
     if "user" not in session:
         return redirect(url_for('homepage')) 
+    user = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', user))
+    if us.gender==None or us.description==None or us.orientation==None:
+        msg = 'Merci de bien remplir votre fiche avant de chercher un profil compatible'
+        return redirect(url_for('profilmodif',msg=msg))
     return render_template('recherche.html')
 
 @app.route('/registration/',methods=['GET', 'POST'])
@@ -210,7 +212,9 @@ def registration():
         session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
         new = Users()
+        print('Prenom '+prenom)
         new.first_name = prenom
+        print("nom"+nom)
         new.last_name = nom
         new.user_name = login
         new.password = hash_pwd(pwd,login)
@@ -219,7 +223,7 @@ def registration():
         new.active = False
         new.confirm = lien
         new.gender = None
-        new.orientation = 'Hetero'
+        new.orientation = None
         new.birthday = None
         new.latitude = None
         new.longitude = None
@@ -238,19 +242,18 @@ def forgot():
         user=''
     if request.method=="POST":
         user=request.form.get('login')
-        users = USERS_MANAGER().get_users()
         mail = rep =''
-        for u in users:
-            if u[3] == user:
-                mail=u[6]
-                session['user']= {'name' : user, 'email' : mail}
-        if mail =='':
+        us = DataAccess().find('Users', conditions=('user_name', user))
+        mail=us.email
+        session['user']= {'name' : user, 'email' : mail}
+        if us == None:
             rep='Utilisateur inconnu !'
             return render_template('forgot_password.html',rep=rep)
         else :
             lien=lien_unique()
             nature='password'
-            #ici enregistre le lien dans la fiche membre
+            us.confirm=lien
+            DataAccess().merge(us)  
             ft_send(lien, nature)
             return redirect(url_for('logout')) 
     return render_template('forgot_password.html',user=user)
@@ -277,40 +280,47 @@ def newpassword(code):
     us = DataAccess().find('Users', conditions=('confirm', code))
     if us==None:
         rep="ce lien n'est pas valable !"
-        return render_template('newpassword.html', rep =rep)
+        return render_template('newpasswordfalse.html', rep =rep)
     if request.method=="POST":
         pwd=request.form.get('password')
         pwd2=request.form.get('password2')
         if verif_password(pwd,pwd2) !='ok':
             return render_template('newpassword.html', message = verif_password(pwd,pwd2))
         else:
-            #hash=hash_pwd(pwd,login)
-            #sauvegarder ce pwd hashé
-            #supprimer confirm
+            hash=hash_pwd(pwd,us.user_name)
+            us.confirm=None
+            us.password=hash
+            DataAccess().merge(us)
             return redirect(url_for('logout'))
-    return render_template('newpassword.html', code =code)
+    return render_template('newpassword.html', login=us.user_name)
 
 @app.route('/profilmodif/',methods=['GET', 'POST'])
 def profilmodif():
+    try:
+        msg = request.args['msg']
+    except:
+        msg=''
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    users = USERS_MANAGER().get_users()
     user = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', user))
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
-    for u in users:
-        if u[3] == user:
-            nom = u[2]
-            login =u[3]
-            prenom = u[1]
-            bio= u[5]
-            orientation = u[10]
-            email=u[6]
-            sexe=u[9]
-            b=str(u[11]) #champ date transformé en texte
-            naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    nom = us.last_name
+    login = us.user_name
+    prenom = us.first_name
+    bio= us.description
+    if bio==None:\
+        bio=""
+    orientation = us.orientation
+    email= us.email
+    sexe=us.gender
+    b=str(us.birthday) #champ date transformé en texte
+    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    latitude=us.latitude
+    longitude=us.longitude
     if request.method=="POST":
         return redirect(url_for('profil'))
-    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance)
+    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance,latitude=latitude,logitude=longitude,msg=msg)
 
 @app.after_request
 def add_header(r):

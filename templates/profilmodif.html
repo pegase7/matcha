@@ -6,10 +6,13 @@
 <br><br>
 <h1>bonjour {{session['user']['name']}}</h1>
 <br>
+<h4>{{msg}}</h4>
+<br>
+
 <form method="post">
-    <p>Nom<br><input type="text" name="name" placeholder={{nom}} /></p>
-    <p>Prénom<br><input type="text" name="first_name" placeholder={{prenom}} /></p>
-    <p>E-Mail<br><input type="email" name="courriel" placeholder={{email}} /></p>
+    <p>Nom : {{nom}}<br><input type="text" name="name" value= "{{nom}}" /></p>
+    <p>Prénom<br><input type="text" name="first_name" value={{prenom}} /></p>
+    <p>E-Mail<br><input type="email" name="courriel" value={{email}} /></p>
     
     <p>Sexe</p>
 <div>
