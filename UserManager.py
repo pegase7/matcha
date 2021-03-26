@@ -11,6 +11,6 @@ class USERS_MANAGER():
         except (Exception, p.DatabaseError) as error:
             print(error)
 
-if __name__ == '__main__':
-    users = USERS_MANAGER().get_users()
+# if __name__ == '__main__':
+#     users = USERS_MANAGER().get_users()
    # print(users)
