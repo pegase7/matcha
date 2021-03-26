@@ -6,14 +6,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import time
 import psycopg2
-from UserManager import USERS_MANAGER
+from UserManager import USERS_MANAGER # a supprimer a terme et progressivement
 from datetime import datetime
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from hashage import *
-from matcho.orm.data_access import DataAccess
-from matcho.model.Users import Users
-from matcho.model.Connection import Connection
+from matcha.orm.data_access import DataAccess
+from matcha.model.Users import Users
+from matcha.model.Connection import Connection
 import logging
 from pickle import NONE
 
@@ -104,23 +104,31 @@ def verif_identity(nom,prenom):
 
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
-    users = USERS_MANAGER().get_users()
+    #users = USERS_MANAGER().get_users()
     if request.method=="POST":
         user=request.form.get('login')
         pwd=request.form.get('password')
-        rep='Utilisateur inconnu, merci de vous inscrire'
-        for u in users:
-            if u[3] == user:
-                if u[4] == pwd:#if u[4] ==hash_pwd(pwd,user):
-                    if u[7]:#verifier si l'utilisateur est actif
-                        session['user']= {'name' : user}
-                        date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment
-                        return redirect(url_for('accueil'))
-                    else:
-                        rep = "vous n'avez pas encore confirmé votre inscription"
-                else:
-                    rep = "Mauvais mot de passe, merci de réessayer"
-        return  render_template('home.html', rep = rep)
+        us = DataAccess().find('Users', conditions=('user_name', user))
+        if us==None:
+            rep='Utilisateur inconnu, merci de vous inscrire'
+            return  render_template('home.html', rep = rep)
+        if  not (us.password == pwd):
+            rep = "Mauvais mot de passe, merci de réessayer"
+            return  render_template('home.html', rep = rep)
+        session['user']= {'name' : user}
+        return redirect(url_for('accueil'))
+        #for u in users:
+        #    if u[3] == user:
+         #       if u[4] == pwd:#if u[4] ==hash_pwd(pwd,user):
+         #           if u[7]:#verifier si l'utilisateur est actif
+           #             session['user']= {'name' : user}
+         #               date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment
+            #            return redirect(url_for('accueil'))
+          #          else:
+           #             rep = "vous n'avez pas encore confirmé votre inscription"
+           #     else:
+           #         rep = "Mauvais mot de passe, merci de réessayer"
+            
     else:   
         return render_template('home.html')
 
@@ -168,21 +176,22 @@ def test2():
 def profil():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    users = USERS_MANAGER().get_users()
+    #users = USERS_MANAGER().get_users()
     user = session['user']['name']
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
-    for u in users:
-        if u[3] == user:
-            nom = u[2]
-            login =u[3]
-            prenom = u[1]
-            bio= u[5]
-            orientation = u[10]
-            email=u[6]
-            sexe=u[9]
-            b=str(u[11]) #champ date transformé en texte
-            naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
-    return render_template('profil.html',ph1=ph1, nom = nom, prenom = prenom, sexe=sexe, orientation=orientation,bio=bio,email =email, naissance=naissance)
+    us = DataAccess().find('Users', conditions=('user_name', user))
+    nom = us.last_name
+    login = us.user_name
+    prenom = us.first_name
+    bio= us.description
+    orientation = us.orientation
+    email= us.email
+    sexe=us.gender
+    b=str(us.birthday) #champ date transformé en texte
+    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    latitude=us.latitude
+    longitude=us.longitude
+    return render_template('profil.html',ph1=ph1, nom = nom, prenom = prenom, sexe=sexe, orientation=orientation,bio=bio,email =email, naissance=naissance, latitude=latitude,longitude=longitude)
 
 @app.route('/recherche/',methods=['GET', 'POST'])
 def recherche():
