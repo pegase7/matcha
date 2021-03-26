@@ -234,6 +234,7 @@ class DataAccess():
         
     def execute(self, cmd, parameters=None, model=None, record=None):
         logging.debug("Excecute:" + cmd)
+        print("Excecute:" + cmd)
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(cmd, parameters)
             if not record is None:

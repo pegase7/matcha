@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Validation{% endblock %}
 {% block content %}
 
 <br><br>
 <h1>bonjour </h1>
 <br><br><br><br>
-{{code}}
+<h2>{{rep}}</h2>
+
+<a href="{{ url_for('homepage')}}">
+    <button type="button" class="btn btn-primary btn-lg mb-2" >retour</button></a>
 {% endblock %}

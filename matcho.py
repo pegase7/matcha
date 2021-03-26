@@ -106,29 +106,22 @@ def verif_identity(nom,prenom):
 def homepage():
     #users = USERS_MANAGER().get_users()
     if request.method=="POST":
-        user=request.form.get('login')
+        login=request.form.get('login')
         pwd=request.form.get('password')
-        us = DataAccess().find('Users', conditions=('user_name', user))
+        us = DataAccess().find('Users', conditions=('user_name', login))
         if us==None:
             rep='Utilisateur inconnu, merci de vous inscrire'
             return  render_template('home.html', rep = rep)
-        if  not (us.password == pwd):
+        if  not (us.password == hash_pwd(pwd,login)):
             rep = "Mauvais mot de passe, merci de réessayer"
             return  render_template('home.html', rep = rep)
-        session['user']= {'name' : user}
+        if us.active==False:
+            rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
+            return  render_template('home.html', rep = rep)
+        session['user']= {'name' : login}
         return redirect(url_for('accueil'))
-        #for u in users:
-        #    if u[3] == user:
-         #       if u[4] == pwd:#if u[4] ==hash_pwd(pwd,user):
-         #           if u[7]:#verifier si l'utilisateur est actif
-           #             session['user']= {'name' : user}
-         #               date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment
-            #            return redirect(url_for('accueil'))
-          #          else:
-           #             rep = "vous n'avez pas encore confirmé votre inscription"
-           #     else:
-           #         rep = "Mauvais mot de passe, merci de réessayer"
-            
+        
+         #               date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment           
     else:   
         return render_template('home.html')
 
@@ -202,8 +195,8 @@ def recherche():
 @app.route('/registration/',methods=['GET', 'POST'])
 def registration():
     if request.method=="POST":
-        user=request.form.get('login')
-        if verif_login(user) !='ok':
+        login=request.form.get('login')
+        if verif_login(login) !='ok':
             return render_template('registration.html', message = verif_login(user))
         mail=request.form.get('courriel')
         pwd=request.form.get('password')
@@ -214,9 +207,24 @@ def registration():
             return render_template('registration.html', message = verif_password(pwd,pwd2))
         if verif_identity(nom,prenom) !='ok':
             return render_template('registration.html', message = verif_identity(nom,prenom))
-        session['user']= {'name' : user, 'email' : mail}   
+        session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
-        #ici enregistre le lien et la fiche membre en non actif
+        new = Users()
+        new.first_name = prenom
+        new.last_name = nom
+        new.user_name = login
+        new.password = hash_pwd(pwd,login)
+        new.description = None
+        new.email = mail
+        new.active = False
+        new.confirm = lien
+        new.gender = None
+        new.orientation = 'Hetero'
+        new.birthday = None
+        new.latitude = None
+        new.longitude = None
+        DataAccess().persist(new)
+
         ft_send(lien,'registration')
         return redirect(url_for('accueil'))
     else:
@@ -254,20 +262,22 @@ def logout():
     
 @app.route('/validation/<code>')
 def validation(code):
-    users = USERS_MANAGER().get_users()
-    #for u in users:
-        #if u[8]==code:
-            #passer l'utilisateur en mode actif
-            #supprimer confirm  
-            #return redirect(url_for('logout'))        
-    return render_template('validation.html', code = code)
+    us = DataAccess().find('Users', conditions=('confirm', code))
+    if us==None:
+        rep="ce lien n'est pas valable !"
+        return render_template('validation.html', rep=rep)
+    us.active=True
+    us.confirm=None
+    DataAccess().merge(us)       
+    return redirect(url_for('logout'))        
+
 
 @app.route('/newpassword/<code>', methods=['GET','POST'])
 def newpassword(code):
-    users = USERS_MANAGER().get_users()
-    for u in users:
-        if u[8]==code:
-            login=u[3]
+    us = DataAccess().find('Users', conditions=('confirm', code))
+    if us==None:
+        rep="ce lien n'est pas valable !"
+        return render_template('newpassword.html', rep =rep)
     if request.method=="POST":
         pwd=request.form.get('password')
         pwd2=request.form.get('password2')
