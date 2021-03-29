@@ -16,75 +16,101 @@
     header('Cache-Control: no-cache, must-revalidate');
   }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='coeur.ico')}}" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        h1{
-            text-align: center;
-            color: #9fe8e9;
-        }
-        h3{
-            color: #9fe8e9;
-        }
-        h4{
-            color: #fe0000;
-        }
-         header { 
-                 background-color : #72D8D5;
-                 
-                 }
-         body { 
-             margin:0;
-             padding:0;
-             background: url("{{url_for('static', filename='polynesie.jpg')}}") no-repeat center fixed; 
-         
-             background-size: cover; /* version standardisée */
-          }
-          html {
-        position: relative;
-        min-height: 100%;
-                }
-                #center{
-                    text-align: center;
-                }
-        .footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 50px;
-            background: #62d0df;
-            text-align: center;
-    
-}
-      </style>
-    <title>{% block title %}{% endblock %} </title>
- </head>
-    
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static', filename='coeur.ico')}}" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Styles -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat_styles.css') }}">
+        <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/reset.css') }}"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+        <!-- SocketIO JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
+
+        <!-- Custom SocketIO JS -->
+        <script src="{{ url_for('static', filename='scripts/socketio.js')}}"></script>
+
+        <!-- Custom Chat JS -->
+        <script src="{{ url_for('static', filename='scripts/chat_page.js')}}"></script>
+
+        <!-- Get username -->
+        <script>
+            const username = `{{ username }}`;
+        </script>
+
+        <style>
+            h1 {
+                text-align: center;
+                color: #9fe8e9;
+            }
+            
+            h3 {
+                color: #9fe8e9;
+            }
+            
+            h4 {
+                color: #fe0000;
+            }
+            
+            header {
+                background-color: #72D8D5;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                background: url("{{url_for('static', filename='polynesie.jpg')}}") no-repeat center fixed;
+                background-size: cover;
+                /* version standardisée */
+            }
+            
+            html {
+                position: relative;
+                min-height: 100%;
+            }
+            
+            #center {
+                text-align: center;
+            }
+            
+            .footer {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 50px;
+                background: #62d0df;
+                text-align: center;
+            }
+        </style>
+        <title>{% block title %}{% endblock %} </title>
+    </head>
+
     <header>le site de Matcha</header><br>
-   
+
     <body>
         <div class="container-fluid">
-            
-             {% block content %}{% endblock %} 
-            
+
+            {% block content %}{% endblock %}
+
         </div>
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>       
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="dist/js/bootstrap.bundle.min.js"></script>
     </body>
     <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    L'amour est enfant de boheme...  L'amour est un oiseau rebelle... L'amour est aveugle... Vivre d'amour et d'eau fraiche...
+                    L'amour est enfant de boheme... L'amour est un oiseau rebelle... L'amour est aveugle... Vivre d'amour et d'eau fraiche...
                 </div>
             </div>
         </div>
     </footer>
-  
-</html>
+
+    </html>

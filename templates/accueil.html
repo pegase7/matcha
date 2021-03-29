@@ -1,19 +1,18 @@
-{% extends 'base.html' %}
-
-{% block title %}Accueil{% endblock %}
-{% block content %}
-{% include 'nav.html' %}
+{% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
 <br><br>
 <h1>bonjour {{session['user']['name']}}</h1>
 <br><br><br><br>
 <h3>
-<br>
-mon tableau de bord
-<br><br><br>
-Popularité
-<br>
-Qui m'a liké ?
-<br>
-Qui a consulté mon profil ?
+    <br> mon tableau de bord
+    <br><br><br> Popularité
+    <br> Qui m'a liké ?
+    <br> Qui a consulté mon profil ?
 </h3>
+<hr>
+<div>
+    <script>
+        sessionStorage.setItem("current_user", "{{session['user']['name']}}");
+    </script>
+    {% include 'chat.html' %}
+</div>
 {% endblock %}
