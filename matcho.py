@@ -336,12 +336,12 @@ def leave(data):
     send({'msg': data['username'] + " has left the " + data['room'] + " room."}, room=data['room'])
 
 
-@socketio.on('like')
-def like(msg):
+@socketio.on('like') #l'evenement 'like'  arrive ici
+def like(data):
     # like_send(data['room'])
-    # print(f"\n\n{msg}\n\n")
-    print(f"\n\ntoto\n\n")
-    send("test")
+    print(f"\n\n{data}\n\n")
+    #print(f"\n\ntoto\n\n")
+    emit("afterlike", {'username': data['username']}, room=data['room']) # renvoie un evenement 'afterlike' 
 
 
 # @ socketio.on('create')
