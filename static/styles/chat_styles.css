@@ -4,17 +4,6 @@
     border: 2px solid red;
 }
 
-.like-section {
-    border-top: 3px solid black;
-    border-bottom: 3px solid black;
-}
-
-#send_like {
-    padding-right: 15px;
-    padding-left: 15px;
-    color: red;
-}
-
 .chat_p {
     background-color: rgb(53, 71, 230);
     color: white;

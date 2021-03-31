@@ -17,12 +17,15 @@ from matcha.model.Users import Users
 from matcha.model.Connection import Connection
 import logging
 from pickle import NONE
+from matcha.model.Room import Room
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
 socketio = SocketIO(app)
+logging.basicConfig(level=logging.DEBUG)
 ROOMS = ["lounge", "news", "games", "coding"]
 
 def ft_send(unique, nature):
@@ -158,7 +161,13 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        return render_template('accueil.html', username=username, rooms=ROOMS)
+        print(f"\n\n{username}\n\n")
+        #print(f"\n\n{session}\n\n")
+        liste = DataAccess().fetch('Users')
+        # print("liste : ", liste)
+        for element in liste:
+            print("element :\n",element)
+        return render_template('accueil.html', username=username, rooms=ROOMS, liste=liste)
     else:
         return redirect(url_for('homepage'))   
 
@@ -338,10 +347,28 @@ def leave(data):
 
 @socketio.on('like') #l'evenement 'like'  arrive ici
 def like(data):
-    # like_send(data['room'])
+    # find users id
+    user1 = DataAccess().find('Users', conditions=('user_name', data['username']))
+    user2 = DataAccess().find('Users', conditions=('user_name','LaBombe'))
+    # print(f"\n\n{user1.id}\n\n") 
+    # print(f"\n\n{user2.id}\n\n")
     print(f"\n\n{data}\n\n")
-    #print(f"\n\ntoto\n\n")
-    emit("afterlike", {'username': data['username']}, room=data['room']) # renvoie un evenement 'afterlike' 
+    
+    #search if room already exists
+    # users_room = DataAccess().find('Users_room', conditions=[('master_id', user1.id),('slave_id', user2.id)], joins=[('room_id')])
+    # print("users_room : ", users_room.room_id, users_room.master_id, users_room.slave_id )
+    
+    # create new room
+    newroom = Room()
+    newroom.users_ids = [user1.id, user2.id]
+    newroom.active = False
+    DataAccess().persist(newroom)
+    print("newroom_id : ",newroom.id)
+
+    # join the newroom
+    join_room(newroom)
+
+    emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
 
 
 # @ socketio.on('create')

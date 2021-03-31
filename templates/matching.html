@@ -1,0 +1,30 @@
+<div id="matching-main-section">
+    <h2>Matching</h2>
+    <div>
+        <!-- result find -->
+        <div class="find-section">
+            <!-- <p>{{ username }}</p> -->
+            {% for user in liste %} {% if username != user.user_name %}
+            <div class="find-user">
+                <p class="matching-username">{{ user.user_name }} </p>
+                <ul class="matching-like">
+                    <li>Envoyer un like</li>
+                    <li><button title="envoyer un like" class="send_like">
+				    <i class="fas fa-heart fa-2x"></i>
+			    </button></li>
+                </ul>
+            </div>
+            {% endif %} {% endfor %}
+        </div>
+
+        <!-- like -->
+        <div class="like-section">
+            <!-- Send like -->
+            <h3></h3>
+            <div id="display-like-section">
+
+            </div>
+
+        </div>
+    </div>
+</div>

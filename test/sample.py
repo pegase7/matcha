@@ -66,7 +66,7 @@ if __name__ == "__main__":
     print(boris)
     
     '''
-    Suppression de Borid
+    Suppression de Boris
     '''
     DataAccess().remove(boris)
     

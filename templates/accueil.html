@@ -13,6 +13,7 @@
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
+    {% include 'matching.html' %}
     {% include 'chat.html' %}
 </div>
 {% endblock %}

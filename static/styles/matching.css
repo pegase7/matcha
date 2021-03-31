@@ -1,0 +1,35 @@
+.send_like {
+    padding-right: 15px;
+    padding-left: 15px;
+    color: red;
+}
+
+#matching-main-section {
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    margin: 0px 10px;
+}
+
+.find-user {
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin: 10px 10px;
+    display: inline-block;
+}
+
+.matching-username {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.matching-like li {
+    display: inline-block;
+    list-style: none;
+}
+
+
+/* .like-section {
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+} */
