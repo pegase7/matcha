@@ -163,6 +163,7 @@ def accueil():
         username = session['user']['name']
         print(f"\n\n{username}\n\n")
         #print(f"\n\n{session}\n\n")
+        # liste sera le resultata de la recherche
         liste = DataAccess().fetch('Users')
         # print("liste : ", liste)
         for element in liste:
@@ -348,10 +349,10 @@ def leave(data):
 @socketio.on('like') #l'evenement 'like'  arrive ici
 def like(data):
     # find users id
-    user1 = DataAccess().find('Users', conditions=('user_name', data['username']))
-    user2 = DataAccess().find('Users', conditions=('user_name','LaBombe'))
-    # print(f"\n\n{user1.id}\n\n") 
-    # print(f"\n\n{user2.id}\n\n")
+    user1 = DataAccess().find('Users', conditions=('user_name', data['user1']))
+    user2 = DataAccess().find('Users', conditions=('user_name', data['user2']))
+    print(f"\n\n{user1.id}\n\n") 
+    print(f"\n\n{user2.id}\n\n")
     print(f"\n\n{data}\n\n")
     
     #search if room already exists
@@ -366,8 +367,8 @@ def like(data):
     print("newroom_id : ",newroom.id)
 
     # join the newroom
-    join_room(newroom)
-
+    user1.join_room(newroom)
+    user2.join_room(newroom)
     emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
 
 

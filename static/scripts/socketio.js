@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     let room = "Lounge";
-    joinRoom("Lounge");
+    //joinRoom("Lounge");
 
     // display incomming message
     socket.on('message', data => {
@@ -62,12 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //send like
-    document.querySelector('.send_like').onclick = () => {
-        console.log('send like');
-        console.log(username);
-        // socket.emit('like', { 'username': username, 'user2': 'LaBombe', 'room': 'lounge' })
-
+    const buttons = document.querySelectorAll('.send_like');
+    for (const button of buttons) {
+        button.onclick = () => {
+            console.log('send like');
+            console.log(button.value);
+            console.log(username);
+            socket.emit('like', { 'user1': username, 'user2': button.value })
+        }
     }
+
 
     // Room selection
     document.querySelectorAll('.select-room').forEach(p => {
