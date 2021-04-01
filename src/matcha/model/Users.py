@@ -17,6 +17,7 @@ class Users(ModelObject):
     birthday: DateField()
     latitude: FloatField()
     longitude: FloatField()
+    created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)
     connections: ListField(modelname='Connection', select='select * from CONNECTION where users_id = %s order by id')
     tags: ListField(modelname='Tag', select='select T.* from USERS_TAG as UT  left outer join TAG as T on T.id = UT.tag_id where users_id = %s order by T.id')

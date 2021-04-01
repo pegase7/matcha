@@ -31,13 +31,18 @@ if __name__ == "__main__":
     print('====================== Not found ======================')
     usernotfound = DataAccess().find('Users', conditions=[('user_name', '=', 'introuvable'),])
     print(usernotfound)
+
+    if not users3 is None:    
+        print('====================== Update user3 ======================')
+        users3.description = 'Totalement passione des antiques femmes'
+        DataAccess().merge(users3)
+        print(users3)
     
     print('====================== Update user3 ======================')
-    users3.description = 'Totalement passione des antiques femmes'
-    DataAccess().merge(users3)
-    print(users3)
-    
-    print('====================== Update user3 ======================')
+    boris = DataAccess().find('Users', conditions=('user_name', 'borisjohnson'))
+    if not boris is None:
+        DataAccess().remove(boris)
+        
     '''
     Creation du Users Boris. Tous les champs necessaire doivent etre initialise pour eviter une erreur
     '''
@@ -66,7 +71,21 @@ if __name__ == "__main__":
     print(boris)
     
     '''
-    Suppression de Borid
+    Suppression de boris
     '''
     DataAccess().remove(boris)
     
+    
+    '''
+    call procedure INSERT_TOPICS
+        procedure requires a tuple of 2 parameters
+            - users id
+            - a list of unique tags 9for that pass by a set)
+    '''
+    tagset = set()
+    for tag in ['java', 'lecture', 'sieste']:
+        tagset.add(tag)
+    DataAccess().call_procedure(procedure='insert_topics', parameters=(3, list(tagset)))
+    
+    users_room = DataAccess().find('Users_room', conditions=[('master_id', 1),], joins=[('master_id', 'UM'), ('room_id')])
+    print(users_room.room_id, users_room.master_id, users_room.slave_id )

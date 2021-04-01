@@ -118,7 +118,7 @@ class ArrayField(Field):
 class ManyToOneField(Field):
     def __init__(self, iscomputed=False, iskey=False, modelname=None):
         Field.__init__(self, iscomputed, iskey)
-        if modelname is None is None:
+        if modelname is None:
             raise ValueError("'modelname' attribute must be specified!")
         self.modelname = modelname
     def __set__(self, instance, value):
@@ -142,11 +142,13 @@ class ModelObject(object):
         return cls.__name__
     
     def __str__(self):
-        if self.id is None:
-            return ModelObject.get_model_name() + " is None"
-        else:
-            model = ModelDict().get_model(self.get_model_name())
-            return model.model_str(self) 
+#         try:
+#             if self.id is None:
+#                 return ModelObject.get_model_name() + " is None"
+#         except (AttributeError):
+#             return ModelObject.get_model_name() + " is None"
+        model = ModelDict().get_model(self.get_model_name())
+        return model.model_str(self) 
 
 class Model():
     def __init__(self, model_name):
@@ -213,7 +215,7 @@ class Model():
 #         head += ")\n"
         model_str = self.head(instance, self.name)  + "\n"
         for field in self.fields:
-            if not field.type.iskey and not isinstance(field.type, ListField):
+            if not field.type.iskey and not isinstance(field.type, ListField) and hasattr(instance, field.name):
                 attr = getattr(instance, field.name)
                 if hasattr(attr, 'get_model_name'):
                     attr = self.head(attr, type(attr).__name__)

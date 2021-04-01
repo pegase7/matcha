@@ -1,16 +1,18 @@
 alter table USERS add constraint USERS_PKEY primary key (id);
-alter table TAG add constraint TAG_PKEY primary key (id);
-alter table ROOM add constraint ROOM_TAG_PKEY primary key (id);
+alter table TOPIC add constraint TOPIC_PKEY primary key (tag);
+alter table ROOM add constraint ROOM_PKEY primary key (id);
 alter table USERS_ROOM add constraint USERS_ROOM_TAG_PKEY primary key (room_id, master_id);
 alter table MESSAGE add constraint MESSAGE_TAG_PKEY primary key (id);
-alter table USERS_TAG add constraint USERS_TAG_PKEY primary key (users_id, tag_id);
+alter table USERS_TOPIC add constraint USERS_TOPIC_PKEY primary key (users_id, tag);
 alter table VISIT add constraint VISIT_PKEY primary key (id);
 alter table CONNECTION add constraint CONNECTION_PKEY primary key (id);
 
-alter table USERS_TAG add foreign key (users_id) references USERS;
-alter table USERS_TAG add foreign key (tag_id) references TAG;
-create index USERS_TAG_USERS_FK on USERS_TAG using btree(users_id);
-create index USERS_TAG_TAG_FK on USERS_TAG using btree(tag_id);
+create unique index USERS_USER_NAME_UNQ ON USERS (user_name);
+
+alter table USERS_TOPIC add foreign key (users_id) references USERS;
+alter table USERS_TOPIC add foreign key (tag) references TOPIC;
+create index USERS_TOPIC_USERS_FK on USERS_TOPIC using btree(users_id);
+create index USERS_TOPIC_TAG_FK on USERS_TOPIC using btree(tag);
 
 
 alter table USERS_ROOM add foreign key (master_id) references USERS;

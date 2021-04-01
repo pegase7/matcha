@@ -4,7 +4,8 @@ from matcha.orm.reflection import ModelObject, ManyToOneField, IntField, DateTim
 @dataclass(init=False)
 class Message(ModelObject):
     id: IntField(iskey=True)
+    room_id: ManyToOneField(modelname='Room')
     sender_id: ManyToOneField(modelname='Users')
     receiver_id: ManyToOneField(modelname='Users')
     chat: TextField()
-    last_update: DateTimeField(iscomputed=True)
+    created: DateTimeField(iscomputed=True)

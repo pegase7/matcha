@@ -3,5 +3,6 @@ from matcha.orm.reflection import ModelObject, ManyToOneField
 
 @dataclass(init=False)
 class Users_room(ModelObject):
-    users_id: ManyToOneField(modelname='Users')
-    room_id: ManyToOneField(modelname='Users')
+    room_id: ManyToOneField(modelname='Room', iskey=True)
+    master_id: ManyToOneField(modelname='Users', iskey=True)
+    slave_id: ManyToOneField(modelname='Users')

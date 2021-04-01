@@ -4,5 +4,9 @@
 		"database":"matchadb",
 		"user":"matchaadmin",
 		"password":"matchapass"
+    },
+	"populate":{
+		"#test_data":"3_populate.sql",
+		"test_data":"faker"
     }
  }
