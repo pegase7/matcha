@@ -1,7 +1,64 @@
+/* chat.html */
+
+.chat-title {
+    color: green;
+    font-weight: 700;
+    text-align: center;
+    margin: 10px 10px;
+    text-shadow: 1px 1px 2px grey;
+}
+
+.chat-section {
+    display: flex;
+}
+
+.display-chat-rooms {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+
+/* .select-room {
+    visibility: hidden;
+} */
+
 #rigthside-pannel {
     /* scroll-behavior: smooth; */
     overflow-y: scroll;
     border: 2px solid red;
+    flex-grow: 2;
+    padding: 10px 10px;
+    /* display: inline; */
+}
+
+#send_message {
+    background-color: rgb(253, 217, 10);
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#chat-rooms {
+    border: 2px solid black;
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 10px 10px;
+    /* display: inline-block; */
+}
+
+
+/* créé par socket.js */
+
+.span_username {
+    font-weight: 400;
+    color: tomato;
+}
+
+.span_timestamp {
+    font-style: italic;
+    font-size: x-small;
+    color: black;
 }
 
 .chat_p {
@@ -26,21 +83,4 @@
     max-width: 40%;
     word-wrap: break-word;
     margin-left: 10%;
-}
-
-.span_username {
-    font-weight: 400;
-    color: tomato;
-}
-
-.span_timestamp {
-    font-style: italic;
-    font-size: x-small;
-    color: black;
-}
-
-#send_message {
-    background-color: rgb(253, 217, 10);
-    padding-right: 15px;
-    padding-left: 15px;
 }

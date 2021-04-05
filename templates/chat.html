@@ -1,12 +1,20 @@
+{% extends 'base.html' %} {% block title %}Messagerie{% endblock %} {% block content %} {% include 'nav.html' %}
+
 <div>
-    <h2>Matchat</h2>
+    <script>
+        sessionStorage.setItem("current_user", "{{session['user']['name']}}");
+    </script>
+    <h2 class="chat-title">Matchat ma messagerie</h2>
     <!-- Room selection -->
     <div class="chat-section">
-        <nav id="sidebar">
+        <nav id="chat-rooms">
             <h4>Discussions</h4>
-            {% for room in rooms %}
-            <p class="select-room">{{ room|title }}</p>
-            {% endfor %}
+            {% for room in rooms %} {% if room.slave_id == user_id %}
+            <div class="display-chat-rooms">
+                <p>User_id : {{ room.master_id }}</p>
+                <p class="select-room">Room : {{ room.room_id }}</p>
+            </div>
+            {% endif %} {% endfor %}
         </nav>
         <hr>
         <!-- Chat -->
@@ -26,3 +34,4 @@
         </div>
     </div>
 </div>
+{% endblock %}

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     let room = "Lounge";
-    //joinRoom("Lounge");
+    joinRoom("Lounge");
 
     // display incomming message
     socket.on('message', data => {
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Room selection
-    document.querySelectorAll('.select-room').forEach(p => {
+    document.querySelectorAll('.display-chat-rooms').forEach(p => {
         p.onclick = () => {
             let newRoom = p.innerHTML;
             if (newRoom == room) {

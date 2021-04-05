@@ -161,13 +161,13 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        print(f"\n\n{username}\n\n")
+        # print(f"\n\n{username}\n\n")
         #print(f"\n\n{session}\n\n")
-        # liste sera le resultata de la recherche
+        # liste sera le resultat de la recherche
         liste = DataAccess().fetch('Users')
         # print("liste : ", liste)
-        for element in liste:
-            print("element :\n",element)
+        # for element in liste:
+        #     print("element :\n",element)
         return render_template('accueil.html', username=username, rooms=ROOMS, liste=liste)
     else:
         return redirect(url_for('homepage'))   
@@ -313,6 +313,24 @@ def profilmodif():
         return redirect(url_for('profil'))
     return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance)
 
+
+@app.route('/chat/')
+def chat():
+    if "user" in session:
+        username = session['user']['name']
+        user = DataAccess().find('Users', conditions=('user_name', username))
+
+        # print(f"\n\n{username}\n\n")
+        print(f"\n\n{session}\n\n")
+        # liste = DataAccess().fetch()
+        liste = DataAccess().fetch('Users_room')
+        print("liste : ", liste)
+        print("\n\n")
+        return render_template('chat.html', username=username, user_id=user.id, rooms=liste)
+    else:
+        return redirect(url_for('homepage'))  
+
+
 @app.after_request
 def add_header(r):
     """
@@ -337,6 +355,7 @@ def message(data):
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
+    print("\n\ndata join : ", data)
     send({'msg': data['username'] + " has join the " + data['room'] + " room."}, room=data['room'])
 
 
@@ -360,15 +379,15 @@ def like(data):
     # print("users_room : ", users_room.room_id, users_room.master_id, users_room.slave_id )
     
     # create new room
-    newroom = Room()
-    newroom.users_ids = [user1.id, user2.id]
-    newroom.active = False
-    DataAccess().persist(newroom)
-    print("newroom_id : ",newroom.id)
+    # newroom = Room()
+    # newroom.users_ids = [user1.id, user2.id]
+    # newroom.active = False
+    # DataAccess().persist(newroom)
+    # print("newroom_id : ",newroom.id)
 
     # join the newroom
-    user1.join_room(newroom)
-    user2.join_room(newroom)
+    # user1.join_room(newroom)
+    # user2.join_room(newroom)
     emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
 
 
