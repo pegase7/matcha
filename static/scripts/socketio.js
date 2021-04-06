@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
-    let room = "Lounge";
-    joinRoom("Lounge");
+    let room = "";
+    // joinRoom("Lounge");
 
     // display incomming message
     socket.on('message', data => {
         const p = document.createElement('p');
-        p.className = "chat_p";
+        p.className = "msg_p";
         const span_username = document.createElement('span');
         const span_timestamp = document.createElement('span');
         span_username.className = "span_username";
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             span_username.innerHTML = data.username;
             span_timestamp.innerHTML = data.time_stamp;
-            p.innerHTML = span_username.outerHTML + br.outerHTML + data.msg +
+            p.innerHTML = data.msg +
                 br.outerHTML + span_timestamp.outerHTML;
             document.querySelector('#display-message-section').append(p);
             document.getElementById("rigthside-pannel").scrollTop;
@@ -51,11 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send message
     document.querySelector('#send_message').onclick = () => {
-        console.log('chat');
+
+        console.log(document.querySelector("#input-area").className);
         socket.send({
             'msg': document.querySelector('#user_message').value,
             'username': username,
-            'room': room
+            'room': room,
+            'user_id': document.querySelector("#input-area").className
         });
         // Clear input area
         document.querySelector('#user_message').value = '';
@@ -74,11 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Room selection
-    document.querySelectorAll('.display-chat-rooms').forEach(p => {
+    document.querySelectorAll('.select-room').forEach(p => {
         p.onclick = () => {
-            let newRoom = p.innerHTML;
+            let newRoom = p.value.toString();
+            console.log("room = " + newRoom);
+            console.log("disc" + username)
             if (newRoom == room) {
-                msg = `You are already in ${room} room.`;
+                msg = `Vous êtes déjà connecté à cette discussion.`;
                 printSysMsg(msg);
             } else {
                 leaveRoom(room);

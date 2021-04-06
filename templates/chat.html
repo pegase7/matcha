@@ -9,15 +9,17 @@
     <div class="chat-section">
         <nav id="chat-rooms">
             <h4>Discussions</h4>
-            {% for room in rooms %} {% if room.slave_id == user_id %}
-            <div class="display-chat-rooms">
-                <p>User_id : {{ room.master_id }}</p>
-                <p class="select-room">Room : {{ room.room_id }}</p>
-            </div>
-            {% endif %} {% endfor %}
+            <ul>
+                {% for room in rooms %} {% if room.slave_id == user_id %}
+                <li class="select-room" value="{{ room.room_id }}">{{ room.master_id.user_name }}</p>
+                    {% endif %} {% endfor %}
+            </ul>
         </nav>
         <hr>
         <!-- Chat -->
+        <div class="receiver">
+
+        </div>
         <!-- Message area -->
         <div id="rigthside-pannel">
             <!-- Display message -->
@@ -25,7 +27,7 @@
 
             </div>
             <!-- Input message -->
-            <div id="input-area">
+            <div id="input-area" class="{{ user_id }}">
                 <input type="text" id="user_message" placeholder="Enter your message here">
                 <button id="send_message">
 					<i class="fas fa-paper-plane fa-sm"></i>

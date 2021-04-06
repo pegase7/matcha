@@ -3,22 +3,22 @@ insert into USERS (first_name, last_name, user_name, password, description, emai
 insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude) values ('Emmanuel', 'Macron', 'Le Kiki', 'MyPassword', 'Passionne des antiquites', 'manu@narcisse.com', true, null, 'Male', 'Bi', '1977-12-21', 48.87120, 2.31650);
 insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude) values ('Fogiel', 'Marc-Olivier', 'marcopapolo', 'MyPassword', 'Ouvert a toute les promotions', 'mo-fogiel@tetu.fr', true, null, 'Male', 'Homo', '1969-07-05', 48.83636, 2.27387);
 
-insert into tag(wording) values ('Piscine');
-insert into tag(wording) values ('Peluche');
-insert into tag(wording) values ('Gerontologie');
-insert into tag(wording) values ('Manipulation');
-insert into tag(wording) values ('Blitz');
-insert into tag(wording) values ('Mercedes');
+insert into topic(tag) values ('Piscine');
+insert into topic(tag) values ('Peluche');
+insert into topic(tag) values ('Gerontologie');
+insert into topic(tag) values ('Manipulation');
+insert into topic(tag) values ('Blitz');
+insert into topic(tag) values ('Mercedes');
 
-insert into users_tag(users_id, tag_id) values (1,1);
-insert into users_tag(users_id, tag_id) values (1,4);
-insert into users_tag(users_id, tag_id) values (2,5);
-insert into users_tag(users_id, tag_id) values (2,6);
-insert into users_tag(users_id, tag_id) values (3,2);
-insert into users_tag(users_id, tag_id) values (3,3);
-insert into users_tag(users_id, tag_id) values (3,4);
-insert into users_tag(users_id, tag_id) values (4,1);
-insert into users_tag(users_id, tag_id) values (4,6);
+insert into users_topic(users_id, tag) values (1, 'Piscine'); 
+insert into users_topic(users_id, tag) values (1, 'Manipulation');
+insert into users_topic(users_id, tag) values (2, 'Blitz');
+insert into users_topic(users_id, tag) values (2, 'Mercedes');
+insert into users_topic(users_id, tag) values (3, 'Peluche');
+insert into users_topic(users_id, tag) values (3, 'Gerontologie');
+insert into users_topic(users_id, tag) values (3, 'Manipulation');
+insert into users_topic(users_id, tag) values (4, 'Piscine');
+insert into users_topic(users_id, tag) values (4, 'Mercedes');
 
 insert into room(id, users_ids) values (1, '{2,3}');
 insert into room(id, users_ids) values (2,	'{2,1}');

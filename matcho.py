@@ -18,6 +18,7 @@ from matcha.model.Connection import Connection
 import logging
 from pickle import NONE
 from matcha.model.Room import Room
+from matcha.model.Message import Message 
 
 
 app = Flask(__name__)
@@ -319,12 +320,11 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-
+        # msgs = DataAccess()fetch('Message',)
         # print(f"\n\n{username}\n\n")
-        print(f"\n\n{session}\n\n")
-        # liste = DataAccess().fetch()
-        liste = DataAccess().fetch('Users_room')
-        print("liste : ", liste)
+        # print(f"\n\n{session}\n\n")
+        liste = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
+     #   print("liste : ", liste)
         print("\n\n")
         return render_template('chat.html', username=username, user_id=user.id, rooms=liste)
     else:
@@ -347,7 +347,12 @@ def add_header(r):
 # Temps réel avec socketio
 @socketio.on('message')
 def message(data):
-    # print(f"\n\n{data}\n\n")
+    print(f"\n\n{data}\n\n")
+    msg = Message()
+    msg.chat = data['msg']
+    msg.room_id = data['room']
+    msg.sender_id = data['user_id']
+    DataAccess().persist(msg)
     send({'msg': data['msg'], 'username': data['username'], 
     'time_stamp': strftime('%d-%b %I:%M%p', localtime())}, room=data['room'])
     
@@ -355,14 +360,15 @@ def message(data):
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
-    print("\n\ndata join : ", data)
-    send({'msg': data['username'] + " has join the " + data['room'] + " room."}, room=data['room'])
+    # print("\n\ndata join : ", data)
+    send({'msg': data['username'] + " a rejoint cette discussion."}, room=data['room'])
 
 
 @socketio.on('leave')
 def leave(data):
+    # print("leave : ",data)
     leave_room(data['room'])
-    send({'msg': data['username'] + " has left the " + data['room'] + " room."}, room=data['room'])
+    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room'])
 
 
 @socketio.on('like') #l'evenement 'like'  arrive ici
@@ -388,7 +394,7 @@ def like(data):
     # join the newroom
     # user1.join_room(newroom)
     # user2.join_room(newroom)
-    emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
+   # emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
 
 
 # @ socketio.on('create')

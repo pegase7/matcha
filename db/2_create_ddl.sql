@@ -42,6 +42,7 @@ create table USERS (
     birthday	date,
     latitude	numeric(7,5),
     longitude 	numeric(7,5),
+    created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS owner to MATCHAADMIN;
@@ -61,7 +62,9 @@ alter table ROOM_ID_SEQ owner to MATCHAADMIN;
 create table ROOM (
     id			integer DEFAULT nextval('ROOM_ID_SEQ'::regclass) NOT NULL,
     users_ids	integer[2] NOT NULL,
-    active		boolean DEFAULT False NOT NULL
+    active		boolean DEFAULT False NOT NULL,
+    created		timestamp without time zone DEFAULT now() NOT NULL,
+    last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table ROOM owner to MATCHAADMIN;
 
@@ -97,9 +100,8 @@ create table MESSAGE (
     id			integer DEFAULT nextval('MESSAGE_ID_SEQ'::regclass) NOT NULL,
     room_id		integer NOT NULL,
     sender_id	integer NOT NULL,
-    receiver_id	integer NOT NULL,
     chat		text,
-    last_update timestamp without time zone DEFAULT now() NOT NULL
+    created		timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table MESSAGE owner to MATCHAADMIN;
 
@@ -108,29 +110,24 @@ alter table MESSAGE owner to MATCHAADMIN;
 
 
 ---
---- sequence TAG_ID_SEQ
+--- table TOPIC
 ---
-create sequence TAG_ID_SEQ increment by 1 cache 1;
-alter table TAG_ID_SEQ owner to MATCHAADMIN;
-
----
---- table TAG
----
-create table TAG(
-    id		integer DEFAULT nextval('TAG_ID_SEQ'::regclass) NOT NULL,
-    wording	character varying(45) NOT NULL
+create table TOPIC(
+    tag		character varying(45) NOT NULL,
+    created		timestamp without time zone DEFAULT now() NOT NULL,
+    last_update timestamp without time zone DEFAULT now() NOT NULL
 );
-alter table TAG owner to MATCHAADMIN;
+alter table TOPIC owner to MATCHAADMIN;
 
 
 ---
---- table USERS_TAG
+--- table USERS_TOPIC
 ---
-create table USERS_TAG(
+create table USERS_TOPIC(
     users_id	integer NOT NULL,
-    tag_id		integer NOT NULL
+    tag		character varying(45) NOT NULL
 );
-alter table USERS_TAG owner to MATCHAADMIN;
+alter table USERS_TOPIC owner to MATCHAADMIN;
 
 
 ---
@@ -147,10 +144,11 @@ create table VISIT (
     visited_id		integer not null,
     visitor_id		integer not null,
     is_like			boolean DEFAULT False NOT NULL,
-    last_visit		timestamp,
-    visit_number	int
+    visit_number	int,
+    created		timestamp without time zone DEFAULT now() NOT NULL,
+    last_update timestamp without time zone DEFAULT now() NOT NULL
 );
-alter table VISIT_ID_SEQ owner to MATCHAADMIN;
+alter table VISIT owner to MATCHAADMIN;
 
 ---
 --- sequence CONNECTION_ID_SEQ
@@ -173,7 +171,7 @@ alter table CONNECTION owner to MATCHAADMIN;
 ---
 --- Create Trigger on ROOM to automatically insert/delete rows in USERS_ROOM when inserting/deleting rows
 ---
-create or replace function trigger_room() returns trigger as $$
+create or replace function ON_ROOM_DML() returns trigger as $$
 begin
   IF TG_OP = 'INSERT' THEN
   	insert into USERS_ROOM(room_id, master_id, slave_id) values (new.id, new.users_ids[1], new.users_ids[2]);
@@ -184,7 +182,31 @@ begin
   return null;
 end;
 $$ language PLPGSQL;
+alter function ON_ROOM_DML owner to MATCHAADMIN;
 
 
 create trigger TRIGGER_ROOM after insert or delete on ROOM
-for each row execute function trigger_room(); 
+for each row execute function on_room_dml(); 
+
+
+
+---
+--- Create procedure INSERT_TOPICS
+---		Reintialize list of topic for userid.
+---		if topic does not exist, insert it.
+---
+create or replace procedure INSERT_TOPICS(usersid int, topic_array  text[]) AS $$
+	declare
+            topic_element  text;
+	begin
+		delete from USERS_TOPIC where users_id = usersid;
+		foreach topic_element in array topic_array
+		loop
+			insert into topic(tag)
+			select topic_element
+			 where not exists ( select 1 from TOPIC where tag = topic_element);
+			insert into USERS_TOPIC(users_id, tag) values (usersid, topic_element);
+		end loop;
+	end;
+    $$ language plpgsql;
+alter procedure INSERT_TOPICS owner to MATCHAADMIN;
