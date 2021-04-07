@@ -20,5 +20,10 @@ class Users(ModelObject):
     created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)
     connections: ListField(modelname='Connection', select='select * from CONNECTION where users_id = %s order by id')
-    tags: ListField(modelname='Tag', select='select T.* from USERS_TAG as UT  left outer join TAG as T on T.id = UT.tag_id where users_id = %s order by T.id')
+    topics: ListField(modelname='Topic', select='select T.* from USERS_TOPIC as UT  left outer join TOPIC as T on T.id = UT.tag_id where users_id = %s order by T.id')
     rooms: ListField(modelname='Room', select='select R.* from USERS_ROOM as UR  left outer join ROOM as R on R.id = UR.room_id where master_id = %s order by R.id')
+
+    def __init__(self):
+        self.connections = []
+        self.topics = []
+        self.rooms = []

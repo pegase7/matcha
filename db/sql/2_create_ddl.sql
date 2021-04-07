@@ -100,7 +100,6 @@ create table MESSAGE (
     id			integer DEFAULT nextval('MESSAGE_ID_SEQ'::regclass) NOT NULL,
     room_id		integer NOT NULL,
     sender_id	integer NOT NULL,
-    receiver_id	integer NOT NULL,
     chat		text,
     created		timestamp without time zone DEFAULT now() NOT NULL
 );

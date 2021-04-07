@@ -5,8 +5,12 @@
 		"user":"matchaadmin",
 		"password":"matchapass"
     },
+	"logging":{
+		"level":20,
+		"file_error":"resources/traces/error.log"
+    },
 	"populate":{
 		"#test_data":"3_populate.sql",
 		"test_data":"faker"
     }
- }
+}

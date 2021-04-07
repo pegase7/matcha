@@ -1,6 +1,7 @@
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users_topic import Users_topic
 import numpy as np
+import logging
 
 def insert_topics(dataAccess, users_id, keys, values):
     nbtopics = np.random.randint(2,9)
@@ -29,4 +30,5 @@ def populate(men_topic_dict, women_topic_dict):
             insert_topics(dataAccess, users.id, womenkeys, womenvalues)
         else:
             insert_topics(dataAccess, users.id, menkeys, menvalues)
+    logging.info('End Users_topic populate')
     dataAccess.commit()

@@ -22,9 +22,7 @@ create index USERS_ROOM_MASTER_FK on USERS_ROOM using btree(master_id);
 create index USERS_ROOM_ROOM_FK on USERS_ROOM using btree(room_id);
 
 alter table MESSAGE add foreign key (sender_id) references USERS;
-alter table MESSAGE add foreign key (receiver_id) references USERS;
 create index MESSAGE_SENDER_FK on MESSAGE using btree(sender_id);
-create index MESSAGE_RECEIVER_FK on MESSAGE using btree(receiver_id);
 
 alter table VISIT add foreign key (visited_id) references USERS;
 alter table VISIT add foreign key (visitor_id) references USERS;

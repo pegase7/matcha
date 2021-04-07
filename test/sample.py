@@ -2,12 +2,9 @@ from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
 from matcha.model.Connection import Connection
 from datetime import datetime
-import logging
-from pickle import NONE
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
     '''
     List des Users
     '''

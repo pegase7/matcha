@@ -131,6 +131,7 @@ class ListField(Field):
         Field.__init__(self, iscomputed, iskey)
         self.modelname = modelname
         self.select = select
+        self.value = []
     def __set__(self, instance, value):
         if not isinstance(value, list):
             raise TypeError(instance, self._name, list, value)

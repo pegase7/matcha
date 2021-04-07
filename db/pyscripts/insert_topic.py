@@ -1,6 +1,7 @@
 from matcha.orm.data_access import DataAccess
 from matcha.model.Topic import Topic
 import csv
+import logging
 
 def populate():
     topics = []
@@ -17,13 +18,13 @@ def populate():
             topics.append(topic)
             topic_dict[topic] = (man, both - man)
     dataAccess = DataAccess()
-    dataAccess.execute('truncate table TOPIC')
+    dataAccess.execute('truncate table TOPIC cascade')
     for tag in topics:
         topic = Topic()
         topic.tag = tag
         dataAccess.persist(topic, autocommit=False)
     dataAccess.commit()
-    print('End Topic populate')
+    logging.info('End Topic populate')
     men_total = 0
     women_total = 0
     for (men, women) in topic_dict.values():
@@ -34,4 +35,5 @@ def populate():
     for key, value in topic_dict.items():
         men_topic_dict[key] = float(value[0]/men_total) 
         women_topic_dict[key] = float(value[1]/women_total) 
+    logging.info('Step 1  Users_topic populate')
     return (men_topic_dict, women_topic_dict)         

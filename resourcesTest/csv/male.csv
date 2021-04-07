@@ -1,0 +1,1001 @@
+id,first_name,last_name,username,password,description,email,ip_address,latitude,longitude,lastupdate
+1,Cad,Durie,cdurie0,EuKAAQoEPJ,Insert biological graft,cdurie0@smh.com.au,16.123.0.94,-12.2800422,-75.7863836,2020-02-04 15:54:09
+2,Wilbert,Seiller,wseiller1,y8xF59z,Fit above knee prosthes,wseiller1@imageshack.us,60.136.247.161,7.8143838,-72.4406087,2019-02-20 11:54:37
+3,Fritz,Curds,fcurds2,UXy96rg,Lap lys perivesureth adh,fcurds2@paginegialle.it,244.102.254.95,34.606214,115.852187,2019-06-29 17:35:26
+4,Gianni,Ilchenko,gilchenko3,CS9lQ8MeQWYj,BBBD via infusion,gilchenko3@fotki.com,66.176.176.183,-2.5503853,-44.070196,2021-02-17 13:10:36
+5,Titus,Woolaston,twoolaston4,Gik35IFWz0,Remove orbital implant,twoolaston4@acquirethisname.com,127.139.151.181,40.2568893,21.9160195,2020-01-31 04:06:45
+6,Tamas,Castillou,tcastillou5,wO5yeeiYJcU,Tu adhesiolysis bladder,tcastillou5@zdnet.com,75.206.180.175,37.0597622,140.8775769,2019-01-29 21:25:02
+7,Niall,Agronski,nagronski6,Eyju7mV1,Contrast x-ray of sinus,nagronski6@barnesandnoble.com,232.135.177.139,29.76,-95.36,2019-06-08 01:18:41
+8,Davie,Jamrowicz,djamrowicz7,kGECHDId7b,Open biopsy of tongue,djamrowicz7@com.com,253.234.213.236,42.545625,1.5147392,2020-05-13 20:32:47
+9,Calhoun,Cossam,ccossam8,qoyZc02w,Postop vas reconstruct,ccossam8@cbc.ca,2.184.191.25,-7.0108835,108.8907988,2020-02-20 22:56:16
+10,Udall,Croisier,ucroisier9,0yN6Zg9I,Cysto & recto w grf/pros,ucroisier9@zdnet.com,94.185.71.247,48.3962038,-71.1116362,2019-01-01 00:16:26
+11,Ganny,Wigfield,gwigfielda,qijL7ZK,Lap pt ex lrg intest NEC,gwigfielda@illinois.edu,62.113.227.141,50.1758214,30.1017634,2020-11-27 16:38:26
+12,Nichole,Coleford,ncolefordb,nm9B70dl,Rt heart cardiac cath,ncolefordb@163.com,92.152.196.34,48.8981844,2.2478659,2020-03-05 19:25:45
+13,Martin,Fellini,mfellinic,zPwjFBP,Open valvuloplasty NOS,mfellinic@vinaora.com,216.189.179.30,40.0158487,116.4551375,2020-01-12 10:53:35
+14,Taylor,Learoyde,tlearoyded,hIGKZLlWEVoa,Kidney transplant NEC,tlearoyded@friendfeed.com,154.7.243.79,35.302488,117.002933,2019-11-23 20:48:49
+15,Dunc,Oakeby,doakebye,rNEwF2ihA,Hyperbaric oxygenation,doakebye@de.vu,177.238.169.233,54.141449,101.978668,2019-03-03 00:24:52
+16,Salem,Devine,sdevinef,e5lU2MX,Plastic rep ext ear NEC,sdevinef@opera.com,13.17.97.109,26.855047,100.22775,2019-04-09 13:40:15
+17,Jarrid,Ginglell,jginglellg,u4yhgs1,Other tibia/fibula incis,jginglellg@dot.gov,249.180.87.195,14.93278,47.02763,2021-01-17 09:41:56
+18,Arvie,Berthot,aberthoth,QYInDsluw,Lap umbilical hernia NEC,aberthoth@cornell.edu,107.242.105.111,17.3124678,97.0149006,2019-09-11 20:40:34
+19,Levi,Foldes,lfoldesi,7REOWFmhYsw8,Cell blk/pap-upper GI,lfoldesi@edublogs.org,18.247.30.157,43.8521146,-79.1012197,2020-08-22 20:51:15
+20,Ignatius,Fiddeman,ifiddemanj,F9KJBB,Activ musculosk exer NEC,ifiddemanj@imageshack.us,209.207.30.104,-14.8503277,-40.844989,2020-10-29 22:14:31
+21,Brose,Deeson,bdeesonk,6dw4dG8Xf,Lid reconstruction NOS,bdeesonk@example.com,215.109.157.30,41.3309238,-8.667162,2019-06-30 04:15:46
+22,Eric,Guinan,eguinanl,0DWE3TR1Xmq,Nonmechan resuscitation,eguinanl@sogou.com,140.182.224.56,48.9183905,34.4967438,2019-11-26 11:36:28
+23,Ethe,Mougeot,emougeotm,vu7xUP,Attach pedicle to hand,emougeotm@bloglovin.com,11.133.46.226,-7.1569,108.0375,2019-09-16 13:45:03
+24,Berton,Crich,bcrichn,voheix,Culture-blood,bcrichn@webs.com,230.203.194.207,8.4611612,25.6805868,2019-03-26 18:39:36
+25,Waldemar,Fryers,wfryerso,VKXPJhygwu6,Bilat subq mammectom NEC,wfryerso@histats.com,33.85.126.23,36.5072263,8.7756556,2021-01-09 14:19:14
+26,Cortie,Kenny,ckennyp,BaV9G4hbC,Hemorrhoid evacuation,ckennyp@npr.org,188.160.107.158,-6.2020256,105.8466437,2019-01-08 15:39:07
+27,Sloane,Bisley,sbisleyq,nMv5JbM,Magnet remov ant seg FB,sbisleyq@networkadvertising.org,131.101.200.43,54.1458603,49.7613122,2020-05-26 18:32:01
+28,Bronnie,Leathe,bleather,ISLiwZfF,Oth dx proced-humerus,bleather@skype.com,35.164.9.40,-7.9299269,111.9671537,2021-02-08 12:49:56
+29,Abelard,Edridge,aedridges,UNRXII4zT,CV cath plcmt w guidance,aedridges@artisteer.com,51.63.85.83,14.0158972,121.3404269,2020-10-26 21:58:47
+30,Phineas,Nanni,pnannit,pwUToX92R2t,Gb-to-intestine anastom,pnannit@booking.com,163.191.172.118,-7.8100327,110.3592495,2019-01-10 09:04:16
+31,Saxe,Wornum,swornumu,FdommeSPzT,Rib/sternum/clavic x-ray,swornumu@cbslocal.com,246.241.125.66,50.7648787,15.3726031,2019-08-08 19:42:25
+32,Friedrich,Hylands,fhylandsv,IHVDsL,Appl ext fix-metacar/car,fhylandsv@dyndns.org,72.192.219.22,52.0391192,39.7408362,2020-04-15 17:23:28
+33,Yard,Mackinder,ymackinderw,7cBtvmOuA,Coronar arteriogr-1 cath,ymackinderw@issuu.com,226.68.195.37,21.3971282,106.71167,2019-01-10 16:05:14
+34,Gilles,Chittleburgh,gchittleburghx,skGoMuqRpeq,Removal iud,gchittleburghx@ca.gov,201.65.84.151,29.18902,103.236634,2020-12-31 05:04:22
+35,Gamaliel,Innes,ginnesy,wQbNRCzP,Intra-op electron rad rx,ginnesy@eepurl.com,47.77.121.22,53.6920618,-6.3025448,2019-04-28 23:30:08
+36,Reagan,Ebsworth,rebsworthz,BcjZCfA8dzX,Insert indwelling cath,rebsworthz@scribd.com,241.171.60.139,52.6053795,39.5788904,2019-12-20 13:42:59
+37,Rriocard,Boustead,rboustead10,cGJOwfIk,Interposit op uterin lig,rboustead10@cocolog-nifty.com,225.129.127.92,23.505032,110.454177,2019-07-10 04:35:42
+38,Mallory,Imms,mimms11,ttgHOVnJhyQ7,Periop aut trans hol bld,mimms11@huffingtonpost.com,19.178.197.43,5.0281872,118.3157161,2020-08-11 03:50:36
+39,Richy,Gronno,rgronno12,u5Haeh8hDL,Bursectomy of hand,rgronno12@reverbnation.com,186.98.55.235,52.7440595,21.1228461,2019-01-30 05:05:46
+40,Adham,Tribble,atribble13,UWxpWDI,Gastric tube irrigat NEC,atribble13@youku.com,77.129.145.206,31.877958,34.739449,2020-04-01 07:01:00
+41,Llywellyn,Grzelewski,lgrzelewski14,Fj3JIjvS,Aspir curett uterus NEC,lgrzelewski14@twitter.com,79.158.217.160,46.6794431,29.974368,2019-08-18 15:18:30
+42,Jamey,Bastow,jbastow15,nJ702L,Remove ocular implant,jbastow15@google.es,60.68.13.59,32.68567,68.23801,2020-05-09 07:22:14
+43,Zacharie,Timpany,ztimpany16,L8iN4aEPZHFm,Oth meta/tar repa/plast,ztimpany16@ow.ly,212.217.28.243,-8.602068,116.195655,2019-10-20 07:28:38
+44,Joshua,Pearl,jpearl17,b3K5g6CeaV,Oth endo proc oth vessel,jpearl17@comsenz.com,132.150.76.99,50.4127137,22.7432687,2019-03-11 17:54:34
+45,Durward,Barrat,dbarrat18,rfXg4N,Lac canaliculi incision,dbarrat18@example.com,45.214.138.171,57.903389,53.715125,2021-01-26 00:26:10
+46,Saw,Lovett,slovett19,3zJbz42,Flexible sigmoidoscopy,slovett19@vk.com,193.189.118.127,23.404165,113.220218,2020-07-09 06:17:16
+47,Woodie,Bavester,wbavester1a,EaDoTg6yqMXt,Closed biopsy trachea,wbavester1a@about.com,190.39.108.229,13.4841015,-88.4670322,2019-05-09 17:42:05
+48,Cortie,Rihanek,crihanek1b,h1ernfqhru,Pancreat sphincteroplas,crihanek1b@hud.gov,58.143.124.95,9.6625019,123.8565287,2019-01-07 01:56:58
+49,Ingemar,Wye,iwye1c,0BtZXZS,Lid marg lac rx-part th,iwye1c@scribd.com,160.171.143.33,8.955271,126.009711,2020-12-11 18:16:16
+50,Pascal,Kulis,pkulis1d,BuP1os,Ins tot disc prost cerv,pkulis1d@businesswire.com,6.154.188.77,31.598328,98.326906,2019-05-19 19:04:57
+51,Carney,Doust,cdoust1e,VIfuarLG,Insrt prsr snsr w/o lead,cdoust1e@seesaa.net,94.10.44.3,11.1051054,122.642712,2020-07-07 02:08:25
+52,Lewie,Tuxsell,ltuxsell1f,C3WVsJw,Suture vagina laceration,ltuxsell1f@imageshack.us,85.107.30.136,29.9108312,-95.6563119,2020-01-18 23:01:17
+53,Theodore,Jowsey,tjowsey1g,Mqm4XIOC7Ug,Total esophagectomy,tjowsey1g@bravesites.com,253.243.42.80,-6.2323908,106.8318446,2020-06-29 14:41:46
+54,Vick,Matyatin,vmatyatin1h,Yoizd5PwLo,Diaphragmatic plication,vmatyatin1h@google.com,9.6.21.76,32.28786,-115.1046436,2019-08-06 22:51:25
+55,Earvin,Owenson,eowenson1i,V1rjhgmIyJ,Diather/cryo turbinectom,eowenson1i@wufoo.com,66.55.215.105,32.509155,120.127934,2019-09-01 09:10:29
+56,Cooper,Malloch,cmalloch1j,xP1uak55w,Testicular les destruct,cmalloch1j@bizjournals.com,71.166.87.220,30.526435,120.946263,2019-05-18 10:57:14
+57,Pierson,Caldera,pcaldera1k,Vbn8rqmQkiM,Interruption vena cava,pcaldera1k@amazon.co.uk,0.131.212.73,-7.2030729,112.0237903,2019-01-11 16:18:16
+58,Chicky,Spilling,cspilling1l,4L4A9u,Esophageal web incision,cspilling1l@furl.net,254.127.41.110,-2.5695714,-42.7399195,2021-03-06 04:49:22
+59,Nealon,Prynne,nprynne1m,Uln28Cm4zQt,Reclose post op disrupt,nprynne1m@dailymail.co.uk,244.196.134.182,44.9688472,-93.1315648,2021-01-13 08:46:35
+60,Muffin,Braisher,mbraisher1n,EUqLO4zK,Repair of hammer toe,mbraisher1n@blogger.com,10.87.242.150,56.148382,13.8060697,2019-05-14 23:37:44
+61,Sergeant,Benedite,sbenedite1o,V3tuopfKc,Orbital exenteration NEC,sbenedite1o@google.es,9.206.242.95,38.119756,23.8661305,2020-08-29 21:46:41
+62,Jay,Bassingden,jbassingden1p,eKN0u6NMpm,Excis cul-de-sac lesion,jbassingden1p@google.fr,134.216.46.97,-8.037728,111.4007597,2020-09-19 23:03:24
+63,Keene,Unsworth,kunsworth1q,gUCf2wQBVQ,Pros repair atria def-cl,kunsworth1q@php.net,165.116.102.240,43.5414515,-5.8855146,2019-11-09 12:25:45
+64,Chaim,Blackston,cblackston1r,krfFBQAOwQA,Facilit intraoc circ NEC,cblackston1r@instagram.com,181.243.91.90,55.4330626,74.9385554,2019-04-28 11:48:48
+65,Stephan,Trevaskus,strevaskus1s,IY0VDD,Remov fallop tube prosth,strevaskus1s@alibaba.com,177.147.194.193,33.5142841,36.3741834,2020-02-15 05:25:15
+66,Joaquin,Winteringham,jwinteringham1t,mbaR77a,Radical mastoidectomy,jwinteringham1t@usa.gov,54.74.132.207,-3.4603809,-44.8721875,2019-10-06 03:46:17
+67,Barton,Standingford,bstandingford1u,QAwJLKRB,Open rectal biopsy,bstandingford1u@washington.edu,242.109.105.246,61.7983586,34.3753781,2019-10-22 08:10:32
+68,Braden,Sanchez,bsanchez1v,t9iHLVxa03,Psychiat mental determin,bsanchez1v@shinystat.com,212.172.223.238,-0.1806532,-78.4678382,2020-09-13 00:55:54
+69,Harv,Addams,haddams1w,2u3fkR,Repl cardiodefib leads,haddams1w@google.fr,136.230.45.36,-32.2002692,26.8115141,2020-06-13 12:43:14
+70,Giffie,Gradly,ggradly1x,DGp1BF,IVUS coronary vessels,ggradly1x@imdb.com,73.225.25.13,24.0993658,90.1046678,2021-01-02 22:02:10
+71,Oby,Steggles,osteggles1y,zSAsTI,Orchiopexy,osteggles1y@zdnet.com,16.183.3.250,52.0609041,17.239347,2019-11-06 09:41:38
+72,Tull,Blasetti,tblasetti1z,sivUsa,Tetanus toxoid administ,tblasetti1z@cmu.edu,214.39.96.186,46.803197,61.6639055,2019-01-17 20:13:00
+73,Dalston,Render,drender20,eiteRHWuKG,Occlude abd vein NEC,drender20@cam.ac.uk,28.129.146.28,47.3752386,-0.8453268,2021-01-08 06:35:55
+74,Adam,Palister,apalister21,NIJgjU8,Lap radical abdomnl hyst,apalister21@cnn.com,146.211.124.103,-0.891834,119.8699982,2020-02-05 10:23:30
+75,Jarret,Holywell,jholywell22,I7001aHl,Oth trachea dx procedure,jholywell22@nymag.com,173.70.181.221,0.9463536,-74.4994517,2020-06-29 09:16:31
+76,Shadow,MacTrustey,smactrustey23,XGJRj6YFoRo,Total body scan,smactrustey23@github.io,226.198.243.172,10.3834377,124.9779153,2020-03-28 03:04:47
+77,Michel,Wheelan,mwheelan24,0l7xa1q,Remov post segmnt FB NOS,mwheelan24@chronoengine.com,50.178.151.90,30.761853,117.007039,2019-07-16 10:16:30
+78,Johnnie,Fawlks,jfawlks25,JvqOLOhByDW,Opn rt hemicolectomy NEC,jfawlks25@creativecommons.org,242.236.107.80,30.108216,104.677091,2020-04-26 05:31:37
+79,Klaus,Rickcord,krickcord26,bZeeFer5o7h,Female genital x-ray NEC,krickcord26@cocolog-nifty.com,54.122.4.152,10.4492758,-84.2725621,2020-11-21 11:50:14
+80,Shea,Blant,sblant27,FKymW0X,Culture-lower GI,sblant27@soundcloud.com,52.99.56.177,40.8024339,-8.5959634,2020-12-18 07:14:48
+81,Ozzy,Harbison,oharbison28,gsE1Nbj,Micro exam-spln/marr NEC,oharbison28@arizona.edu,149.163.56.128,27.1840722,114.9749001,2021-01-16 22:57:41
+82,Josias,Eddy,jeddy29,2XbWix,Mastoidectomy revision,jeddy29@economist.com,103.29.249.155,64.2617939,16.4152338,2020-07-12 09:25:20
+83,Pavel,Cady,pcady2a,cltUdMpDDhe,Coronary bld flow monit,pcady2a@blinklist.com,213.153.185.54,24.945573,114.030161,2020-05-26 23:07:24
+84,Gun,Greeves,ggreeves2b,WA3Sr9vtE,Placental scan,ggreeves2b@reference.com,228.101.160.241,-23.4554707,-52.0423373,2020-12-29 03:39:52
+85,Thorsten,McAloren,tmcaloren2c,mTaAWt0tr,Oth reimplant of ovary,tmcaloren2c@123-reg.co.uk,64.75.106.12,-8.2922696,120.4415242,2021-02-05 01:43:21
+86,Bondon,Sneezum,bsneezum2d,UDr0rKE5x,C & s-endocrine,bsneezum2d@google.com,62.161.122.220,10.6868176,-12.2490697,2021-02-15 13:11:04
+87,Locke,Paulitschke,lpaulitschke2e,FrVKsu363,Spinal canal explor NEC,lpaulitschke2e@mapquest.com,117.154.228.87,50.9648271,6.9538234,2019-11-30 06:31:57
+88,Hans,Reddie,hreddie2f,zr6xZp,Laser destruc rectal les,hreddie2f@ning.com,31.4.79.29,-3.1703446,139.0817124,2021-01-02 02:06:43
+89,Giffard,Stuchburie,gstuchburie2g,1oJFLL5zrehS,Bone graft NOS,gstuchburie2g@ezinearticles.com,238.22.202.222,32.9271287,66.1415263,2020-12-04 14:36:53
+90,Anson,Akker,aakker2h,359V4Y8v7ZK2,Fus/refus 4-8 vertebrae,aakker2h@alibaba.com,197.62.46.235,22.900182,112.892578,2019-12-22 15:13:10
+91,Jamal,MacInherney,jmacinherney2i,DCh1RQ09Ov,Botulism antitoxin admin,jmacinherney2i@dailymail.co.uk,53.82.1.204,-34.0508783,23.0935283,2021-02-13 09:57:10
+92,Free,Playdon,fplaydon2j,zIf13mmqWM,Lung operation NEC,fplaydon2j@psu.edu,130.147.185.104,25.7564471,-80.2056382,2019-05-21 23:40:43
+93,Quinlan,Pagitt,qpagitt2k,QfX1rtqTy8r,Thorac esophagocolos NEC,qpagitt2k@gmpg.org,113.202.124.199,39.500179,118.874552,2021-02-12 16:49:01
+94,Monroe,MacCroary,mmaccroary2l,QWHC7ksXe,Spleen operation NEC,mmaccroary2l@facebook.com,234.235.218.54,34.7576397,-92.324251,2020-10-14 04:56:37
+95,Tristam,Coaster,tcoaster2m,6FfCOe8,Oth repair han/fin/wris,tcoaster2m@craigslist.org,185.138.17.35,29.181201,110.138102,2019-12-23 20:46:15
+96,Cosimo,Critchard,ccritchard2n,stYKsooMZ7,Bact smear-bili/pancreas,ccritchard2n@pen.io,203.173.237.219,-5.5205551,-47.4790966,2020-03-17 16:02:58
+97,Jeno,Rillatt,jrillatt2o,tgNxzN38d,Milk extraction,jrillatt2o@boston.com,132.36.128.250,48.116045,36.3725301,2019-09-02 17:20:15
+98,Dion,De Mattia,ddemattia2p,mhwZgL,Thigh reattachment,ddemattia2p@cornell.edu,165.104.174.115,23.2423405,-106.4530275,2019-02-23 03:40:40
+99,Cheston,Marusyak,cmarusyak2q,MA9uqil52jg,Endocrine dx proc NEC,cmarusyak2q@earthlink.net,58.48.106.14,52.7189291,58.677007,2019-04-18 03:25:43
+100,Lowe,Yetman,lyetman2r,XYDipY,Thumb reconstruction NEC,lyetman2r@imageshack.us,116.103.124.67,36.9549975,65.1254488,2019-03-01 18:48:23
+101,Elwyn,Bowhey,ebowhey2s,hPLEnCPK6Ap,Micro exam-upper GI NEC,ebowhey2s@networkadvertising.org,171.72.31.18,48.35874,118.14065,2020-11-03 13:55:24
+102,Edmon,Rivallant,erivallant2t,ZRyZbSxQ,"Resrf hip,part-acetablum",erivallant2t@auda.org.au,47.29.161.75,22.613406,113.190869,2020-04-25 01:04:51
+103,Giorgi,Sentance,gsentance2u,IBAeoseXa2,Total pancreatectomy,gsentance2u@youku.com,167.156.61.19,48.1933831,13.1657762,2019-06-10 15:40:50
+104,Gabi,Tunaclift,gtunaclift2v,7nUBfj,Thorac total exc thymus,gtunaclift2v@scribd.com,183.149.64.97,-7.4704747,112.4401329,2020-07-07 01:49:18
+105,Justino,Luddy,jluddy2w,KBwocln,Repair of uvula,jluddy2w@dion.ne.jp,81.81.153.226,49.2176624,2.121866,2020-01-09 03:51:16
+106,Lyle,Sculpher,lsculpher2x,9w0J0VZMTQ,Remov large bowel tube,lsculpher2x@europa.eu,22.123.47.201,43.8227415,18.2051201,2020-04-02 15:22:45
+107,Torry,D'Ugo,tdugo2y,U4SZsXBWCT,Cell block/pap-endocrine,tdugo2y@foxnews.com,198.120.96.148,10.0600742,-2.5098914,2019-12-18 11:29:25
+108,Hube,Ruse,hruse2z,m3SXBxpP6Gi,Thorac esophagogastrost,hruse2z@biglobe.ne.jp,59.97.126.157,31.046822,115.318821,2019-08-07 21:02:00
+109,Harvey,Physick,hphysick30,NlZxiAmZ0vL5,Endosc destru lg int les,hphysick30@gnu.org,251.218.130.26,4.0627144,-75.1285712,2019-01-16 15:38:53
+110,Cody,Clemendot,cclemendot31,BaP7gYkTO,Femoral division NEC,cclemendot31@chron.com,91.211.96.211,50.063355,18.4336557,2019-05-03 18:04:31
+111,Titus,Godding,tgodding32,SzkzDtA,Pericardiectomy,tgodding32@answers.com,196.123.178.212,-6.143977,106.3993658,2021-03-21 01:52:11
+112,Huntley,De Benedictis,hdebenedictis33,dgg3yV,Synovectomy-site NEC,hdebenedictis33@lulu.com,125.175.72.121,18.2726824,-70.2297697,2019-05-27 20:15:24
+113,Humfried,Mordey,hmordey34,dyphY0Ko,Orchiopexy,hmordey34@wunderground.com,76.1.136.145,40.724331,-7.6665735,2021-03-20 14:43:05
+114,Reg,Manser,rmanser35,zf39i5a0,Parasitology-lower resp,rmanser35@drupal.org,76.171.218.81,48.47092,24.94678,2019-03-01 02:57:38
+115,Seward,Heggs,sheggs36,bkk7Bz,Bone grft to metacar/car,sheggs36@wired.com,3.84.203.122,29.1082924,119.6364468,2020-12-10 12:35:38
+116,Shepard,Overy,sovery37,E99GmFa6,Complete sialoadenectomy,sovery37@tripod.com,105.132.238.225,-13.3970988,48.2667279,2019-09-04 20:52:38
+117,Giordano,Mathewes,gmathewes38,iytNRRbbL,Endosc destr urethra les,gmathewes38@yellowbook.com,142.224.225.138,-1.4580748,114.4108587,2020-02-19 13:25:35
+118,Hallsy,Keddle,hkeddle39,4OrVQkogsUJs,Unilat breast implant,hkeddle39@joomla.org,181.90.239.151,4.0224656,9.1954432,2021-01-10 12:00:01
+119,Jervis,Hursey,jhursey3a,SMCk2WWdg,Recreational therapy,jhursey3a@163.com,45.80.241.242,33.989451,105.097568,2019-07-26 04:09:55
+120,Rochester,Totterdell,rtotterdell3b,FC7u2Vr8xd,Tendon sheath explorat,rtotterdell3b@prnewswire.com,185.88.195.14,39.9870663,48.4692545,2018-12-28 11:46:28
+121,Laurie,Musker,lmusker3c,ZJliAmVjvDbe,Debrid opn fx-radius/uln,lmusker3c@state.gov,85.15.83.66,49.7442318,21.9201324,2019-06-21 06:16:14
+122,Linoel,Bandiera,lbandiera3d,OqbdQ8X,Retroperit dissect NOS,lbandiera3d@constantcontact.com,140.156.105.249,36.02866,70.77258,2020-12-27 01:16:05
+123,Fairfax,Croot,fcroot3e,HOp1lkbg0,Imp limb length kinetic,fcroot3e@google.ru,185.52.27.212,-17.1023219,49.1221414,2019-08-21 05:15:23
+124,Che,Benesevich,cbenesevich3f,ZAhT9hVP,Aortocoronary bypass NOS,cbenesevich3f@yandex.ru,45.157.245.117,54.8986278,61.3521146,2019-06-07 11:57:55
+125,Zechariah,Scapens,zscapens3g,x2qdyKnY0,Radius/ulna division NEC,zscapens3g@pen.io,141.61.232.180,-34.9368789,-54.9281496,2019-06-16 15:07:24
+126,Myles,Girvin,mgirvin3h,4ZwFyLSsJQ,Fallopian tube biopsy,mgirvin3h@lulu.com,231.215.255.101,44.351935,-87.8445954,2018-12-23 19:40:34
+127,Emerson,Yapp,eyapp3i,CBksuagfcxb,Conduit artium-pulm art,eyapp3i@google.fr,47.230.167.129,-20.5180739,57.5263859,2019-05-31 08:22:58
+128,Moss,McClinton,mmcclinton3j,1QnPhjN,Isotope inject/instill,mmcclinton3j@moonfruit.com,247.167.95.76,42.629452,120.639361,2019-07-02 20:33:36
+129,Urban,Seldon,useldon3k,0Uw4to5oP2D,Vaccination NEC,useldon3k@freewebs.com,73.231.3.246,48.7997482,2.4699259,2021-03-01 08:52:13
+130,Ezechiel,Gathercole,egathercole3l,tzwq8NeMH,Osteoclasis-patella,egathercole3l@ca.gov,135.217.26.159,39.1457699,-9.234085,2019-03-14 09:18:38
+131,Will,Pennazzi,wpennazzi3m,L4Vengj,Dacryocystorhinostomy,wpennazzi3m@oaic.gov.au,71.201.213.171,35.063892,101.818885,2018-12-21 13:29:50
+132,Elston,Minkin,eminkin3n,jGEGovT,Inject antidote,eminkin3n@fema.gov,15.216.158.67,4.616094,-75.635595,2019-11-15 00:23:10
+133,Wiley,Brugmann,wbrugmann3o,HdCaIoo,Facial rhytidectomy,wbrugmann3o@narod.ru,83.216.44.88,49.3580116,23.5123193,2021-02-04 06:05:13
+134,Roger,Backes,rbackes3p,IswWgi7Z,Remov imp device-patella,rbackes3p@wordpress.com,203.248.178.224,60.3068052,15.3893305,2019-04-27 03:35:06
+135,Vaughan,Eggers,veggers3q,u4GAaYC,Intrauterine transfusion,veggers3q@google.com.hk,195.20.253.59,35.0160783,40.44654,2020-08-15 17:08:34
+136,Purcell,Wakely,pwakely3r,Kao4pzBFs4F,Endosc destr stomach les,pwakely3r@bandcamp.com,112.228.198.163,-11.3462099,38.411369,2019-04-01 16:20:57
+137,Dennet,Orrobin,dorrobin3s,WS5TPc8jG,Catarac phacoemuls/aspir,dorrobin3s@google.co.uk,136.143.126.246,21.0744245,40.3241759,2021-01-06 09:07:31
+138,Prentiss,Huzzey,phuzzey3t,mUlI7mEj7KF8,Cell blk/pap-nervous sys,phuzzey3t@shop-pro.jp,211.106.241.210,46.880102,127.507824,2020-11-10 06:44:18
+139,Forster,Gingel,fgingel3u,1VzEGHOWIJ9,Open robotic assist proc,fgingel3u@nba.com,84.210.2.126,-17.0363653,30.4386437,2021-01-21 00:42:29
+140,Hubert,Wingar,hwingar3v,iaSXev,Esophag stricture repair,hwingar3v@oracle.com,78.144.41.138,47.5196602,91.631072,2019-07-30 13:36:56
+141,Otes,Van der Velden,ovandervelden3w,1YDkhKrEU9,Anal biopsy,ovandervelden3w@facebook.com,210.59.164.38,50.1304906,16.1867635,2019-04-10 22:28:00
+142,Averell,Herreran,aherreran3x,ae2fgRCER,Implant bladder stimulat,aherreran3x@blogger.com,10.177.62.207,22.0557244,106.615868,2019-10-27 22:29:10
+143,Sonny,Prichet,sprichet3y,GyQlWcjC0,Respiratory measure NEC,sprichet3y@dagondesign.com,218.212.222.22,-7.051,112.4232,2019-06-03 07:49:02
+144,Elliott,Persich,epersich3z,gPWrq3l3nUy,Scrot/tunica dx proc NEC,epersich3z@stumbleupon.com,195.44.67.42,-21.1393418,-175.204947,2020-11-16 09:58:36
+145,Osborne,Lindmark,olindmark40,zFPQqyxH7A,Operations on clitoris,olindmark40@t.co,156.221.27.137,32.699635,35.303546,2021-02-07 15:47:23
+146,Cazzie,Stoile,cstoile41,yNUaB0G6yn,Imp/rep CRT defib genat,cstoile41@usnews.com,45.139.34.133,-13.4605423,24.9932143,2020-03-13 19:14:49
+147,Aube,Kirrens,akirrens42,DU9XECg,Ankle structure division,akirrens42@shutterfly.com,88.125.202.70,-7.1221059,106.5701927,2019-07-09 05:09:44
+148,Kellby,Quye,kquye43,oQdxTc,Transposit hand tend NEC,kquye43@imdb.com,212.101.23.111,27.696901,111.975237,2019-09-14 14:09:06
+149,Lenci,Hawley,lhawley44,lbfldt,Renal injection NEC,lhawley44@issuu.com,162.126.4.82,41.1060534,-7.9642047,2020-07-16 19:15:30
+150,Nichols,Filipiak,nfilipiak45,h9csaY7v6Ru,Breast split-thick graft,nfilipiak45@rediff.com,50.243.24.59,56.1597869,37.9891132,2020-04-11 16:59:05
+151,Gabriele,Arnaudi,garnaudi46,M4HyuH,Rad node dissection NOS,garnaudi46@topsy.com,168.243.94.133,13.4793694,-87.1036224,2020-12-26 14:55:59
+152,Kasper,Wofenden,kwofenden47,E9Pfbh,Cl fx reduc-tibia/fibula,kwofenden47@goodreads.com,14.132.53.188,-14.9061237,50.2785486,2020-10-11 07:49:38
+153,Ross,Renton,rrenton48,Wc7VM6ErP,Int fixation-metatar/tar,rrenton48@opera.com,65.208.125.214,47.3860507,0.7236073,2021-03-23 03:08:22
+154,Giffer,Dodge,gdodge49,0O0OYW,Conjunctiva incision NEC,gdodge49@ezinearticles.com,132.19.25.131,35.2866986,36.7415432,2021-02-21 18:17:39
+155,Alvy,Mugridge,amugridge4a,xaug37zDx8F,Tuberculosis vaccination,amugridge4a@state.tx.us,215.100.254.26,-31.7436794,-65.0052144,2019-05-07 16:44:34
+156,Frederigo,Maruska,fmaruska4b,piu9RPwu,Continent ileostomy,fmaruska4b@intel.com,52.120.66.10,31.051908,96.719767,2019-05-04 04:10:20
+157,Demott,Bagwell,dbagwell4c,Vq6PypC,Trnsapcl rep aortc valve,dbagwell4c@psu.edu,178.72.107.3,44.5597467,16.7228288,2020-12-30 06:30:23
+158,Hilliard,Francois,hfrancois4d,sWxujN0Gb,Fit below knee prosthes,hfrancois4d@seesaa.net,169.243.211.155,57.68356,11.8861644,2019-10-15 01:36:58
+159,John,Isitt,jisitt4e,uUlSrH8J,Cervical dx procedur NEC,jisitt4e@feedburner.com,228.75.96.111,53.31611,40.70806,2019-03-20 01:00:41
+160,Olin,Croxford,ocroxford4f,quUXU06U,Closed fx reduction NOS,ocroxford4f@nymag.com,52.213.2.167,39.3621896,22.942159,2019-08-06 23:03:34
+161,Alec,Halegarth,ahalegarth4g,E0fbzQ,Pharyngeal diverticulec,ahalegarth4g@ow.ly,192.158.90.34,43.7441795,2.511999,2019-11-21 10:43:40
+162,Timmie,Bedell,tbedell4h,VvH7cxj5R,Unilat lung transplant,tbedell4h@slashdot.org,106.181.249.185,21.2059357,104.0943247,2019-05-01 04:48:59
+163,Kippar,Broadist,kbroadist4i,euHpW8nR,Nephroscopy,kbroadist4i@phpbb.com,63.161.203.224,1.3566345,172.9299068,2019-05-18 18:20:52
+164,Wash,Sheron,wsheron4j,EznCS4jsfELF,Lumb/lmbsac fus ant/post,wsheron4j@etsy.com,52.40.90.212,54.9428925,20.2216245,2020-07-10 12:45:07
+165,Shayne,Phillis,sphillis4k,yQRLtLj0u9Ji,Remov ext immobilization,sphillis4k@fotki.com,248.6.28.6,52.1513886,4.4982869,2019-06-05 12:21:03
+166,Nealon,Gayforth,ngayforth4l,v2yrzCk8Tb,Noninvas elect stimulatn,ngayforth4l@elpais.com,151.71.57.112,57.3579277,61.6905815,2021-02-16 07:13:41
+167,Boot,Carragher,bcarragher4m,KJyK4TmOF,Temporomand arthroplasty,bcarragher4m@e-recht24.de,162.132.49.162,41.9720786,-87.7517295,2020-10-22 08:35:57
+168,Bruce,Musgrove,bmusgrove4n,A3Pt4WOPPtfv,Exc/dest hrt lesion open,bmusgrove4n@cyberchimps.com,226.159.104.118,39.618462,113.536462,2019-11-22 00:50:23
+169,Bryce,Doswell,bdoswell4o,pjPFNyiGIzAI,Atmos press/compos contr,bdoswell4o@hud.gov,17.97.174.172,35.89222,14.51833,2021-02-08 00:42:32
+170,Jerrold,Bichener,jbichener4p,FQsAdI,C & s-ent/larynx,jbichener4p@sfgate.com,127.223.33.245,-6.5643956,106.2522143,2020-01-26 10:18:48
+171,Seth,Saket,ssaket4q,cltef3ZdUBI,Implant arm prosthesis,ssaket4q@oracle.com,108.144.40.232,45.054478,7.6579399,2019-07-02 04:03:51
+172,Gayelord,Burgisi,gburgisi4r,WeW28YLu1en1,Retinal tear laser coag,gburgisi4r@edublogs.org,241.226.115.194,28.80901,120.26121,2019-09-20 04:38:54
+173,Merwyn,Woodman,mwoodman4s,n4kPT6E1ebh,Mus/ten/fas/bur op NEC,mwoodman4s@sfgate.com,56.194.46.5,15.1650908,120.5657329,2021-02-23 13:13:43
+174,Lucias,Rasher,lrasher4t,RXeTIeZoA,Remov ren dialysis shunt,lrasher4t@shareasale.com,60.130.58.228,53.3126826,22.9196898,2020-05-30 19:31:44
+175,Darren,Heddon,dheddon4u,wt5qBnNxIH,Radioisot teleradiother,dheddon4u@ycombinator.com,233.38.117.157,9.6470386,125.602355,2020-03-21 11:27:30
+176,Gaspard,Cosbey,gcosbey4v,COzVUERAawNN,Character analysis,gcosbey4v@squidoo.com,230.52.213.127,50.1424249,15.1188883,2019-09-28 09:24:56
+177,Baily,Amdohr,bamdohr4w,tD8WOvgo,"Oth exc, fus, repair toe",bamdohr4w@cmu.edu,143.233.183.175,57.6041481,34.5795618,2020-02-08 10:24:03
+178,Sasha,Haymes,shaymes4x,X4okOM0Vr2,Intracran ves resec-anas,shaymes4x@bluehost.com,78.36.241.141,40.7681987,-73.9608428,2020-05-06 15:12:40
+179,Taddeusz,Weavill,tweavill4y,Nvc1nBKgO4I,Choledochohepat intubat,tweavill4y@tripod.com,69.91.114.177,14.5495607,-90.7858316,2020-12-31 20:20:03
+180,Quinton,Strickett,qstrickett4z,kM5tpTF,Other spinal dx proc,qstrickett4z@freewebs.com,133.114.1.69,11.748142,125.421596,2020-05-28 15:47:09
+181,Talbert,Maker,tmaker50,cSfMYh,Transfer of finger,tmaker50@fc2.com,26.242.254.102,50.1837815,33.6817424,2020-04-12 13:09:31
+182,Yul,Stork,ystork51,AADaXD3pAM,Endosc dil pancreat duct,ystork51@redcross.org,66.250.47.48,44.0407757,16.1964988,2019-04-14 23:13:51
+183,Vin,Gummow,vgummow52,7aLhe8QYNu,Wedg resec entropion rep,vgummow52@ycombinator.com,209.192.94.216,18.9133079,72.8228652,2020-11-03 04:34:32
+184,Selby,Bediss,sbediss53,mbo9HmFvar,Repair of ovary NEC,sbediss53@quantcast.com,225.31.139.181,38.0187253,140.1471983,2020-03-20 17:42:26
+185,Worden,Hallet,whallet54,zsllOxkE3,Parastern hernia repair,whallet54@wsj.com,240.145.206.144,48.4470051,23.2604434,2019-11-05 13:50:06
+186,Geri,Mattes,gmattes55,wtKtzhm,Metacarp/carp sequestrec,gmattes55@ebay.com,252.97.151.227,5.6497493,37.3693679,2019-12-04 02:21:39
+187,Frasier,Phipps,fphipps56,NERIGXUw,Thymus transplantation,fphipps56@google.com.hk,176.45.219.95,30.03495,107.122289,2019-05-23 23:22:29
+188,Brose,Kleisel,bkleisel57,BAO4WtuG4Df,Ureteroscopy,bkleisel57@samsung.com,146.179.77.28,-27.4561199,-53.9288773,2019-09-03 17:07:12
+189,Ewell,Lorent,elorent58,tP0XAgD,Excise inguinal node,elorent58@vistaprint.com,202.135.104.162,13.8645517,122.0680526,2020-10-11 13:03:10
+190,Rance,Bassick,rbassick59,gcsiH2,Lap incis hern repr-grft,rbassick59@theatlantic.com,89.149.65.109,26.4836842,117.9249002,2020-06-06 05:58:58
+191,Abbe,Glendinning,aglendinning5a,iKBIsb,Ureteroscopy,aglendinning5a@mit.edu,56.142.20.89,49.6297207,37.6810464,2020-10-21 09:27:40
+192,Patrick,Puckinghorne,ppuckinghorne5b,3KKHXCGVU7,High forceps w episiot,ppuckinghorne5b@reddit.com,140.115.225.235,-0.2842862,20.8850949,2020-05-07 21:55:37
+193,Gamaliel,Szubert,gszubert5c,0oTnXrpFis,Stern esophagogastrostom,gszubert5c@w3.org,123.211.77.13,5.3523231,100.3573891,2020-02-13 13:38:45
+194,Sayers,Ianetti,sianetti5d,uPby9tzJV,Peritoneal repair NEC,sianetti5d@linkedin.com,78.132.172.23,-16.4658725,-54.6341746,2019-05-31 12:43:25
+195,Allen,Lockhart,alockhart5e,oQNAs7N,Bact smear-nervous syst,alockhart5e@flickr.com,3.75.7.202,40.8103508,19.6460758,2019-08-30 01:15:05
+196,Mattie,Farlowe,mfarlowe5f,8vASj2kKh,Total removal sm bowel,mfarlowe5f@unc.edu,199.30.79.162,20.55832,106.56882,2020-01-28 00:13:10
+197,Ewen,Moan,emoan5g,3ZzBBcQ,Oth metacarp/carp incis,emoan5g@elegantthemes.com,141.84.245.122,33.027777,113.546942,2018-12-22 23:52:58
+198,Dominik,Canfield,dcanfield5h,rZqQYk,Oth meta/tar repa/plast,dcanfield5h@friendfeed.com,187.129.7.39,49.45218,-123.2376,2020-01-29 18:23:34
+199,Tod,Dominetti,tdominetti5i,qgXIu27mgRx,Endosc dil pancreat duct,tdominetti5i@imageshack.us,79.208.28.118,38.0790354,23.5215964,2021-01-28 07:23:41
+200,Wilfrid,Rewcastle,wrewcastle5j,832yzvM5niJ,Other CAS,wrewcastle5j@hp.com,104.69.30.29,46.2194458,-71.7713791,2020-06-08 09:35:18
+201,Teador,Grece,tgrece5k,pUN6OIGLOO,Routine psychiat visit,tgrece5k@miitbeian.gov.cn,241.248.161.84,55.6710006,12.5565291,2021-02-08 23:43:02
+202,Artair,Brecknock,abrecknock5l,eZMxV6tXt,Partial pinealectomy,abrecknock5l@google.pl,107.226.215.62,50.1120523,16.2564466,2020-03-19 07:12:06
+203,Moishe,aManger,mamanger5m,qmepkqhu3,Liver scan/isotope funct,mamanger5m@google.de,103.187.145.60,-6.1512014,-79.7147468,2021-02-03 13:49:05
+204,Stanley,Blucher,sblucher5n,px3eO7YeuR,Choledochoplasty,sblucher5n@msn.com,236.127.192.235,29.50393,117.976899,2020-03-31 06:29:42
+205,Martino,Townley,mtownley5o,eAzjDOOnBRxS,Insert gastric tube NEC,mtownley5o@so-net.ne.jp,212.26.54.105,56.93333,49.15361,2019-12-01 23:09:55
+206,Haleigh,Pochon,hpochon5p,ZmZxO8W2O,Tooth extraction NEC,hpochon5p@paypal.com,138.132.95.205,35.880105,14.510096,2020-08-22 12:50:15
+207,Franchot,O' Finan,fofinan5q,F9u2coo,Drug rehabilitation,fofinan5q@globo.com,123.234.156.242,13.5215952,102.1714454,2020-06-11 13:45:30
+208,Aldon,Cowely,acowely5r,VfrFA0ozoq,Excision tunica les NEC,acowely5r@timesonline.co.uk,195.12.178.6,38.520089,102.188043,2020-08-23 06:42:48
+209,Bryan,Sibille,bsibille5s,GBnWIu,Simpl aspir lens extract,bsibille5s@blogger.com,213.205.117.60,8.2158527,-13.0961989,2021-03-16 09:37:10
+210,Wilfrid,Caddens,wcaddens5t,wgmb3IKVArA,Rad node dissection NOS,wcaddens5t@cafepress.com,75.186.242.165,59.9043046,10.7545473,2019-09-25 00:43:34
+211,Ruben,Fidilis,rfidilis5u,dWNl3vfR,Trans bal dil pros ureth,rfidilis5u@tamu.edu,148.115.25.107,-5.1443118,-38.0850339,2020-09-05 11:17:14
+212,Rollins,Gratton,rgratton5v,R63wdk9Pjp,Hip joint biopsy,rgratton5v@w3.org,95.20.201.234,45.2544588,5.7043997,2019-11-10 10:18:08
+213,Alisander,Heffy,aheffy5w,SIt2Yc50W,Opn red-sep epiphy-humer,aheffy5w@bigcartel.com,63.143.242.10,55.4763949,13.5019331,2019-08-30 23:05:43
+214,Glen,Hollingby,ghollingby5x,7o3f9FI,Female genital x-ray NEC,ghollingby5x@exblog.jp,120.61.63.204,40.094835,113.249246,2020-08-04 06:11:38
+215,Adolf,Burgess,aburgess5y,CuG1O7tG4rf,Therapeu erythropheresis,aburgess5y@51.la,35.106.44.47,-24.3994943,26.1477598,2020-07-08 22:36:03
+216,Arie,Bickersteth,abickersteth5z,oisgerHdByW,Ventri shunt-circula sys,abickersteth5z@apple.com,49.69.56.102,-7.8307181,110.6338382,2019-09-14 17:58:26
+217,Dunc,Bedells,dbedells60,A8JnIoxwvT5p,Eswl gb/bile duct,dbedells60@disqus.com,77.211.237.233,40.2507786,44.419895,2019-08-03 23:19:24
+218,Monty,Kuban,mkuban61,90LaDs3Y5CkL,Trnsapcl repl pulm valve,mkuban61@unesco.org,119.86.174.160,49.5376953,6.1470475,2019-04-12 10:34:24
+219,Brade,Lorking,blorking62,b5zXiyyI,Bact smear-lower GI,blorking62@dedecms.com,170.31.110.76,45.6138162,20.0459853,2019-11-24 03:30:44
+220,Rafaello,Lesaunier,rlesaunier63,Cl9xPn9g,High forceps w episiot,rlesaunier63@chronoengine.com,123.241.153.17,-31.3961762,26.354462,2019-06-11 19:18:17
+221,Monti,Hawe,mhawe64,CwY11B,Prod subq tunnel no anas,mhawe64@technorati.com,129.242.52.106,-21.2352558,-46.7865516,2020-06-07 08:41:11
+222,Bondie,Stuckey,bstuckey65,gcmZhy45ZUhr,Unilateral adrenalectomy,bstuckey65@vistaprint.com,39.252.150.249,26.879864,113.646181,2019-09-25 12:28:41
+223,Des,Linnock,dlinnock66,cHEbX5,Tracheostomy toilette,dlinnock66@e-recht24.de,164.41.121.143,28.0896014,108.7986202,2020-08-22 06:21:58
+224,Man,Oldknowe,moldknowe67,3VZSkjJlL5BP,Rem int bivent hrt sys,moldknowe67@nba.com,55.230.53.195,40.417902,122.660538,2019-02-23 20:34:26
+225,Wendel,Fowlston,wfowlston68,B5kUJk,Orbit exent w bone remov,wfowlston68@slashdot.org,213.146.164.52,43.2916776,-0.3696612,2020-03-21 00:11:17
+226,Stefan,Tourmell,stourmell69,WBBdF4XdQv,Suture bladder lacerat,stourmell69@engadget.com,39.2.211.166,59.79769,30.5550816,2020-03-28 22:42:18
+227,Krishnah,Peagram,kpeagram6a,YonchhDkd,Opn ind ing hern-gft NEC,kpeagram6a@seesaa.net,134.252.153.92,22.825065,100.966512,2019-09-19 05:06:37
+228,Raddie,Boater,rboater6b,mjVJcbd8bN,Suture vagina laceration,rboater6b@sbwire.com,22.42.213.160,32.519016,34.904544,2020-01-12 02:11:25
+229,Efren,Crowth,ecrowth6c,CqwSGoe,"Exc/dest hrt les, thrspc",ecrowth6c@amazon.co.jp,23.110.54.55,60.986717,14.5654425,2020-05-16 03:00:31
+230,Chase,Stabbins,cstabbins6d,m60VvX81inSr,Plast op hnd-mus/fas grf,cstabbins6d@nps.gov,25.195.124.118,26.647932,107.917448,2019-04-24 02:22:15
+231,Cort,Maypother,cmaypother6e,OMfPb7,Oth totl excision thymus,cmaypother6e@tumblr.com,197.54.161.28,7.916433,124.200182,2020-04-23 03:46:06
+232,Alexandros,Bullier,abullier6f,fTABFF,Form cutan ileoureterost,abullier6f@newsvine.com,241.76.56.123,-11.6604039,43.2726992,2020-03-16 08:17:59
+233,Salvatore,Creany,screany6g,PtqeSbXZqk,Cell blk/pap-bili/pancre,screany6g@businesswire.com,222.252.230.42,45.788378,3.1331436,2020-06-09 09:15:34
+234,Aloysius,Wathell,awathell6h,yuoEFEM3G,Incis rectal stricture,awathell6h@google.cn,117.57.106.47,-38.7589114,-62.2749967,2019-09-09 12:10:06
+235,Vin,Gossage,vgossage6i,5sdN3CqLtQ4,Bilat ing hernia rep NOS,vgossage6i@forbes.com,14.211.40.60,54.5859873,73.6386612,2019-03-13 07:28:09
+236,Falkner,Hackforth,fhackforth6j,n3hN2UL,Other incid appendectomy,fhackforth6j@hostgator.com,106.220.166.67,23.1243988,113.2475087,2020-04-18 16:27:27
+237,Lambert,Cattermole,lcattermole6k,EX1QcXE,Bilat adrenal explorat,lcattermole6k@hao123.com,183.155.168.232,8.6962086,-82.4969331,2019-08-19 11:35:41
+238,Yuri,Cowie,ycowie6l,RiXTw4ki,Therapeutc photopheresis,ycowie6l@trellian.com,229.194.166.108,30.7058907,76.785812,2020-06-04 11:52:17
+239,Nico,Infante,ninfante6m,OHvkiZYMa8,Breast xerography,ninfante6m@chronoengine.com,55.102.198.186,46.70011,-75.44929,2019-01-18 13:55:16
+240,Shelden,Wicher,swicher6n,DrSJE51VY,Symbleph rep w free grft,swicher6n@example.com,55.8.205.88,47.0799211,-1.2821339,2019-04-09 13:42:06
+241,Egbert,Haskins,ehaskins6o,8OqP7CI,Cell block/pap-ent/laryn,ehaskins6o@youtu.be,222.249.64.220,25.763034,107.701307,2019-05-31 07:06:33
+242,Jecho,Da Costa,jdacosta6p,ki3GifNUSjn,Abd vein resect & anast,jdacosta6p@earthlink.net,88.15.229.30,14.8753647,-88.0729754,2019-07-03 21:57:39
+243,Munroe,Tennant,mtennant6q,ERxpc6sz,C & s-eye,mtennant6q@comcast.net,130.212.96.74,6.7703871,8.9935558,2020-09-07 02:38:32
+244,Irvine,Gever,igever6r,1SNiJYP8,Contrast phlebogram NEC,igever6r@tamu.edu,33.53.110.192,-8.3257,123.1505,2020-10-23 11:55:49
+245,Morse,Birtles,mbirtles6s,xg4CEtx,Debrid opn fx-tibia/fib,mbirtles6s@wikia.com,31.185.72.33,16.08532,120.03164,2019-09-25 10:05:45
+246,Ray,Lindsey,rlindsey6t,gGMd2Coe,Oth thorac op thymus NOS,rlindsey6t@wordpress.org,176.46.47.33,-14.0993396,-75.6891699,2020-09-20 20:34:45
+247,Kelley,Storah,kstorah6u,HSGo8jJV,Int fix w/o fx reduc NOS,kstorah6u@homestead.com,217.212.15.9,-25.3810275,-57.1577041,2019-03-12 02:30:51
+248,Welbie,Molan,wmolan6v,m66tyP,Thorac lg bowel interpos,wmolan6v@histats.com,198.107.216.217,48.87561,2.302597,2019-10-31 06:19:02
+249,Abner,Erricker,aerricker6w,ecXLntGgN4w4,Transfus prev auto blood,aerricker6w@java.com,42.54.43.12,41.6434293,42.9934449,2020-06-14 04:08:16
+250,Ambrosi,Storrah,astorrah6x,KP6ARmZpcFsh,Closed fx reduction NOS,astorrah6x@geocities.jp,162.90.250.69,-7.7799,114.0783,2019-10-05 20:05:45
+251,Hersch,Scardafield,hscardafield6y,fy6oQ2l,Local destruc trach les,hscardafield6y@bloomberg.com,8.19.168.95,52.1327312,18.2293232,2021-03-12 21:50:53
+252,Jarret,Forbear,jforbear6z,nYQgjoFo1sf,Remove bile duct prosth,jforbear6z@sina.com.cn,60.237.75.63,40.42722,71.71889,2020-07-14 17:22:04
+253,Nicolai,Camies,ncamies70,X7sZJcUUx3vc,Inject insulin,ncamies70@earthlink.net,209.11.27.82,54.1863169,19.7204087,2019-08-02 13:20:20
+254,Bear,Godsell,bgodsell71,xGwLiLvMXIFp,Hindquarter amputation,bgodsell71@google.com.au,63.164.162.212,-7.5944434,-35.1048713,2019-07-26 12:29:08
+255,Antony,Phillott,aphillott72,K51UMQ,Parasitology-peritoneum,aphillott72@qq.com,240.92.32.93,28.1328796,-15.4393074,2019-06-14 01:58:10
+256,Kinsley,Abrahams,kabrahams73,2l2XSDbx,Upper limb vessel incis,kabrahams73@about.me,159.71.20.197,60.4783655,15.3710047,2020-05-14 16:08:26
+257,Berti,Ezele,bezele74,uMEQUVI,Other destruc bronc les,bezele74@tamu.edu,149.27.101.156,8.5131518,124.7568082,2019-03-25 04:58:14
+258,Johny,Valeri,jvaleri75,n4dhBpy8i,Plastic rep ext ear NEC,jvaleri75@blogger.com,145.130.227.167,30.475663,-87.193563,2020-01-03 05:38:28
+259,Keith,Shmyr,kshmyr76,8KPrWm0m,Cell blk/pap-upper urin,kshmyr76@mashable.com,241.102.212.184,-7.2801,108.1944,2020-08-28 14:50:47
+260,Ware,Breem,wbreem77,lg1eqgXTxK7g,Arm ves resect w replace,wbreem77@unc.edu,17.211.218.162,14.1929998,121.1317352,2019-09-14 19:49:41
+261,Emlen,Leatham,eleatham78,pXWtERMay28,SuperSat O2 therapy,eleatham78@fda.gov,73.201.222.208,59.6170081,52.4618922,2020-04-17 14:16:19
+262,Jamey,Maly,jmaly79,qFmDHQvnYO8,Skull x-ray NEC,jmaly79@soup.io,150.248.1.195,36.0486399,140.2051504,2019-07-11 07:56:35
+263,Stevie,Leachman,sleachman7a,J1vNSpmeG,Hypnotherapy,sleachman7a@sciencedaily.com,114.5.187.35,-8.557437,114.0369075,2020-07-19 05:26:07
+264,Hanson,Longridge,hlongridge7b,E1cTpEotae,Magnetic res image unsp,hlongridge7b@addtoany.com,9.121.9.13,32.7074464,108.9391253,2019-03-10 01:48:08
+265,Thurston,Gosford,tgosford7c,MGr1yuQ5mA,Tracheal reconstruction,tgosford7c@techcrunch.com,114.223.208.229,52.2649866,18.4265865,2020-06-19 14:15:20
+266,Der,Critchell,dcritchell7d,ZDJGoBeHv,Open biopsy of esophagus,dcritchell7d@sphinn.com,42.110.117.55,58.6316895,80.1006379,2021-02-28 04:19:18
+267,Alfons,Schimke,aschimke7e,XuUXsx,Nasophary contrast x-ray,aschimke7e@exblog.jp,114.31.233.82,-8.1578871,112.2771485,2021-02-22 17:07:13
+268,Ansell,Ossenna,aossenna7f,Du73XliaZ2V,Bone graft NEC,aossenna7f@moonfruit.com,85.109.153.24,-16.2382608,-44.4370606,2020-08-22 04:59:08
+269,David,Jendrassik,djendrassik7g,dMXjnZDM,Rep rectocele w grf/pros,djendrassik7g@forbes.com,254.103.164.131,-6.8482297,106.6802549,2019-08-25 20:25:33
+270,Christie,Rigardeau,crigardeau7h,WFHIVTJGG,Salivary duct probing,crigardeau7h@yellowbook.com,81.102.226.145,42.1068701,60.0789086,2020-05-09 07:33:05
+271,Purcell,Tebbut,ptebbut7i,c9oH82EdiX7,Metacarpal/carpal biopsy,ptebbut7i@histats.com,0.58.97.7,57.6557636,11.9664639,2020-07-05 00:26:13
+272,Niki,Dyson,ndyson7j,bITUkS5Oz,Mid forceps w episiotomy,ndyson7j@va.gov,152.160.20.150,16.3793702,102.3692982,2020-09-11 01:50:03
+273,Nolly,Veasey,nveasey7k,al77Xgre,Dyslexia training,nveasey7k@oracle.com,174.110.127.200,31.811226,119.974061,2020-01-05 04:03:57
+274,Cassius,Kerss,ckerss7l,oYzw6h9SuW,Attach pedicle graft NEC,ckerss7l@taobao.com,129.240.143.179,-7.240959,112.746435,2019-10-06 17:06:29
+275,Steffen,Legate,slegate7m,45nNkfH,Remov imp dev-chest cage,slegate7m@gmpg.org,78.244.126.133,43.598763,93.016624,2020-04-30 18:52:10
+276,Garey,Thewys,gthewys7n,9vRm7Zv,Ligate thoracic duct,gthewys7n@behance.net,62.161.212.46,-11.0073376,-66.058249,2020-08-11 14:03:51
+277,Hardy,Mortimer,hmortimer7o,5fveXMQfIh,"Hip surface, cermc/poly",hmortimer7o@weather.com,149.24.196.186,43.8317876,4.3686291,2021-03-06 01:33:01
+278,Massimiliano,Breit,mbreit7p,lv0YTfFQlZ,Coronary bld flow monit,mbreit7p@europa.eu,60.84.120.94,34.17,-118.12,2020-06-27 07:13:49
+279,Willem,Remon,wremon7q,x1oy5YO9X,Spermatic cord/vas biops,wremon7q@icq.com,40.231.147.230,48.3226457,31.5187617,2020-09-28 16:21:18
+280,Nefen,Hurdedge,nhurdedge7r,uqF2riQKlEC,Video/radio eeg monitor,nhurdedge7r@cbslocal.com,200.64.204.110,-6.3943,105.9495,2020-04-19 05:38:07
+281,Constantino,Lewcock,clewcock7s,P6D6aXCQnA,Bone marrow ops NEC,clewcock7s@geocities.com,196.100.206.230,20.8965838,-105.4093552,2019-07-10 23:15:16
+282,Adolphus,Vowles,avowles7t,LJ5XcjM6,Urethral dilation,avowles7t@harvard.edu,131.88.251.99,37.439299,-5.9885456,2020-09-25 02:00:16
+283,Colman,Jaggard,cjaggard7u,qyWtgz,Blood expander transfus,cjaggard7u@webeden.co.uk,118.176.185.213,-5.0175431,-42.5117238,2019-04-03 15:38:51
+284,Shepherd,Muston,smuston7v,vfBviAkA,Endo insrt bronc def/sub,smuston7v@jugem.jp,226.189.42.167,59.0475746,15.002836,2021-02-14 13:24:51
+285,Adolph,Cappleman,acappleman7w,lF1ILL,Spermatic cord incision,acappleman7w@paypal.com,206.168.85.249,48.8048649,2.1203554,2020-07-06 04:54:07
+286,Ravid,Jedrzejewski,rjedrzejewski7x,7gFvqox,Thoracentesis,rjedrzejewski7x@bloomberg.com,1.158.195.218,46.9962539,28.8716267,2020-11-15 17:15:18
+287,Lucias,Redpath,lredpath7y,Cu87wArNcQ,Aspiration of ovary,lredpath7y@nsw.gov.au,11.85.9.223,66.2185015,23.0524409,2021-01-12 03:03:45
+288,Corbin,Pavluk,cpavluk7z,yR8qyZx7Xth,X-ray of gravid uterus,cpavluk7z@joomla.org,3.179.136.54,65.1047244,17.1227163,2019-09-22 15:44:34
+289,Jaime,Wickenden,jwickenden80,bIlT5F,Remov ext immobilization,jwickenden80@vinaora.com,149.196.8.166,17.7409147,-91.7660525,2019-06-08 15:34:44
+290,Rudolfo,Pyson,rpyson81,m6OQrQSt0,Laparoscopy,rpyson81@delicious.com,12.135.116.116,8.7550575,-11.044307,2019-08-11 11:39:29
+291,Kristian,Fripps,kfripps82,t8hycWG5GILx,Tendon advancement,kfripps82@sciencedirect.com,125.229.64.113,-28.2963334,-52.793776,2019-01-23 03:12:32
+292,Hurlee,Habershaw,hhabershaw83,WByLhUs7jr2R,Delay opening ileostomy,hhabershaw83@mashable.com,57.24.69.57,14.9699796,145.6412079,2020-12-04 15:22:16
+293,Wallache,Castillou,wcastillou84,SpdFAa,Suture bladder lacerat,wcastillou84@virginia.edu,185.156.179.51,46.2279096,-63.1016755,2021-02-10 21:40:53
+294,Justino,Marushak,jmarushak85,q8Q0dm,Intrathoracic shunt NEC,jmarushak85@jimdo.com,116.211.243.181,37.3051059,136.7493479,2019-07-11 14:09:29
+295,Richy,Bearne,rbearne86,nuLAn5g8ysOa,Partial shoulder replace,rbearne86@i2i.jp,27.102.136.63,-7.620317,112.3695412,2019-03-06 19:47:56
+296,Northrop,Bugge,nbugge87,YdraJdK,Thorac duct cannulation,nbugge87@slideshare.net,138.223.13.252,50.0234664,-66.8869412,2019-09-07 23:05:51
+297,Myrvyn,Lambole,mlambole88,pRD4xbrF,Hand skin graft NEC,mlambole88@seesaa.net,204.114.255.102,13.5987473,122.2344876,2019-02-09 01:41:59
+298,Daniel,Boadby,dboadby89,Ta2YyI,Aspirat curet-preg termi,dboadby89@mit.edu,80.206.237.31,31.491169,120.31191,2019-09-23 09:59:35
+299,Tripp,Gricewood,tgricewood8a,aDgJYHDU,Diaphragm operation NEC,tgricewood8a@google.nl,179.119.246.29,29.7286909,115.9990815,2019-04-03 23:11:31
+300,Sayre,Ost,sost8b,4dGcEuL2,Exc les sft tiss hnd NEC,sost8b@infoseek.co.jp,160.195.113.64,-51.7308935,-72.4977407,2019-10-10 18:55:37
+301,Tobe,Aingel,taingel8c,PCzThQxHAz,Cystourethroplasty,taingel8c@topsy.com,45.8.213.206,7.867718,124.1018629,2019-11-01 17:05:21
+302,Killie,Rosie,krosie8d,zTRaSRUhp,Sphenoidotomy,krosie8d@cyberchimps.com,126.67.134.0,41.604029,-8.5920192,2020-04-29 17:14:11
+303,Guss,Haistwell,ghaistwell8e,nOpRTIR,Closed chest card massag,ghaistwell8e@cdc.gov,197.166.151.15,34.540852,109.44096,2020-06-22 18:55:17
+304,Siegfried,Pinkie,spinkie8f,OqKZKl,Opn rep dir ing hern NEC,spinkie8f@youtu.be,217.186.174.106,-34.6893836,-58.5801516,2020-10-21 17:14:03
+305,Cooper,Simmank,csimmank8g,MUPqjrHs4q,Opn/oth rep aortic valve,csimmank8g@loc.gov,188.208.103.252,39.975999,116.317558,2020-05-05 10:52:32
+306,Leonerd,Novic,lnovic8h,qGtuwu19,Close lg bowel fistula,lnovic8h@g.co,149.11.137.64,38.838392,99.617119,2019-05-28 09:33:47
+307,Ozzie,Sayle,osayle8i,kL2ORKA76uy,Other perm tracheostomy,osayle8i@typepad.com,239.218.136.164,-8.2412718,112.0744643,2020-04-10 18:37:03
+308,Flint,Petworth,fpetworth8j,jtx4mIIXye72,Pedicle attach to mouth,fpetworth8j@cdbaby.com,45.214.214.161,49.1532539,16.8764982,2019-11-02 13:24:19
+309,Phillip,Coxen,pcoxen8k,z6H9OGkFbI,Radical glossectomy,pcoxen8k@huffingtonpost.com,195.91.33.3,28.598454,111.786109,2020-01-23 03:32:05
+310,Edvard,Domini,edomini8l,6FIrwc5TJT,Tracheal injection,edomini8l@cornell.edu,54.33.206.123,51.549106,-9.268589,2019-12-01 19:56:02
+311,Ronnie,Gilbeart,rgilbeart8m,mKYerMnbvcT,Arth/pros rem wo rep NEC,rgilbeart8m@pen.io,181.57.250.62,38.853468,121.2502,2020-06-21 04:31:38
+312,Gerek,Coventry,gcoventry8n,PguVOkmzD,Manual rotat fetal head,gcoventry8n@delicious.com,108.176.3.16,14.290674,-91.912218,2020-12-23 23:21:23
+313,Dex,Mardlin,dmardlin8o,K8o4fe,Open reduc-ankle disloc,dmardlin8o@noaa.gov,33.223.77.48,50.3700968,13.794744,2019-01-12 21:45:54
+314,Hart,Dauncey,hdauncey8p,AEHWAjc,Excis deep cervical node,hdauncey8p@furl.net,33.39.235.79,40.7200264,-7.2571497,2020-09-09 22:12:56
+315,Karel,Rennocks,krennocks8q,BWMwZ6yF5,Lip biopsy,krennocks8q@walmart.com,103.74.143.129,35.089251,135.8827528,2020-09-18 12:38:41
+316,Cyrill,Stilgoe,cstilgoe8r,cjTMePa0Tc,Arth/pros rem wo rep-hnd,cstilgoe8r@themeforest.net,64.151.13.247,52.4198041,20.9258628,2020-06-30 21:38:14
+317,Hasty,Ganley,hganley8s,W3zKZcVNW,Auto bone mt w purging,hganley8s@craigslist.org,58.87.156.205,-6.972219,112.4619282,2020-12-03 00:02:50
+318,Kahlil,Eakin,keakin8t,IL04Kh1L,Leg vein excision,keakin8t@yahoo.com,145.195.3.128,44.3660736,19.8379835,2020-05-05 21:45:40
+319,Patric,Crummey,pcrummey8u,B393X4X2IEb,Thyroid scan/isotop func,pcrummey8u@columbia.edu,33.43.233.26,-3.3419323,-60.8609358,2019-05-04 09:48:15
+320,Harold,Rosser,hrosser8v,DrhjCRy,Aspirat curet-post deliv,hrosser8v@wordpress.com,183.215.139.179,15.1539332,-87.8721602,2019-06-07 14:42:14
+321,Lemuel,Chauvey,lchauvey8w,LxYvsD2LDp,Op bi in ing hrn-grf NEC,lchauvey8w@wisc.edu,46.239.95.34,27.522725,112.507849,2019-10-30 11:48:40
+322,Christie,Rihosek,crihosek8x,SCYjH5157,Joint biopsy NEC,crihosek8x@macromedia.com,69.49.76.221,32.009016,112.122426,2021-01-17 06:15:18
+323,Vincent,Hagger,vhagger8y,DfFRajyXoff,Imp/rep CRT defib genat,vhagger8y@plala.or.jp,93.151.145.74,36.776357,119.98842,2020-07-09 20:46:05
+324,Gabi,Grimwood,ggrimwood8z,CyocdqP2vD,Clos transureth bladd bx,ggrimwood8z@imgur.com,135.204.199.5,55.6832198,12.5899894,2020-07-17 06:16:33
+325,Chancey,Rammell,crammell90,jGXTHMXUVF,Remove dental prosthesis,crammell90@omniture.com,224.186.182.111,15.5106977,104.7264617,2020-06-11 02:36:50
+326,Jacob,O'Lyhane,jolyhane91,tiua8Hyxv,Other fasciectomy,jolyhane91@sakura.ne.jp,182.55.84.20,47.1117538,96.6716809,2020-05-16 21:01:20
+327,Irving,Barnbrook,ibarnbrook92,7cRAmqbQBHKX,Incis to remov tonsil FB,ibarnbrook92@google.com.hk,195.205.142.140,48.1967872,6.4788333,2019-01-25 05:32:18
+328,Horton,Heyworth,hheyworth93,OjkQz0sLhVUo,Ankle fusion,hheyworth93@google.co.jp,73.96.77.55,59.6484097,16.5685158,2020-04-16 08:43:18
+329,Traver,Biggins,tbiggins94,wjegZVNjHHS,Referral psych rehab NEC,tbiggins94@dropbox.com,94.69.22.44,25.66788,110.547966,2019-11-03 11:19:40
+330,Ollie,Galgey,ogalgey95,rdIixIaU,Muscle trnsfr/transplant,ogalgey95@issuu.com,70.69.178.222,-2.4135692,115.2111472,2019-03-14 23:13:13
+331,Arte,Towey,atowey96,pASALBGUr8S,Rev facet replace device,atowey96@ustream.tv,139.116.60.222,-27.1799941,25.9586253,2019-10-30 11:33:07
+332,Temple,Faucett,tfaucett97,7iFdrH,Incision of chest wall,tfaucett97@flickr.com,251.163.9.8,10.3291793,123.8864493,2020-01-17 22:59:48
+333,Zacharia,Reason,zreason98,sCzNs3o,Electroretinogram,zreason98@goo.ne.jp,250.144.142.0,55.456622,60.2122499,2019-11-03 07:30:32
+334,Marcus,Brookes,mbrookes99,QxWojPJ14dm,Mix venous bld gas meas,mbrookes99@slate.com,72.214.166.164,13.9098814,121.6159031,2019-07-25 03:01:34
+335,Kelby,Caldes,kcaldes9a,WhzIvWJ,Other CAS,kcaldes9a@example.com,144.208.141.57,38.43923,-122.6673018,2019-11-08 00:25:20
+336,Ricky,Meaders,rmeaders9b,xBwNofI4ykOx,Lumbar sympathectomy,rmeaders9b@networkadvertising.org,18.251.40.152,55.874056,37.690366,2019-03-23 08:42:16
+337,Skelly,Philpotts,sphilpotts9c,USOPQIBkUu,Intravascul imaging NEC,sphilpotts9c@bluehost.com,61.180.203.228,28.214419,121.293705,2019-04-17 14:58:20
+338,Garrard,Bracegirdle,gbracegirdle9d,utwDot1H,Open biopsy of esophagus,gbracegirdle9d@ow.ly,194.103.204.127,45.1181926,21.2944883,2019-04-14 17:45:47
+339,Isak,Bowley,ibowley9e,ckeMLEjj,Cystostomy closure,ibowley9e@bandcamp.com,84.188.13.234,35.818632,111.285799,2020-10-19 14:30:58
+340,Donalt,Grene,dgrene9f,nkEDppAKeXxi,Alveoloplasty,dgrene9f@etsy.com,33.120.176.20,33.3107008,-111.8749872,2019-12-29 19:41:18
+341,Gaston,Crehan,gcrehan9g,aH1G7OIc,Perc extrac com duc calc,gcrehan9g@dailymotion.com,153.57.182.49,27.868393,113.433712,2020-12-15 23:47:21
+342,Fidole,Stritton,fstritton9h,pYQIsNiFk5K,Bladder les destruct NEC,fstritton9h@aol.com,43.149.185.158,30.526435,120.946263,2019-01-10 19:44:42
+343,Linus,Lake,llake9i,GNVCcnfZHN,Inser breast tissu expan,llake9i@infoseek.co.jp,37.123.83.65,-7.3990333,108.1636206,2020-03-07 05:15:48
+344,Benyamin,Alessandretti,balessandretti9j,nFizToFwDdm,Applic ext fix-humerus,balessandretti9j@youtu.be,216.231.72.214,40.6057199,-8.6883541,2020-03-05 21:12:58
+345,Chevy,Marde,cmarde9k,54K8GIRBKk,Inser bone stim-rad/ulna,cmarde9k@diigo.com,92.116.115.150,-8.6332229,121.5598345,2020-09-02 23:34:23
+346,Derk,Chastang,dchastang9l,v1XnbvtMr,Closed tricusp valvotomy,dchastang9l@bandcamp.com,135.54.114.245,39.8694686,48.0665218,2019-12-27 22:57:36
+347,Sidnee,Ferrea,sferrea9m,SIf8mj,Rect/perirect dx op NEC,sferrea9m@ocn.ne.jp,186.199.237.45,18.903521,110.477642,2019-02-02 03:10:39
+348,Charles,Udey,cudey9n,BadV7q9,Facial bone x-ray NEC,cudey9n@abc.net.au,129.10.61.124,-25.6112339,-54.5515662,2019-10-17 07:51:39
+349,Giffie,Pocock,gpocock9o,39som4,Ureterostomy closure,gpocock9o@squarespace.com,146.241.33.30,39.0427929,-9.193864,2020-12-08 22:11:20
+350,Henrik,Hendricks,hhendricks9p,X23IOkz5R,Hand soft tissue exc NEC,hhendricks9p@jalbum.net,152.184.129.168,18.0226967,101.8812323,2020-11-11 08:32:51
+351,Karney,Mughal,kmughal9q,ANfxtF,Mri chest & heart,kmughal9q@blinklist.com,109.41.227.229,45.1452956,18.9362522,2020-03-17 13:29:29
+352,Tony,Hiseman,thiseman9r,KPpI56,Auxiliary liver transpl,thiseman9r@dagondesign.com,51.118.229.185,34.7220005,-5.1441842,2020-03-21 22:44:13
+353,Costa,Clemenza,cclemenza9s,loBdZk9zTkE,Scan of other sites,cclemenza9s@loc.gov,100.53.101.112,-7.0392183,109.9020509,2019-02-18 12:19:40
+354,Jerrome,Seaman,jseaman9t,HNYzRJom3,Insert recombinant BMP,jseaman9t@technorati.com,24.22.4.193,22.78691,100.977164,2019-09-15 07:36:48
+355,Agosto,McLese,amclese9u,fh87EU9tItF,Arth/pros rem wo rep-ank,amclese9u@tripod.com,29.29.82.239,34.88333,136.98333,2021-02-03 19:30:41
+356,Jacky,Bernardotte,jbernardotte9v,9Dn3Ciyf5RE5,Hemodialysis,jbernardotte9v@berkeley.edu,32.202.31.92,10.6989729,122.5747412,2019-09-19 00:37:28
+357,Gabriele,Gigg,ggigg9w,ape5YX,Achillotenotomy,ggigg9w@wufoo.com,246.167.41.248,-6.9273494,109.2385498,2020-03-30 17:02:13
+358,Eldredge,Gillice,egillice9x,MrI0ys3,Bone graft-tibia/fibula,egillice9x@nationalgeographic.com,91.50.193.52,31.470305,34.999744,2020-10-09 19:36:19
+359,Bevin,Lehrmann,blehrmann9y,b2vRug,Rep recur shlder disloc,blehrmann9y@networksolutions.com,242.111.73.235,33.4316535,131.3529666,2021-02-06 07:07:24
+360,Phineas,Flasby,pflasby9z,OU2KAPsAIdeD,Choledochoenterostomy,pflasby9z@cyberchimps.com,245.140.251.218,41.187621,111.062933,2020-03-29 07:57:20
+361,Tabbie,Blazejewski,tblazejewskia0,yIhnZCAK,Thumb amputation,tblazejewskia0@furl.net,36.145.150.183,58.3858079,24.4965768,2019-08-28 01:11:15
+362,Caddric,Boner,cbonera1,jofSZixMZ,Esoph pouch exteriorizat,cbonera1@smh.com.au,235.140.154.147,31.637714,119.716535,2019-05-13 23:47:11
+363,Bartlett,Cancutt,bcancutta2,5NeX6QSGmUsu,Excision tunica les NEC,bcancutta2@census.gov,170.29.114.188,45.2977605,2.5135985,2020-12-29 21:40:19
+364,Marco,Durning,mdurninga3,JltLtEWWu,Perc abltn liver les/tis,mdurninga3@wikimedia.org,105.25.79.112,6.6169319,-75.7720328,2020-06-19 16:46:27
+365,Iosep,Robertazzi,irobertazzia4,Q1wVl8X,Revis exenter cavity NEC,irobertazzia4@answers.com,240.60.132.195,32.8796692,51.5465539,2019-10-24 19:34:30
+366,Irvine,O'Sheerin,iosheerina5,gbbcefk,Prostatectomy NEC,iosheerina5@pen.io,169.232.130.120,44.6111646,19.3208433,2019-04-07 18:47:25
+367,Cassie,Grishunin,cgrishunina6,5esCV34,Open uterine biopsy,cgrishunina6@reverbnation.com,40.196.89.124,-8.2439594,112.5125893,2020-03-12 08:23:54
+368,Bo,Ever,bevera7,4bBevgAUN,Jt structur division NOS,bevera7@jiathis.com,216.41.24.165,10.1386495,-75.2153857,2020-05-07 23:47:33
+369,Sebastien,Kobpac,skobpaca8,Pav5fF7,Intra-ab bowel manip NOS,skobpaca8@ucsd.edu,116.9.182.46,38.7731612,140.297972,2019-07-14 17:00:23
+370,Abner,Skipsea,askipseaa9,tcvbi6RZAK,Ing hernia rep-graft NOS,askipseaa9@dot.gov,43.54.217.119,52.913784,-0.445788,2020-01-31 10:36:04
+371,Pearce,Howles,phowlesaa,a86xJibuehk,Ventricl shunt tube punc,phowlesaa@virginia.edu,47.116.240.1,18.4770791,-69.9732934,2019-04-27 07:09:25
+372,Evered,Blacksell,eblacksellab,6nXpAVuHS5I,Opn/oth rep hrt vlv NOS,eblacksellab@dedecms.com,21.137.153.169,33.9205932,134.4266559,2020-03-31 13:48:41
+373,Mathian,Duly,mdulyac,vD2Iws,Audiological evaluation,mdulyac@t.co,208.113.55.157,45.517207,16.6038706,2019-03-11 00:43:12
+374,Derick,Halward,dhalwardad,2W9N3oijm7V,Dpt administration,dhalwardad@flickr.com,35.32.28.190,-6.7131574,107.0185123,2019-01-09 06:02:05
+375,Roy,D'Acth,rdacthae,lGSFXzyXwMy,Injec therap sbst tm jnt,rdacthae@ca.gov,29.167.0.51,44.7352635,4.5991033,2019-07-08 08:45:20
+376,Kiley,Este,kesteaf,jhCQyMnu,Closed pancreatic biopsy,kesteaf@loc.gov,76.29.116.150,46.0313077,29.9343459,2019-09-03 01:52:21
+377,Hastings,Kettlestringes,hkettlestringesag,xflmGg,Culture-bili/pancreas,hkettlestringesag@nps.gov,93.67.38.31,33.9253024,-84.3857442,2021-01-18 06:10:21
+378,Allayne,Wrathmell,awrathmellah,oXvMRWRLS,Vaginal obliteration,awrathmellah@e-recht24.de,250.152.114.45,18.4691383,-77.5404459,2021-02-09 01:24:02
+379,Ned,Cloonan,ncloonanai,cbjYre5pegTZ,Create septal defect,ncloonanai@google.fr,103.8.243.193,-15.712819,28.5797981,2020-05-16 00:10:48
+380,Garwin,Shepstone,gshepstoneaj,EIbbMw,Hand soft tissue exc NEC,gshepstoneaj@multiply.com,125.103.63.226,13.576473,105.9699878,2020-01-09 13:29:56
+381,Base,Yushankin,byushankinak,r6ftw3,Micro exam-integumen NEC,byushankinak@tinyurl.com,108.83.157.168,56.0972538,40.1985263,2020-06-17 12:12:30
+382,Standford,Edmondson,sedmondsonal,JxFk9Y,Other repair of knee,sedmondsonal@moonfruit.com,206.7.210.150,-7.9955024,111.7048262,2020-06-21 22:45:00
+383,Donavon,Barmadier,dbarmadieram,RVqGWITj,Limb shorten-metacar/car,dbarmadieram@whitehouse.gov,76.116.24.64,-6.9072,113.8825,2019-03-22 00:24:16
+384,Derron,Briddock,dbriddockan,mbIVu48Yx,Other heart valve ops,dbriddockan@tamu.edu,146.246.14.81,38.6169978,-9.083874,2020-03-28 15:53:26
+385,Swen,Fullalove,sfullaloveao,7Eeo6OcVZG,Nonexcis debridement wnd,sfullaloveao@nbcnews.com,209.241.59.251,9.462591,3.179389,2021-01-08 22:14:47
+386,Cort,Bradnam,cbradnamap,EZ66jka79TTg,Cord/epid/vas ops NEC,cbradnamap@state.tx.us,92.97.38.35,40.5425073,44.868475,2020-07-26 00:06:18
+387,Zack,Heilds,zheildsaq,yZOLlx9E1,Ciliary body op NEC,zheildsaq@adobe.com,60.60.205.156,43.0429124,1.9038837,2020-03-06 01:14:29
+388,Willey,Ruusa,wruusaar,jedXafyjEqU,Vaccination NEC,wruusaar@ezinearticles.com,3.167.227.171,28.488535,117.653994,2021-02-13 12:55:48
+389,Ewart,Paddison,epaddisonas,oTYbA4f,Percutaneous pyelogram,epaddisonas@ftc.gov,97.184.44.191,32.704922,115.970718,2020-07-01 03:50:56
+390,Irvine,Chinery,ichineryat,AyigyZVpFgI,Unilateral vulvectomy,ichineryat@facebook.com,19.21.141.206,33.6883392,130.7171244,2020-02-02 04:12:49
+391,Chance,Marwood,cmarwoodau,Bf4qtEEVpMOl,Part ostect-metacar/car,cmarwoodau@mail.ru,28.130.92.194,20.5849821,-76.2247366,2019-09-19 15:51:18
+392,Martainn,Hawksley,mhawksleyav,aboSrNq,Dental x-ray NEC,mhawksleyav@wisc.edu,82.110.201.215,8.9245,-74.47033,2019-05-29 19:37:59
+393,Terrance,McMechan,tmcmechanaw,d4A7Ej,Cl reduc disloc-elbow,tmcmechanaw@last.fm,117.115.70.179,39.224791,117.135488,2020-06-12 15:42:23
+394,Robby,Gorthy,rgorthyax,EuVnSn6esu,Open cecectomy NEC,rgorthyax@sbwire.com,96.122.55.208,-16.3846284,-51.2213044,2020-02-10 10:07:06
+395,Francisco,Addionisio,faddionisioay,C4tMZq,Tot nasal reconstruction,faddionisioay@icq.com,62.163.32.102,17.1613952,121.5863465,2019-07-28 21:21:56
+396,Worthington,Overthrow,woverthrowaz,ArSAFr0I,Appendicostomy,woverthrowaz@ustream.tv,9.236.29.167,48.7855359,2.0425663,2020-08-01 13:40:29
+397,Carlo,Betteriss,cbetterissb0,UvYtnl,Transplantation of ovary,cbetterissb0@buzzfeed.com,44.30.48.103,-8.1022828,113.8911914,2019-01-03 22:23:20
+398,Xerxes,Sandeman,xsandemanb1,cIZuFMCUgjYd,Limb shorten proc NEC,xsandemanb1@csmonitor.com,74.227.187.80,49.3559892,2.7877074,2020-01-24 06:25:52
+399,Bill,Prandi,bprandib2,GthbExUsM7,Per cardiopulmon bypass,bprandib2@zdnet.com,69.92.251.213,48.7790663,38.564841,2021-02-28 17:49:17
+400,Roderick,Perillo,rperillob3,D8NMPZEfS8B,Micro exam-spln/marr NEC,rperillob3@alibaba.com,51.219.102.180,-1.7232202,105.471249,2020-03-06 01:39:54
+401,Burlie,McAlinion,bmcalinionb4,lmbAzB,Injection into prostate,bmcalinionb4@ox.ac.uk,89.149.35.221,25.3946143,97.3840729,2019-03-09 05:54:58
+402,Tann,Cherry Holme,tcherryholmeb5,HqLZ07h,Tot face ostect w recons,tcherryholmeb5@chronoengine.com,11.27.111.250,48.7803815,2.4549884,2019-11-01 15:08:24
+403,Elwood,Canter,ecanterb6,KEDRFK5uX4,Hrt revas byps anas NEC,ecanterb6@businessweek.com,254.115.57.164,46.6824698,15.6512293,2020-08-04 05:26:43
+404,Michael,Lepere,mlepereb7,E8zexhK,Dx ultrasound-abdomen,mlepereb7@statcounter.com,173.77.34.101,23.438818,112.018204,2020-04-11 09:11:35
+405,Robby,Trent,rtrentb8,x3ikA8vv,Rabies vaccination,rtrentb8@alibaba.com,199.244.126.219,40.979512,19.897722,2019-04-26 18:30:55
+406,Gregorio,Lipman,glipmanb9,rBFunnX5jS,Rep anulus fibrosus-grft,glipmanb9@clickbank.net,62.167.212.99,46.1740537,45.3471492,2019-07-07 10:39:58
+407,Warden,Patchett,wpatchettba,8Xjfs16ng,Postop vasc op hem contr,wpatchettba@altervista.org,200.39.141.90,41.245445,119.4015739,2019-06-18 02:38:10
+408,Alleyn,Snel,asnelbb,cKvIlSQNU,Contr cerebr arteriogram,asnelbb@clickbank.net,75.91.155.27,34.0181246,-5.0078451,2019-06-01 05:37:47
+409,Bogey,Hyndley,bhyndleybc,kdwlDyZ6,Epididymectomy,bhyndleybc@va.gov,197.239.181.133,8.5681393,-70.3583879,2020-09-16 13:28:35
+410,Ichabod,O'Mara,iomarabd,20gGuQ3OFvKA,Mid/in ear dx proc NEC,iomarabd@china.com.cn,247.47.14.238,43.4945737,5.8978018,2020-05-13 21:09:12
+411,Raoul,Melato,rmelatobe,hpJQrR6LTa,Skel xray-elbow/forearm,rmelatobe@webmd.com,189.144.39.43,41.4410475,22.0126949,2019-01-17 17:00:51
+412,Seward,Norway,snorwaybf,Be7NZR0a,Endosc lg bowel thru st,snorwaybf@un.org,187.66.90.31,51.791159,87.2508267,2020-06-25 10:13:16
+413,Niall,Konzel,nkonzelbg,BpczCO6ZewGm,Laparoscopic cecectomy,nkonzelbg@so-net.ne.jp,207.225.150.89,9.939624,126.065213,2019-12-22 22:05:37
+414,Cornall,Caustick,ccaustickbh,zl5pKsbFO0c,Oth arthrotomy-hip,ccaustickbh@geocities.com,245.6.28.202,58.5704706,16.2518896,2020-01-24 15:42:01
+415,Reed,Aps,rapsbi,KK7rcwwtl9,Insert ves-to-ves cannul,rapsbi@discuz.net,35.179.115.131,61.2844577,77.0904561,2020-12-04 10:58:10
+416,Bondon,Dunster,bdunsterbj,FITA4ZVAFq7P,Osteoclasis-patella,bdunsterbj@answers.com,71.23.90.93,58.7462917,26.3972118,2019-01-30 22:54:12
+417,Fabian,Crehan,fcrehanbk,2KkxKqZ2,Hemispherectomy,fcrehanbk@tripadvisor.com,149.48.5.120,31.57551,35.01223,2020-03-25 05:41:07
+418,Abel,McReidy,amcreidybl,B8umimGZ,Parasitology-lower resp,amcreidybl@ustream.tv,107.103.28.208,46.4244411,16.4312318,2020-07-10 13:20:09
+419,Langsdon,Frusher,lfrusherbm,zp58QtZi,Occlude abd artery NEC,lfrusherbm@amazon.com,110.250.30.145,45.8440218,16.8524058,2020-07-10 11:22:34
+420,Emmet,Dumpleton,edumpletonbn,lYliyPuPl,Percutan facet denervat,edumpletonbn@ucoz.ru,71.172.179.163,-8.3724396,123.4887939,2019-09-23 02:03:56
+421,Filberte,Smithen,fsmithenbo,BSFDbCmH,Resection of nose,fsmithenbo@shop-pro.jp,130.86.101.74,48.7865463,2.054647,2019-07-23 04:35:28
+422,Rowen,O'Hederscoll,rohederscollbp,RL3OHwb3,Cardiac biopsy,rohederscollbp@blinklist.com,178.30.44.96,26.489902,113.772655,2019-09-05 15:30:40
+423,Dall,Rubroe,drubroebq,Za2YEpQ9TRNj,Bilat tubal destruct NEC,drubroebq@biglobe.ne.jp,30.235.168.37,28.246367,109.169053,2020-08-20 04:40:26
+424,Billie,Gulleford,bgullefordbr,JCwdCyYe,Part breech extract NEC,bgullefordbr@fc2.com,176.224.70.124,-7.7920677,113.479098,2019-05-21 13:01:10
+425,Crichton,Vasyunin,cvasyuninbs,WX0CVpj0C9dL,Lung laceration closure,cvasyuninbs@surveymonkey.com,86.217.160.185,53.3177535,-6.2324705,2020-06-17 15:32:04
+426,Vanya,Bartlett,vbartlettbt,EFKeR79Km1,High-dose infusion IL-2,vbartlettbt@lulu.com,3.197.143.230,38.34185,66.56342,2019-03-03 12:57:31
+427,Rinaldo,Barents,rbarentsbu,MrHYGskeuw,Alcoholism counselling,rbarentsbu@squarespace.com,195.225.196.48,34.3400547,108.946087,2018-12-19 10:36:19
+428,Elwood,Blankhorn,eblankhornbv,TgVP9ecqc,Dental wiring,eblankhornbv@geocities.com,20.175.181.216,23.124745,113.331389,2020-01-21 12:10:52
+429,Moritz,Pady,mpadybw,EkOPj4Gq1R,"TRAM flap, pedicled",mpadybw@thetimes.co.uk,34.148.86.84,-8.1429,112.2206,2019-06-08 20:45:43
+430,Salvidor,Kolak,skolakbx,Cs8BRLt,Diathermy,skolakbx@cbsnews.com,209.144.244.100,59.7448493,17.8041667,2020-06-18 17:40:44
+431,Fabio,Speares,fspearesby,ESuUvi,Bone division NEC,fspearesby@simplemachines.org,139.61.161.210,41.3047616,69.2817267,2020-10-04 21:07:58
+432,Horatio,Mottinelli,hmottinellibz,Fngc0h98W6C,Tooth extraction NEC,hmottinellibz@uol.com.br,101.1.32.150,17.3798237,104.6821048,2019-08-08 08:41:19
+433,Dominik,Morris,dmorrisc0,crBHnEc,Destruc-elbow lesion NEC,dmorrisc0@usa.gov,122.25.198.233,7.9187344,125.3297787,2020-10-04 19:33:00
+434,Gayelord,Dauney,gdauneyc1,WgkqWpbEG,Ins totl disc pros lumb,gdauneyc1@ask.com,252.178.188.219,5.7799851,101.0372376,2019-06-09 05:15:12
+435,Boris,Wissbey,bwissbeyc2,KJ0BwTd,Nasal laceration suture,bwissbeyc2@nymag.com,111.237.37.149,-7.6535289,110.6749978,2019-06-17 21:09:18
+436,Standford,Garatty,sgarattyc3,JvLzPv4rqbFL,Facial bone incision NEC,sgarattyc3@yahoo.co.jp,138.250.30.93,30.6031858,104.1029064,2019-03-02 08:00:24
+437,Gearalt,Zieme,gziemec4,f0k1yDLi5,Lap appendectomy,gziemec4@redcross.org,234.243.21.212,34.272117,108.084731,2020-05-14 16:20:36
+438,Willem,Gyves,wgyvesc5,OiIBNnO0Gj,Refusion of spine NEC,wgyvesc5@usa.gov,111.83.36.249,36.1364291,139.3741999,2020-10-07 06:22:00
+439,Vincents,Schoenrock,vschoenrockc6,SwpqhXWXCCE,Lengthen 1 extraoc musc,vschoenrockc6@epa.gov,48.48.33.248,47.008673,124.17754,2020-02-15 05:00:12
+440,Mace,Godart,mgodartc7,JQB5ixi,Sperm collection,mgodartc7@skyrock.com,8.23.112.62,15.0541658,-91.229784,2019-02-25 06:41:01
+441,Markos,Tschersich,mtschersichc8,o7Kkrqw,Create cutanperiton fist,mtschersichc8@wiley.com,165.163.214.91,-6.9013005,111.9611919,2020-02-20 23:20:09
+442,Brit,Kolodziejski,bkolodziejskic9,e1UjRAD6,Facial rhytidectomy,bkolodziejskic9@wufoo.com,248.83.153.222,30.2915328,-97.7688358,2019-05-07 01:24:03
+443,Nathan,Balsillie,nbalsillieca,4RpMa7ZOpF,Gum lesion excision,nbalsillieca@gravatar.com,81.232.123.180,50.564305,21.8827302,2020-09-26 23:19:03
+444,Lukas,Dewhirst,ldewhirstcb,5vXFOTA9O,Oth remove ovaries/tubes,ldewhirstcb@epa.gov,220.150.153.100,45.1888273,39.6438647,2019-11-08 01:58:53
+445,Bar,Penny,bpennycc,jJsB1eaKTP,Insert indwelling cath,bpennycc@sina.com.cn,23.100.44.244,4.5475154,97.1574784,2020-04-23 23:40:55
+446,Justin,Compston,jcompstoncd,jWpioCP0,Type 3 tympanoplasty,jcompstoncd@sfgate.com,55.117.215.144,48.9175083,2.3514328,2020-09-16 23:15:37
+447,Walt,Lean,wleance,cOCqCbMe,Excise cord/epid les NEC,wleance@nbcnews.com,31.135.5.99,67.0610032,27.3157403,2021-02-23 16:47:28
+448,Hillard,Dametti,hdametticf,VEBUnB8TeKgJ,Repair of uvula,hdametticf@pbs.org,190.131.121.164,-7.1481355,111.4991334,2020-08-20 04:39:36
+449,Forester,Chape,fchapecg,aqxz55UZL,Arterial bld gas measure,fchapecg@hexun.com,50.1.93.211,-9.9605397,124.5777565,2020-09-30 06:10:30
+450,Scottie,Sallans,ssallansch,j34J0oDz,Electrocardiogram,ssallansch@goo.ne.jp,57.246.107.80,27.1291264,-104.9126044,2020-12-05 04:36:28
+451,Cal,Carous,ccarousci,NaYhNbP8UC80,Elbow synovectomy,ccarousci@hatena.ne.jp,67.199.155.236,8.9215342,117.5532603,2020-04-01 10:25:44
+452,Lyman,Buesnel,lbuesnelcj,HXoATz7cl,Pedicle graft advancemen,lbuesnelcj@altervista.org,70.77.25.246,48.382005,-123.53785,2019-02-20 19:35:02
+453,Leupold,Grishanov,lgrishanovck,HRyDi9,Video/radio eeg monitor,lgrishanovck@howstuffworks.com,99.214.70.248,41.9662209,23.0756589,2019-08-07 18:49:05
+454,Nevil,Pidgeley,npidgeleycl,wLo8uasHLA4m,Open adrenal gland bx,npidgeleycl@symantec.com,251.9.172.53,31.363043,72.98757,2021-03-22 07:41:31
+455,Goober,Pryce,gprycecm,FrXmkSm3,Laryngostomy revision,gprycecm@bbb.org,176.147.95.212,43.4945737,5.8978018,2019-08-07 11:09:23
+456,Robbie,Crutchley,rcrutchleycn,PeVHKTDEP,Cell blk/pap-lower GI,rcrutchleycn@icio.us,4.151.106.27,-7.0277395,109.4616074,2019-12-31 11:37:40
+457,Dudley,Calafate,dcalafateco,YVvN0oAIm5dC,Cls red-radius/ul epiphy,dcalafateco@cam.ac.uk,254.65.122.108,28.144185,103.972601,2019-08-01 11:21:11
+458,Jefferson,Hanna,jhannacp,m5efNc,Open incis hern-grft NEC,jhannacp@1688.com,168.214.110.38,50.8441485,17.7283013,2020-12-30 02:14:16
+459,Mayer,Rea,mreacq,9y8uvY,Radius & ulna biopsy,mreacq@lycos.com,33.159.50.152,37.1518793,138.3591194,2019-11-08 11:16:38
+460,Ford,Wride,fwridecr,EAJUoL46J,Tot repair tetral fallot,fwridecr@ucsd.edu,43.174.113.250,27.283955,105.291643,2019-01-17 00:00:54
+461,Edan,Caudrelier,ecaudreliercs,riQi9S2DCxb,Osteoclasis-femur,ecaudreliercs@independent.co.uk,17.103.34.180,54.2107161,36.6157524,2019-01-07 15:22:18
+462,Piggy,Eichmann,peichmannct,lyLYY7S,Ambulat & gait training,peichmannct@mozilla.org,64.123.105.82,9.8827617,124.3882585,2020-02-17 14:37:10
+463,Jareb,Peeter,jpeetercu,KNx0se,Sinusotomy NOS,jpeetercu@blogtalkradio.com,213.190.39.197,55.8634461,13.6916707,2019-04-09 21:49:20
+464,Emmery,Tombs,etombscv,0qGK4Ies,Insert removable bridge,etombscv@archive.org,123.176.48.212,37.57126,113.719422,2019-10-10 03:45:05
+465,Garrik,Templeton,gtempletoncw,Ap2AWxr,Endosc destruc lung les,gtempletoncw@msn.com,185.3.146.163,26.715349,113.271114,2019-08-26 02:13:17
+466,Dewie,Daubney,ddaubneycx,Tu8GSsxwD,Corneovitreal adhesiolys,ddaubneycx@nymag.com,249.238.47.62,41.364568,21.253752,2020-07-14 05:59:23
+467,Alphonso,Whittles,awhittlescy,iWEBoOA0QW6m,Dilat enterostomy stoma,awhittlescy@vinaora.com,183.47.80.114,29.584292,111.380014,2019-05-31 00:05:02
+468,Clint,Keattch,ckeattchcz,KSJ0vQ,Thyrogloss duct excision,ckeattchcz@google.com.hk,78.213.151.75,59.1499143,9.6586061,2020-01-27 13:06:15
+469,Ricardo,Goodding,rgooddingd0,14nwvUh,Revis/reinsert ocul imp,rgooddingd0@goodreads.com,39.164.120.212,56.0349544,35.9510395,2020-06-28 14:12:17
+470,Harvey,McKenny,hmckennyd1,Q5u3VrXwNS,Bact smear-lower resp,hmckennyd1@disqus.com,20.190.13.160,14.048167,122.955697,2019-05-21 23:17:06
+471,Chickie,Gunny,cgunnyd2,fJpisqIXW,Breast tissu destruc NOS,cgunnyd2@ftc.gov,88.160.201.237,31.25583,48.61667,2020-09-10 04:24:16
+472,Hillel,Kaemena,hkaemenad3,7utMqo51r,Esophageal repair NEC,hkaemenad3@wsj.com,100.22.170.40,7.75003,168.97513,2018-12-23 10:44:14
+473,Lefty,Polini,lpolinid4,Qh5GdFBQ,Bact smear-nervous syst,lpolinid4@sbwire.com,30.106.107.15,30.798775,121.33638,2020-05-01 00:30:15
+474,Arny,Bonavia,abonaviad5,6M2llE,Pelvic dye contrast xray,abonaviad5@newsvine.com,169.147.242.164,39.21485,113.364619,2019-11-20 07:14:06
+475,Lincoln,Pagel,lpageld6,Lnz0KqKHLBRt,Incision of penis,lpageld6@slate.com,29.60.184.106,35.6196262,-5.2841177,2020-08-05 03:21:58
+476,Graig,McIlhagga,gmcilhaggad7,SLyddLurLOi,Leg vein resect/anastom,gmcilhaggad7@washington.edu,23.118.30.6,39.534154,113.087107,2021-03-10 20:19:56
+477,Danny,Rennles,drennlesd8,Y5cHaCTzyy,Hand soft tissue exc NEC,drennlesd8@yahoo.com,229.80.20.28,7.28361,125.84222,2021-02-15 18:21:57
+478,Charles,Geddes,cgeddesd9,ApJsq8Bo1n,Resect ext seg lg bowel,cgeddesd9@go.com,205.25.29.249,-31.4505323,-64.1847851,2019-05-30 14:22:30
+479,Hobard,Menendez,hmenendezda,D8kE8uhch3,Micro exam-lymph sys NEC,hmenendezda@harvard.edu,41.16.54.11,31.455948,120.879101,2019-10-04 19:20:46
+480,Maxwell,Labbey,mlabbeydb,xGsbCt7HEv,Leg vein excision,mlabbeydb@homestead.com,11.61.243.87,5.21667,96.28333,2019-06-12 21:47:38
+481,Eben,Van Der Vlies,evandervliesdc,yMc0cmLRT1vC,Cord bld stem cell trans,evandervliesdc@hp.com,119.230.227.10,59.186002,17.4530287,2019-05-17 18:13:28
+482,Micheal,Worgen,mworgendd,pPfpAiHeKLU5,Fetal ops-facilitate del,mworgendd@github.io,90.167.232.29,56.2340628,37.5182622,2021-03-13 20:15:49
+483,Giusto,Wilkes,gwilkesde,6EgsWhatmSS,Xtraoc mus op/detach NEC,gwilkesde@hugedomains.com,72.37.111.151,43.9078337,12.4581209,2020-11-19 04:54:09
+484,Arte,Waberer,awabererdf,gVNXzng,Micro exam-upper GI NEC,awabererdf@mtv.com,87.37.248.43,-1.9296172,18.291137,2019-06-11 01:12:08
+485,Heall,Ferry,hferrydg,wH68TivEoHZ,Hand mus/ten/fas/ops NEC,hferrydg@amazonaws.com,172.135.196.122,39.9592176,44.600243,2020-12-19 00:51:05
+486,Duncan,Penhaligon,dpenhaligondh,6W6GTJLaIYl,Clipping of aneurysm,dpenhaligondh@ifeng.com,245.81.103.29,41.618679,-8.3868747,2020-08-03 15:31:01
+487,Carlie,Kennealy,ckennealydi,FH4kKmTZLF,Wedge osteotomy NOS,ckennealydi@altervista.org,79.64.236.13,18.1219608,121.6723186,2019-10-04 23:51:57
+488,Guilbert,Laybourn,glaybourndj,NsnhPD,Toxicology-upper urinary,glaybourndj@cyberchimps.com,234.188.116.10,8.721124,5.7563151,2020-04-05 07:59:29
+489,Brok,Pasek,bpasekdk,cD556aZ7s,Therapeu erythropheresis,bpasekdk@youtube.com,66.153.141.184,-7.099977,106.888644,2018-12-24 12:11:34
+490,Israel,Bowyer,ibowyerdl,abYL4a,Injection into joint,ibowyerdl@gov.uk,195.51.39.162,59.3465821,26.365315,2021-02-18 20:57:28
+491,Kelly,Bagby,kbagbydm,o9pr7IGP,Oth part cholecystectomy,kbagbydm@mtv.com,215.68.109.253,57.7662174,16.5983762,2020-06-13 23:50:58
+492,Shae,Heaseman,sheasemandn,UEEpjcv,Replace cast NEC,sheasemandn@nymag.com,93.141.18.149,10.1775604,106.1125201,2020-03-28 02:48:58
+493,Clayson,Vauls,cvaulsdo,ymS5mYH9,Foot synovectomy,cvaulsdo@google.pl,142.170.151.170,11.5358447,124.4553581,2019-05-25 15:21:49
+494,Lutero,Benoit,lbenoitdp,GOwzL8SAoEO,Contr thor arteriogr NEC,lbenoitdp@hc360.com,0.202.8.175,-28.2674857,-52.4626809,2021-02-18 18:31:33
+495,Luke,Hartup,lhartupdq,PRutIWk,Rt heart angiocardiogram,lhartupdq@e-recht24.de,127.159.233.245,-22.5306158,-52.1708052,2020-03-28 15:51:06
+496,Joel,Busain,jbusaindr,Y5ykcJvCU2E8,Other skull dx procedure,jbusaindr@geocities.jp,248.201.33.233,-7.9017349,112.5632485,2019-12-24 19:37:15
+497,Chalmers,Maffetti,cmaffettids,bNfr6f,Cannulation pancrea duc,cmaffettids@sohu.com,117.44.221.139,38.5774849,23.6417373,2020-11-09 10:40:15
+498,Hebert,Izchaki,hizchakidt,JtJTUKpw,Perineal prostatectomy,hizchakidt@cdc.gov,186.236.248.248,41.076226,113.969618,2019-07-05 23:02:34
+499,Ogden,Hardman,ohardmandu,WMEBv4jlAEZu,Contrast phlebogram-leg,ohardmandu@columbia.edu,218.231.56.143,-7.261568,112.749865,2019-08-09 17:38:13
+500,Lester,Derill,lderilldv,IKPcI5cus8,Cornea reconstruct NEC,lderilldv@studiopress.com,62.40.203.246,41.57365,120.4493879,2020-09-15 00:37:42
+501,Hewett,Goude,hgoudedw,rc9xIExHo,Hepatic duct-gi anastom,hgoudedw@youku.com,66.27.251.75,56.355176,26.1725258,2020-11-18 06:48:33
+502,Ruben,Stuehmeyer,rstuehmeyerdx,3EaugmD6tS,Remove impl dev-humerus,rstuehmeyerdx@china.com.cn,65.163.208.168,25.274374,118.033863,2019-08-21 04:49:21
+503,Fidelio,MacDougall,fmacdougalldy,70cF35tMLtA1,Destruct facial bone les,fmacdougalldy@icq.com,7.56.39.137,-14.8518869,-66.7486446,2019-11-01 04:50:03
+504,Yvon,Sked,yskeddz,XmcbWp,Open pancreatic biopsy,yskeddz@reverbnation.com,230.200.107.23,-19.9454604,-43.4876311,2020-04-23 21:30:30
+505,Sauveur,Dive,sdivee0,sQtc8pV2Fm,Excision acoustc neuroma,sdivee0@deviantart.com,230.255.184.83,41.126912,-7.3592019,2020-05-21 07:42:48
+506,Jose,Spragge,jspraggee1,tI31IZ,Electromyogram of eye,jspraggee1@ifeng.com,179.33.188.162,37.7162538,-97.2983363,2020-08-29 17:22:03
+507,Rudolf,Godbolt,rgodbolte2,10nnBQk9M,Rhythm electrocardiogram,rgodbolte2@tuttocitta.it,165.49.135.10,40.079784,116.158066,2020-09-02 07:18:14
+508,Torry,Curl,tcurle3,HJWh3y9,Cl reduct mandible fx,tcurle3@rediff.com,114.147.111.239,12.5077895,-86.9035511,2020-02-13 19:48:23
+509,Tyrus,Kinker,tkinkere4,Incwuoib,Foot reattachment,tkinkere4@mayoclinic.com,130.209.194.1,-15.4601506,-69.4355341,2019-07-25 00:19:40
+510,Hashim,Bartoloma,hbartolomae5,q77WudZlfKNU,Breast xerography,hbartolomae5@desdev.cn,138.110.255.180,16.5361315,101.6612934,2020-01-03 22:08:07
+511,Bobby,Puxley,bpuxleye6,7RRYs5,Pelvic gas contrast xray,bpuxleye6@imageshack.us,30.235.50.37,41.4981839,-8.3569915,2019-11-02 09:58:07
+512,Alfonse,O'Caine,aocainee7,uyxWdKrxMlgE,Free skin graft NOS,aocainee7@sun.com,127.110.114.134,51.842821,109.906166,2019-12-26 03:41:11
+513,Hill,Ryman,hrymane8,47vqAL,Clubfoot release NEC,hrymane8@barnesandnoble.com,233.144.94.54,32.9401173,50.124088,2020-02-02 10:30:50
+514,Ross,Matyushenko,rmatyushenkoe9,gFYQZW9fuQ7y,Arth/pros rem wo rep-hnd,rmatyushenkoe9@github.io,3.150.238.26,49.333258,6.15176,2020-06-25 20:35:56
+515,Gunther,Alves,galvesea,qcGJnD1Yce,Insert gastric bubble,galvesea@biblegateway.com,195.34.98.41,14.5598164,121.0409412,2019-05-08 17:44:19
+516,Abie,Sever,asevereb,Vvk0CBZU,Micro exam-uppr urin NEC,asevereb@macromedia.com,60.71.104.49,20.5849821,-76.2247366,2019-12-11 10:50:59
+517,Willie,Menham,wmenhamec,I7RIDL,Rev pedcl dyn stabil dev,wmenhamec@hugedomains.com,147.190.25.20,25.386379,114.922922,2019-05-29 19:06:44
+518,Constantino,Balden,cbaldened,8hC8k1oGGV,Enterovesico fist repair,cbaldened@archive.org,47.81.66.215,-6.9460598,111.8151245,2020-08-16 10:21:19
+519,Holly,Casin,hcasinee,ZeJ53XN,Thorac sm bowel interpos,hcasinee@google.com.hk,150.211.126.133,34.9815148,-3.1528692,2019-12-07 18:11:23
+520,Rabi,Burleigh,rburleighef,vC4WKW,Bladder repair NEC,rburleighef@ed.gov,38.200.226.135,-8.1659,111.8378,2020-01-18 11:12:58
+521,Archibold,Mc Grath,amcgratheg,FzcFPhzI,Renal anastomosis,amcgratheg@kickstarter.com,191.76.194.39,-27.4413635,-58.7832105,2019-04-26 20:43:45
+522,Alvy,Thornthwaite,athornthwaiteeh,VRhtzg,Bilateral nephrectomy,athornthwaiteeh@vinaora.com,143.45.217.190,20.4343787,106.2757514,2020-05-29 19:30:57
+523,Eadmund,Cristea,ecristeaei,UwiPa7w28F,Enterostomy NEC,ecristeaei@salon.com,65.52.127.19,15.9321146,120.3478316,2019-11-11 16:04:07
+524,Artair,Besantie,abesantieej,owZKpeXrdW,Nonmagnet remove FB lens,abesantieej@engadget.com,235.166.81.156,4.345152,-74.361823,2020-03-06 16:00:37
+525,Humfrid,Fleg,hflegek,cwoyIW,Antitoxin administra NEC,hflegek@scientificamerican.com,43.247.232.107,-7.5613556,-40.1862129,2019-05-26 05:13:52
+526,Timotheus,Britney,tbritneyel,Z897LHC5o3LV,Lymphatic struct biopsy,tbritneyel@aboutads.info,30.181.22.205,11.321347,122.619095,2019-06-03 10:22:16
+527,Billie,Gaitskell,bgaitskellem,Tpu1ZA,Nasal sinus transillumin,bgaitskellem@mysql.com,230.210.37.143,44.81,-93.92,2019-05-21 03:58:58
+528,Marlo,Whipp,mwhippen,64E7jLNo,Cornea reconstruct NEC,mwhippen@google.de,197.33.165.58,10.2891838,-67.719871,2020-10-28 06:22:00
+529,Manfred,Hamil,mhamileo,gypz44VZrXx,Oth plastic repair palat,mhamileo@bloomberg.com,75.225.149.224,45.0454855,39.6498995,2020-11-04 13:49:58
+530,Pail,Bonsul,pbonsulep,dkjXo3I,Excis metacar/car-graft,pbonsulep@europa.eu,253.146.51.182,50.1617318,16.9473457,2019-07-24 22:03:39
+531,Thornie,Trenouth,ttrenoutheq,QAlgA37zfBI,Open reduct face fx NEC,ttrenoutheq@nps.gov,157.37.106.220,45.0730425,20.6338361,2019-01-07 12:58:03
+532,Shaughn,Westgate,swestgateer,NGghYGMTJc,Salpingo-oophorostomy,swestgateer@soundcloud.com,7.215.249.155,-7.2784402,106.6094916,2019-08-17 12:23:17
+533,Corbett,Campanelli,ccampanellies,izdpICO,Lap sigmoidectomy,ccampanellies@jalbum.net,86.45.61.228,22.5676118,114.1176652,2019-10-15 06:35:31
+534,Aldous,Denmead,adenmeadet,YQlrRVkJELz,Stretching of foreskin,adenmeadet@marketwatch.com,2.18.156.83,21.1241396,105.5939066,2020-11-18 17:47:00
+535,Ely,Bellow,ebelloweu,OCmqAK7m,Lacrimal system op NEC,ebelloweu@statcounter.com,221.33.170.77,-13.9535913,-71.7608251,2018-12-23 04:30:26
+536,Svend,Ballin,sballinev,Lie33AT6Lvch,Other myectomy,sballinev@elpais.com,138.178.1.30,19.241239,108.758458,2019-05-12 02:41:38
+537,Birk,Muglestone,bmuglestoneew,gbsClC7,Repair heart assist sys,bmuglestoneew@arizona.edu,138.30.174.240,-7.6426626,109.0958489,2019-06-21 08:31:31
+538,Laird,Barthelet,lbartheletex,4ysRVoV,Radical vulvectomy,lbartheletex@webs.com,210.194.190.169,7.3275252,122.8946032,2020-03-10 05:35:52
+539,Terry,Priestland,tpriestlandey,eLX1cWN,Cerebral thermography,tpriestlandey@naver.com,141.78.254.220,29.230933,89.841983,2019-04-25 10:57:27
+540,Rickie,Francis,rfrancisez,bDsOCXqKkMb,Opn red-sep epiphy-humer,rfrancisez@digg.com,34.64.185.114,43.817071,125.323544,2019-07-07 04:05:09
+541,Garreth,Dales,gdalesf0,RJGSRVI02rTN,Replace nasal packing,gdalesf0@harvard.edu,160.139.72.107,49.5345161,26.2093072,2019-10-12 10:27:04
+542,Chauncey,Fincken,cfinckenf1,pmJqyv,Exc lacrimal gland NOS,cfinckenf1@bizjournals.com,157.234.248.114,38.6714312,-9.003566,2020-03-16 14:03:14
+543,Gauthier,Pennetta,gpennettaf2,HMlxlHAyc,Translum cor atherectomy,gpennettaf2@naver.com,252.186.159.194,-33.1416441,-64.3600342,2020-04-08 01:57:19
+544,Blake,Clist,bclistf3,8dXesMGaYK3,Hip structure division,bclistf3@netvibes.com,248.255.57.94,52.7489266,19.2533342,2019-11-27 04:04:52
+545,Patrizius,Pendered,ppenderedf4,VwZygLm,Other myectomy,ppenderedf4@deviantart.com,137.48.40.105,16.80778,48.10917,2019-12-27 21:38:23
+546,Nowell,Haselwood,nhaselwoodf5,rPXvseV,Replace lower limb cast,nhaselwoodf5@is.gd,33.182.80.191,18.4500491,-70.0007511,2019-09-04 14:20:35
+547,Terence,Ludlamme,tludlammef6,VIiQ4a,Unilat fallop tube destr,tludlammef6@vk.com,24.211.60.58,30.7446878,120.4910168,2020-06-13 11:18:02
+548,Waylan,Bowerbank,wbowerbankf7,Val4eBt4yAj,Blow therapeut into tube,wbowerbankf7@meetup.com,74.68.92.134,-8.5568557,125.5603143,2019-12-21 08:41:01
+549,Alden,Ledrun,aledrunf8,KpWgc0UU,Thoracic duct fistulizat,aledrunf8@economist.com,146.138.197.150,35.0010118,-85.3162066,2020-07-04 10:17:43
+550,Dylan,Greenwell,dgreenwellf9,6DXUdDU43a7Q,Proctoclysis,dgreenwellf9@cbsnews.com,102.137.131.1,-9.408551,119.3192266,2021-03-04 15:40:03
+551,Justin,Grimstead,jgrimsteadfa,hJnAYChIPu,Eswl other sites,jgrimsteadfa@merriam-webster.com,156.252.112.72,44.9158731,-0.2363562,2019-02-26 17:08:14
+552,Waverly,Agron,wagronfb,Dv0Njk9SPid,C & s-ent/larynx,wagronfb@histats.com,174.238.137.79,29.002602,65.6639904,2019-05-12 09:29:56
+553,Denis,Errowe,derrowefc,0MlzGZm,Repair gb laceration,derrowefc@java.com,18.127.231.71,9.0578504,-72.233418,2018-12-31 22:51:32
+554,Bev,Herreros,bherrerosfd,PFaCXjA5v,Micro exam-low urin NEC,bherrerosfd@addtoany.com,67.6.47.228,18.052469,30.94981,2020-07-16 14:11:23
+555,Lamar,Stonham,lstonhamfe,oMvPTT,Keratomileusis,lstonhamfe@chicagotribune.com,111.139.182.91,25.5822549,-100.9086492,2020-04-18 00:47:17
+556,Ingram,Minichillo,iminichilloff,lJKkC6xMXpoL,Local renal perfusion,iminichilloff@slideshare.net,227.137.201.177,-3.411598,114.8452,2021-03-23 19:35:21
+557,Dunn,Andrioni,dandrionifg,DkBQQCa9,Ventricl shunt-head/neck,dandrionifg@sciencedaily.com,3.44.30.214,36.833095,116.993893,2019-10-11 00:40:47
+558,Edwin,Bate,ebatefh,hsr7btK2,Drain face & mouth floor,ebatefh@histats.com,72.66.240.43,47.545979,19.0375319,2019-05-07 13:46:10
+559,Herve,Scurrer,hscurrerfi,7gNpE28AC,Percutaneous hysterogram,hscurrerfi@yahoo.co.jp,178.79.201.146,-24.7073654,-54.0688562,2019-10-23 23:55:26
+560,Trumaine,Stanbury,tstanburyfj,mqcDZeo,Esophagomyotomy,tstanburyfj@archive.org,81.177.11.1,40.7746041,20.2385432,2021-03-04 16:33:21
+561,Wylie,McCloughen,wmccloughenfk,nHZmmk5BOqjU,Percutan bladder aspirat,wmccloughenfk@dailymail.co.uk,228.250.175.16,41.1071733,-80.5993854,2019-10-28 20:12:57
+562,Zared,Laverick,zlaverickfl,yQqWKwQp0S,Loc exc bony palate les,zlaverickfl@senate.gov,95.59.215.206,15.3694451,44.1910066,2020-01-19 17:46:37
+563,Thedric,Toner,ttonerfm,i9H5rY,Other tenonectomy,ttonerfm@umn.edu,128.28.86.5,25.9868744,-80.2153998,2019-09-05 13:37:57
+564,Wang,Rogers,wrogersfn,8sqmBs,Mandibular reconst NEC,wrogersfn@hubpages.com,45.8.250.82,49.0537242,15.1147336,2019-09-15 18:09:54
+565,Laurent,Caistor,lcaistorfo,ZDHpW13Ib,Imp epiretinal prosth,lcaistorfo@wp.com,224.132.205.76,61.8879727,22.0502411,2020-06-25 15:10:07
+566,Tully,Scullion,tscullionfp,fOuLlE8bl,Uterine suspension NEC,tscullionfp@mozilla.com,168.234.132.150,50.2614977,15.9258038,2019-07-30 11:27:29
+567,Bill,Belcham,bbelchamfq,eQaCXHqB,Suture cord & epid lacer,bbelchamfq@clickbank.net,134.206.65.33,42.1662941,48.1164779,2019-02-16 05:50:32
+568,Tobie,Soda,tsodafr,P4LRNj9,Anterior mechan vitrect,tsodafr@elegantthemes.com,90.3.246.98,43.8273805,1.3951553,2019-03-24 09:55:25
+569,Brockie,Boynton,bboyntonfs,Y6LcYIALi,Open red-sep epiphy NOS,bboyntonfs@mail.ru,241.12.216.254,16.4422479,95.7220845,2021-02-08 04:07:25
+570,Shea,Craggs,scraggsft,E1LK3vPf0bgQ,Periren/uret dx proc NEC,scraggsft@prnewswire.com,169.228.242.8,23.1446758,113.2532221,2020-01-13 04:35:39
+571,Clemmie,Prier,cprierfu,U7tZObWrR9,Arthroplas metacarp wit,cprierfu@arizona.edu,98.170.167.203,35.886399,10.5915072,2021-03-08 19:28:15
+572,Gery,Steventon,gsteventonfv,mt4nSB9v,Referral psych rehab NEC,gsteventonfv@ft.com,211.99.250.163,22.44668,114.033953,2019-10-26 18:16:42
+573,Stanton,Woodthorpe,swoodthorpefw,GThLZhR,Lac punctum incision,swoodthorpefw@howstuffworks.com,101.200.130.25,47.719429,107.795502,2020-04-28 04:41:57
+574,Ulric,Granleese,ugranleesefx,vO1GlSUvGRw,Pressure trouser applica,ugranleesefx@typepad.com,154.158.176.146,30.1444208,121.4305273,2019-07-15 14:09:43
+575,Hewett,Bottrill,hbottrillfy,Iy9ooj4bwg,Amputation through foot,hbottrillfy@ameblo.jp,186.12.241.0,33.267964,116.557663,2019-01-15 14:52:03
+576,Hebert,Brimmell,hbrimmellfz,Ohb1Mj4y,Resp tract intubat NEC,hbrimmellfz@nyu.edu,84.129.185.150,46.294568,17.3742925,2019-10-07 06:39:11
+577,Teddie,Derks,tderksg0,r0H0q1POY8,Fit below knee prosthes,tderksg0@mozilla.com,114.217.23.198,55.604205,40.6113806,2019-12-21 06:00:44
+578,Thorvald,Lerway,tlerwayg1,xbIBSfkXR9xO,Canaliculus repair,tlerwayg1@thetimes.co.uk,242.252.162.129,39.157329,117.244541,2021-02-20 08:14:39
+579,Tulley,Blabber,tblabberg2,Glf5Vg,Elbow structure division,tblabberg2@seesaa.net,176.171.141.37,39.7541856,-8.9232253,2020-08-22 19:32:06
+580,Ollie,Stanbra,ostanbrag3,0wDJ7yiDF92r,Bartholin's gland op NEC,ostanbrag3@ameblo.jp,20.226.142.124,-6.0838087,-39.5691841,2019-11-14 17:33:12
+581,Artemis,Delf,adelfg4,71pn1QIP4k,One extraoc mus recess,adelfg4@odnoklassniki.ru,142.204.62.42,38.416663,112.734174,2019-04-20 09:40:32
+582,Graeme,Clyant,gclyantg5,RHchdAsIIBTo,High gastric bypass,gclyantg5@addtoany.com,136.61.181.202,30.603546,121.095594,2019-09-18 07:53:39
+583,Dom,Gauler,dgaulerg6,paHu7C,Tiss adj to valv ops NEC,dgaulerg6@ask.com,7.38.8.6,50.1209479,17.3831619,2019-02-08 10:18:18
+584,Penrod,Stiebler,pstieblerg7,Zdce7ODX,Urethral meatotomy,pstieblerg7@berkeley.edu,88.249.207.30,26.5153766,127.9179732,2020-06-01 12:02:48
+585,Orren,Orrett,oorrettg8,qVXlB4VtK,Educational therapy,oorrettg8@desdev.cn,160.125.23.164,-8.792325,120.960602,2019-07-21 13:30:18
+586,Yancy,Dulake,ydulakeg9,1C9PZ9F,Other resp procedures,ydulakeg9@soup.io,1.159.253.95,12.4218541,124.800874,2019-01-31 19:34:37
+587,Kermie,Drover,kdroverga,pto2O8,Suture cornea laceration,kdroverga@biblegateway.com,140.47.226.213,21.3873563,106.1270717,2021-02-08 16:04:27
+588,Stacy,Spurden,sspurdengb,EI4cx7uiT,Other fasciectomy,sspurdengb@1688.com,101.207.132.155,26.511966,-78.640226,2020-09-29 02:45:10
+589,Vaughan,Bowering,vboweringgc,6lmQeWdS,Lap abltn renal les/tiss,vboweringgc@cbc.ca,151.55.207.89,51.2982002,20.2969528,2019-05-22 07:32:36
+590,Shermie,Speedy,sspeedygd,mjKNURv2coqN,Incision of anal septum,sspeedygd@nsw.gov.au,8.114.186.234,4.6147368,21.8866683,2019-09-07 19:29:15
+591,Antonio,Marie,amariege,gx3vZAu2mnji,Cystotomy & adhesiolysis,amariege@amazon.co.uk,169.47.48.179,32.871671,117.56024,2020-06-25 00:24:09
+592,Bentley,Cheverton,bchevertongf,MpHVnjw44t,Gastric cooling,bchevertongf@tinypic.com,249.83.236.39,39.8651684,-8.857121,2021-01-22 19:50:47
+593,Nicolai,Mitten,nmittengg,G4sCnKwcNSG,Lap remove both ovaries,nmittengg@senate.gov,75.251.148.87,-7.4703872,110.9387418,2021-01-15 21:47:13
+594,Griswold,Sotheby,gsothebygh,sWNxhGoVN5y,Cl reduc disloc-elbow,gsothebygh@youtu.be,159.57.88.119,27.569517,110.001922,2020-11-29 21:26:52
+595,Alvie,Rumney,arumneygi,JbV85oZeFYAO,Testicular les destruct,arumneygi@ezinearticles.com,105.145.166.7,37.2610694,67.3086236,2021-02-17 03:46:00
+596,Diego,Curror,dcurrorgj,jQV9rSixGWA,Ins d-e stent oth periph,dcurrorgj@delicious.com,242.39.4.19,29.0554502,114.1574404,2019-06-13 02:33:10
+597,Brantley,Hullett,bhullettgk,lzUOBn,Transab lg bowel endosc,bhullettgk@shutterfly.com,202.49.6.245,28.524376,113.233807,2020-06-06 06:56:37
+598,Dwain,Matterson,dmattersongl,KRGjL8xhQd0,Lap abltn liver les/tiss,dmattersongl@hugedomains.com,149.248.231.204,23.020673,113.751799,2019-07-03 03:18:39
+599,Ashton,Skoyles,askoylesgm,6pl8OCv,Shoulder disarticulation,askoylesgm@fema.gov,112.219.216.192,46.252804,-72.9507829,2019-08-03 15:34:22
+600,Daniel,Eldred,deldredgn,XnGQN3yfM,Chemical shock therapy,deldredgn@cam.ac.uk,22.232.231.228,13.1487371,123.5983638,2020-07-18 04:36:16
+601,Vlad,Murrells,vmurrellsgo,4Fz0qpc12,Proctopexy NEC,vmurrellsgo@google.it,135.103.206.111,-7.4727879,109.0274877,2021-02-18 12:04:11
+602,Moe,McTrusty,mmctrustygp,IF1bsoK5gf3C,Robotic ast proc NEC/NOS,mmctrustygp@psu.edu,141.245.250.171,46.3194856,-0.4546217,2019-02-09 23:57:20
+603,Gage,Kingsworth,gkingsworthgq,A9Qg72EYw,Allogrft bone marrow NOS,gkingsworthgq@naver.com,255.130.50.4,-25.877477,28.313059,2020-07-21 20:45:12
+604,Odie,Pedroli,opedroligr,V8pPAQ,Ureteral catheterization,opedroligr@narod.ru,128.226.65.105,6.444345,124.925696,2019-05-25 07:08:08
+605,Kerry,Antonazzi,kantonazzigs,4M2dYDDuVIYZ,Failed forceps,kantonazzigs@tumblr.com,163.147.243.228,8.070619,22.3948737,2020-08-03 21:41:00
+606,Alanson,Orrett,aorrettgt,jmE4fTRA,Destr phren-lung collaps,aorrettgt@nbcnews.com,231.215.31.88,31.172739,115.008163,2020-02-09 05:51:48
+607,Ban,Barson,bbarsongu,6xtiCcL9Dk,Distal gastrectomy,bbarsongu@answers.com,251.17.41.41,41.3905327,-8.3219318,2020-10-09 02:40:40
+608,Matias,Holborn,mholborngv,u8QAb5UKMpEs,Implnt/fit pros limb NOS,mholborngv@yandex.ru,54.16.180.209,-6.8602,115.2711,2020-12-28 17:19:36
+609,Ashley,Sellens,asellensgw,xOlqKjrL,Pineal gland incision,asellensgw@ovh.net,59.255.86.99,-30.6161448,25.4852012,2019-12-03 05:35:57
+610,Quinton,Kincaid,qkincaidgx,VQDz21KN,Endovasc embol hd/nk ves,qkincaidgx@topsy.com,182.92.128.180,43.817071,125.323544,2020-07-21 11:40:59
+611,Mace,Scamaden,mscamadengy,XKKtzn,Graft repair atrial def,mscamadengy@google.com,128.93.100.193,-6.4871369,106.8007712,2019-05-12 19:40:54
+612,Chas,Knutsen,cknutsengz,qrTvPuTW,Female genital x-ray NEC,cknutsengz@chicagotribune.com,67.154.220.154,1.3081095,35.2066038,2021-01-31 23:43:40
+613,Swen,Cathenod,scathenodh0,mcHd7oO,Remov trunk device NEC,scathenodh0@webnode.com,166.66.235.34,-36.7247834,-73.1169808,2021-02-19 18:24:56
+614,Chadd,Nassey,cnasseyh1,4dy1PAE,Open ureteral biopsy,cnasseyh1@auda.org.au,209.104.143.115,30.975286,105.190522,2020-11-07 00:21:32
+615,Clerkclaude,Jillett,cjilletth2,jZqdB7usY,"Exc/des hrt les,endovasc",cjilletth2@skype.com,21.229.78.174,30.6074358,114.3110482,2021-03-18 14:06:02
+616,Joey,Floweth,jflowethh3,2luVWwymzEn,Incision pilonidal sinus,jflowethh3@digg.com,4.251.71.213,-8.5068536,115.2624778,2020-10-26 01:50:55
+617,Sawyer,Ferreri,sferrerih4,YaowdYwQ,Repair of vessel NEC,sferrerih4@joomla.org,55.239.238.74,38.103487,117.742101,2020-05-31 07:16:43
+618,Lazaro,Clayton,lclaytonh5,pJX76A6xO,Remove imp device-femur,lclaytonh5@mediafire.com,72.236.102.196,-6.7354694,105.8429054,2019-01-27 05:50:53
+619,Roley,Woodroffe,rwoodroffeh6,nvx8x2n,Prosthet/orthot training,rwoodroffeh6@wp.com,107.84.77.30,5.9295558,-0.9725085,2020-07-26 05:40:54
+620,Chucho,Margett,cmargetth7,lcfaXxxWNRlk,Varicose v lig-strip NOS,cmargetth7@aol.com,75.111.29.204,42.4657861,1.4921277,2019-12-31 18:35:39
+621,Davidson,Hallmark,dhallmarkh8,cMpbdXWjg,Disarticulation of elbow,dhallmarkh8@prlog.org,3.253.183.89,39.6024762,47.1523402,2020-02-05 19:06:32
+622,Christoph,Cruikshank,ccruikshankh9,zBwSyrlWWdpr,Destruct abd wall lesion,ccruikshankh9@skype.com,243.218.228.247,-7.5450262,111.6556388,2019-03-29 05:21:38
+623,Brod,Veld,bveldha,jwBlX9QR7Y,"Endo ins/re brnc val,mul",bveldha@bandcamp.com,189.217.190.43,34.814591,109.629628,2020-06-16 18:06:38
+624,Alden,Blanc,ablanchb,ssp4Kek3uzF,Micro exam-musculosk NEC,ablanchb@businesswire.com,231.208.224.122,-13.02483,-74.448357,2020-12-19 07:59:39
+625,Hy,McKerron,hmckerronhc,LGdoAWA,Bilat endosc divis tube,hmckerronhc@java.com,28.33.119.47,6.1816141,6.5303102,2020-06-11 06:49:17
+626,Rudd,Crease,rcreasehd,UcmRUGEQSN1r,Percu endosc jejunostomy,rcreasehd@qq.com,35.118.225.153,29.5917677,52.5836982,2020-07-29 23:22:35
+627,Jonathan,Caldayrou,jcaldayrouhe,fIjaNSMkT,Aspiration of bursa,jcaldayrouhe@soundcloud.com,22.177.241.20,40.8979064,-7.9345589,2020-01-22 06:50:45
+628,Arley,Sessions,asessionshf,gDjdq3e6z,Remove dental prosthesis,asessionshf@answers.com,170.165.225.228,14.7596318,121.0589081,2020-01-14 21:22:16
+629,Dallon,Fearn,dfearnhg,13H81cYrLY6,Papillary muscle ops,dfearnhg@marketwatch.com,10.127.35.29,49.4006213,1.1150619,2020-11-02 06:48:07
+630,Saxon,Byfford,sbyffordhh,jddhEowzfk,Excision of hydrocele,sbyffordhh@jugem.jp,138.6.8.66,-31.4856187,-64.2353879,2021-01-25 13:04:45
+631,Millard,Perillo,mperillohi,2FRR68KtR,Lower GI series,mperillohi@is.gd,243.165.208.143,-5.896111,-78.690278,2020-03-13 12:31:15
+632,Chad,Torrisi,ctorrisihj,VeJLHy5XMj9Y,Vocational rehabilitat,ctorrisihj@webmd.com,174.43.243.139,-7.4819949,110.6496693,2020-12-21 02:39:17
+633,Grannie,Haughey,ghaugheyhk,Ev2JkwwvhH,Exc ectopic breast tissu,ghaugheyhk@yelp.com,191.122.250.232,42.12215,60.06276,2019-09-09 21:47:10
+634,Wallache,Conelly,wconellyhl,67mvAr,Pharyngeal repair NEC,wconellyhl@cnn.com,136.253.105.11,44.4959884,19.2677519,2020-09-09 05:45:21
+635,Lyon,Clementi,lclementihm,lCl1MmnNkaT,Surg tooth extract NEC,lclementihm@yellowbook.com,152.130.125.42,29.23682,109.31644,2019-08-13 19:14:48
+636,Benedikt,Rother,brotherhn,V7M0CWO,Vessel operation NEC,brotherhn@squidoo.com,137.128.49.234,18.2382167,-72.0690372,2020-06-26 22:45:13
+637,Gustave,Braisher,gbraisherho,REsQq2ZEk5,Evac ob inc hemat perin,gbraisherho@jigsy.com,244.194.223.15,-7.1194958,-34.8450118,2020-02-18 01:49:02
+638,Conan,Poxon,cpoxonhp,bbUqFddPS7DW,Prostatectomy NEC,cpoxonhp@nhs.uk,232.224.98.22,16.0662148,120.404904,2019-12-05 12:51:46
+639,Enoch,Souza,esouzahq,BcBhkEmCSS,Nasal sinus repair NEC,esouzahq@dailymotion.com,173.136.93.21,11.5346745,108.0954351,2019-03-31 19:09:37
+640,Coop,Hesbrook,chesbrookhr,VTgPDgR,Lg bowel exteriorization,chesbrookhr@linkedin.com,200.75.91.158,29.56492,121.52229,2019-10-31 11:18:29
+641,Ezechiel,Mattevi,emattevihs,d5BKoOO,Humerus wedge osteotomy,emattevihs@unc.edu,230.105.250.128,62.20907,-6.75247,2019-11-13 18:57:05
+642,Brose,Desport,bdesportht,0Ithg7RCn,Skull transilluminat,bdesportht@tinypic.com,45.2.165.186,-8.3568079,114.5806885,2020-07-24 19:58:07
+643,Kelbee,Pulman,kpulmanhu,sGBNShzDKu,Int fixation-humerus,kpulmanhu@chronoengine.com,48.249.75.85,14.6698,-90.357,2019-03-08 17:42:58
+644,Paulo,Bootes,pbooteshv,6X0LtnSXufzw,Mri musculoskeletal,pbooteshv@geocities.jp,128.138.238.249,30.070933,118.181531,2020-04-07 09:31:34
+645,Wolfy,Lettson,wlettsonhw,AhzKix,Spermatocele aspiration,wlettsonhw@toplist.cz,225.22.249.10,58.3495477,33.3074607,2020-09-01 09:53:56
+646,Ingamar,Travers,itravershx,e1vCrq,Plast op hnd-mus/fas grf,itravershx@infoseek.co.jp,240.210.153.181,50.1206081,16.4894818,2020-08-16 14:44:17
+647,Casey,Parkins,cparkinshy,brdMPcyZoM,Perscr/fit/disp contacts,cparkinshy@cnn.com,205.211.66.184,44.9248529,13.8198739,2021-01-12 01:59:15
+648,Gar,Leap,gleaphz,w7Nwn0ABvh,Diagnostic amniocentesis,gleaphz@cpanel.net,86.137.135.242,38.2214782,-85.6794434,2020-12-17 10:56:55
+649,Wayne,Stoppard,wstoppardi0,UNiYOR5Gyl,Ins inflate penis prosth,wstoppardi0@mayoclinic.com,128.238.92.160,23.790902,114.946019,2019-12-05 17:55:28
+650,Sebastien,Duplock,sduplocki1,FMilkWNrAI,Conjunctivoplasty NEC,sduplocki1@scribd.com,66.100.36.157,7.6538679,-11.967619,2020-04-24 06:09:31
+651,Van,Barwick,vbarwicki2,d6sgRxpx,Skel xray-elbow/forearm,vbarwicki2@hugedomains.com,82.10.232.199,30.964593,120.780294,2020-01-27 05:00:16
+652,Irvin,Sheldon,isheldoni3,tdWeWd1FMguL,Other skin & subq i & d,isheldoni3@shop-pro.jp,215.148.143.147,5.2362218,96.2283035,2019-01-13 01:19:25
+653,Artus,Sackey,asackeyi4,h9VDGRkPfUZa,Insert/repl oth neurost,asackeyi4@wordpress.com,190.151.0.71,34.542308,118.752842,2021-01-10 00:30:48
+654,Jedd,Pickerin,jpickerini5,LwJ6S0skEBpa,Rev knee replacemt-total,jpickerini5@ca.gov,158.9.60.47,52.8186154,20.3301247,2020-08-24 08:19:57
+655,Hendrick,Gilluley,hgilluleyi6,oD845TdxbcuM,Nonexc destruc iris les,hgilluleyi6@bizjournals.com,196.161.223.60,14.7059893,120.9500035,2019-08-09 23:29:32
+656,Kim,Jaye,kjayei7,bQIb58RTGu,Interview & evaluat NEC,kjayei7@paginegialle.it,82.194.135.56,-7.6487545,108.7897976,2018-12-25 14:35:53
+657,Mose,Karpeev,mkarpeevi8,YSaxPT,Imp cardiomyostimul sys,mkarpeevi8@friendfeed.com,131.30.38.119,4.4054033,98.1680005,2019-04-30 02:26:50
+658,Vladamir,Falkous,vfalkousi9,snIwhnon9HU,Uterine support op NEC,vfalkousi9@nbcnews.com,226.177.164.89,46.1468572,6.0796844,2018-12-29 04:24:44
+659,Elihu,Dibnah,edibnahia,TblyRVjU2OHG,Abd rep-diaphr hern NOS,edibnahia@diigo.com,6.254.157.38,38.7831729,-9.3242937,2019-03-21 04:42:27
+660,Oran,Shilvock,oshilvockib,RYq7Nm6,Destruct duoden les NEC,oshilvockib@squarespace.com,226.108.237.97,24.117102,117.613808,2019-09-07 13:33:38
+661,Teodoor,Ferney,tferneyic,3Fws8PFwin1y,Inner ear injection,tferneyic@geocities.jp,241.200.208.91,15.6629077,120.5185954,2019-07-26 08:06:02
+662,Krispin,Osichev,kosichevid,5GfWDj55xD8,Leg varicos v liga-strip,kosichevid@toplist.cz,5.109.67.10,-16.8054223,26.9970153,2020-04-05 20:18:52
+663,Northrup,Mash,nmashie,0qvAcJ,Complete sialoadenectomy,nmashie@youtube.com,231.193.127.235,32.161522,35.28638,2020-05-25 03:35:37
+664,Alden,Lilburne,alilburneif,kLl9UNmxexZ,Separat unequl join twin,alilburneif@apple.com,127.182.132.172,45.6181396,-73.8394482,2019-07-10 16:24:51
+665,Findley,Bedinn,fbedinnig,CJnj2psMD,Heart countershock NEC,fbedinnig@wix.com,188.146.61.145,45.3444075,20.5145956,2019-07-05 20:18:24
+666,Whitaker,Yu,wyuih,ClIcBl,Lid recons entropion rep,wyuih@exblog.jp,110.101.11.77,29.742172,103.583042,2021-02-20 17:13:16
+667,Gardie,Baldazzi,gbaldazziii,LWnMzuyDfHXO,Synovectomy-site NEC,gbaldazziii@ask.com,103.126.53.123,-17.3547843,-63.3977316,2021-02-10 19:09:32
+668,Felipe,Greetland,fgreetlandij,Ha3nAUpWpc,Eye enuc/implan/musc att,fgreetlandij@prnewswire.com,133.239.249.112,54.2474065,37.6031799,2019-12-22 01:36:26
+669,Derward,Shillam,dshillamik,JU7590A5HrR9,Other craniectomy,dshillamik@army.mil,204.238.8.233,47.02018,-68.1434996,2019-03-17 02:05:57
+670,Fabien,Antonelli,fantonelliil,nuIMRwHxHS,Tracheoesoph fistulizat,fantonelliil@jigsy.com,131.50.127.121,61.0962323,28.8780526,2020-11-16 14:38:03
+671,Timotheus,Sinclar,tsinclarim,OTNdyjDxOx1,Hypothermia,tsinclarim@ebay.co.uk,78.115.2.113,30.6377274,73.0947607,2020-06-14 20:44:44
+672,Harlen,Antao,hantaoin,EfoIN0pV,Osteoclasis-patella,hantaoin@tinyurl.com,176.86.212.142,28.406359,-106.8654066,2019-01-06 01:25:17
+673,Yank,Mayne,ymayneio,485hH5CTDtg,Open mediastinal biopsy,ymayneio@diigo.com,90.112.235.19,8.070619,22.3948737,2019-08-21 11:43:35
+674,Stanton,Markwell,smarkwellip,UYmQjj85,Partial nephrectomy,smarkwellip@wiley.com,54.173.175.206,-7.2030729,112.0237903,2020-07-10 20:27:16
+675,Julius,Cerie,jcerieiq,hCaFS8k,Other lacrimal gland ops,jcerieiq@comcast.net,174.158.0.124,38.726079,-9.3335286,2021-01-14 13:51:33
+676,Michal,Dayes,mdayesir,8XXgywg8pE,Sinus lavage thru ostium,mdayesir@cmu.edu,239.160.209.179,45.2767109,18.3876045,2020-10-01 06:12:01
+677,Lamont,Cristol,lcristolis,xUAp6NP54eiO,Part ostect-metacar/car,lcristolis@nifty.com,214.83.67.2,49.0194225,2.4613377,2019-04-09 21:32:11
+678,Chrissy,Batecok,cbatecokit,8V5q10,Percutaneous hysterogram,cbatecokit@goo.ne.jp,209.213.203.109,41.400351,-8.5116191,2020-06-23 02:35:20
+679,Armin,Carmichael,acarmichaeliu,i2rWZOJYio,Goniosynechiae lysis,acarmichaeliu@discuz.net,110.221.49.215,31.975314,35.196042,2020-02-01 13:48:00
+680,Ripley,Murrie,rmurrieiv,O1cbqyxcy,Exc les tend sheath hand,rmurrieiv@yellowpages.com,247.234.166.235,41.308715,-8.1332997,2019-03-13 14:52:59
+681,Lemmy,Yakubovics,lyakubovicsiw,b4ryGfvLU,Excision of iris lesion,lyakubovicsiw@bloglines.com,191.81.54.219,43.3213308,45.044839,2019-09-09 17:52:53
+682,Garreth,Robbey,grobbeyix,3Se9iYYnR,Remov trunk device NEC,grobbeyix@domainmarket.com,61.148.2.12,29.235797,111.083598,2019-05-03 00:04:28
+683,Diarmid,Learmont,dlearmontiy,X0KfC0WzT,Eye fluorescein angiogra,dlearmontiy@nsw.gov.au,202.244.86.79,-7.0265442,110.1879106,2019-06-18 21:59:23
+684,Addison,Betjes,abetjesiz,OrIKGm,Gastric tube irrigat NEC,abetjesiz@mapquest.com,74.217.76.135,57.2790167,35.2242376,2020-11-21 05:14:30
+685,Antons,Aicken,aaickenj0,mjI8WU,Rhinoplasty NEC,aaickenj0@ifeng.com,144.28.15.36,40.4249808,49.950331,2020-06-21 01:32:47
+686,Colas,Ahrendsen,cahrendsenj1,so3AQ7,Cls red-radius/ul epiphy,cahrendsenj1@hao123.com,40.247.170.5,30.077787,108.892527,2019-08-17 09:18:20
+687,Rolfe,Hairesnape,rhairesnapej2,S2tZk9P,C-vasc scan/isotop funct,rhairesnapej2@simplemachines.org,180.14.181.123,15.461001,120.465946,2020-03-15 14:17:53
+688,Mallory,Doncom,mdoncomj3,032fvN6OJ,Bact smear-integument,mdoncomj3@ehow.com,14.166.247.238,10.333833,123.9266643,2019-04-17 19:51:50
+689,Granger,Massy,gmassyj4,4yOODZ,Ankle fusion,gmassyj4@state.tx.us,24.223.233.121,-8.2271785,124.6773561,2019-01-31 13:30:14
+690,Sigismundo,Goodyear,sgoodyearj5,ACbTKEdw,Aspiration of breast,sgoodyearj5@devhub.com,231.168.223.248,44.8184554,20.4643411,2020-09-04 05:11:45
+691,Gavan,Cowlas,gcowlasj6,e98QiV,Spinal refusion NOS,gcowlasj6@shop-pro.jp,47.145.255.179,31.5140575,-97.1520926,2020-11-18 19:41:54
+692,Colby,Ormerod,cormerodj7,lLMOE3sH,Dx proc mediastinum NEC,cormerodj7@businesswire.com,55.225.56.242,35.066619,116.311532,2020-02-02 10:26:35
+693,Hanan,Moreing,hmoreingj8,7JlReYKt1ySc,Particul teleradioth NEC,hmoreingj8@livejournal.com,205.50.15.86,12.283797,-85.5112879,2019-12-31 16:11:39
+694,Corbin,Torricella,ctorricellaj9,GfVWwW,Excis les tendon sheath,ctorricellaj9@economist.com,58.151.74.88,-7.2719005,112.7196817,2019-12-26 15:58:13
+695,Hilarius,Geydon,hgeydonja,uPio2CjPEDRg,Lap reimplant of ovary,hgeydonja@hhs.gov,15.183.101.92,30.475663,-87.193563,2019-06-09 22:50:20
+696,Farr,Baudou,fbaudoujb,ci2M1KqAfE,Urethral reanastomosis,fbaudoujb@nhs.uk,71.219.116.240,49.0711781,29.8488529,2020-08-01 13:41:08
+697,Kerby,Rozier,krozierjc,TUQ9lguqND,Knee structure division,krozierjc@dion.ne.jp,93.137.14.226,20.1871897,-75.8475853,2019-12-23 01:11:36
+698,Gaspar,Coultish,gcoultishjd,YDW2Is,Head/neck ves incis NEC,gcoultishjd@umich.edu,70.106.135.51,-6.1164243,106.7883173,2020-03-01 15:42:43
+699,Hermie,Dacke,hdackeje,SPUt8s,Other nervous system ops,hdackeje@wordpress.org,93.226.110.93,-7.2504446,112.7688416,2020-10-30 00:48:54
+700,Hubie,Locard,hlocardjf,p7QkKT,Exc les tend sheath hand,hlocardjf@blinklist.com,57.134.142.30,9.0578504,-72.233418,2020-03-09 16:03:05
+701,Alexandre,Moores,amooresjg,VS3M81wlU,C & s-peritoneum,amooresjg@java.com,165.147.16.233,4.272793,-74.416014,2020-10-10 11:43:00
+702,Casey,Jurisch,cjurischjh,2T264keDgdj,Partial patellectomy,cjurischjh@state.tx.us,66.49.245.33,46.5993244,-1.1457859,2020-08-24 11:22:44
+703,Ximenes,Ulyat,xulyatji,VlJ6aoQYcw,Nonmag remov post seg FB,xulyatji@unesco.org,254.238.125.254,51.5116933,-0.0829051,2020-11-07 23:35:03
+704,Norman,Hutchason,nhutchasonjj,4BmdSBh,Other counselling,nhutchasonjj@ox.ac.uk,233.102.62.75,26.888665,112.616612,2020-09-12 22:13:38
+705,Flint,Cruise,fcruisejk,5nhrUO0tlJ,Remov intralum pharyn FB,fcruisejk@answers.com,134.219.192.214,48.120484,-1.695391,2019-03-13 01:12:26
+706,Cyrus,Hyland,chylandjl,WOr28Z,Open adrenal gland bx,chylandjl@1und1.de,70.234.222.37,3.0646746,97.3290405,2020-03-06 00:32:05
+707,Alwyn,O'Cosgra,aocosgrajm,byT4hUar,Prostatic operation NEC,aocosgrajm@storify.com,70.221.82.219,25.332842,118.732669,2019-07-09 21:22:47
+708,Inglis,Bullent,ibullentjn,hNw0zLKSB03x,Thor abltn lung les/tiss,ibullentjn@youtube.com,228.115.178.196,6.5390358,21.9910008,2019-04-24 06:39:40
+709,Korey,Knapman,kknapmanjo,aTtmoEWn,Polysomnogram,kknapmanjo@webnode.com,118.111.42.64,45.85029,3.53936,2021-01-14 22:07:21
+710,Tracie,Siddall,tsiddalljp,TNN3iT8crc8D,Blow therapeut into tube,tsiddalljp@tmall.com,180.9.12.227,-21.1661005,27.5143603,2019-03-22 07:57:07
+711,Morty,Roderham,mroderhamjq,JJJw3wEvWIo,Recreational therapy,mroderhamjq@usnews.com,113.106.133.107,-9.8185351,147.6609064,2020-01-02 15:08:33
+712,Sig,Vellacott,svellacottjr,dCAZDrz8rfM0,CAS w fluoroscopy,svellacottjr@geocities.com,8.103.34.27,34.124484,119.007287,2021-02-01 10:33:42
+713,Carson,Plowes,cplowesjs,Ct5JHVg,Radius & ulna sequestrec,cplowesjs@buzzfeed.com,8.188.249.237,17.7177253,102.1175404,2020-10-13 04:11:06
+714,Christy,Farron,cfarronjt,8wqjHAhQiwtF,Bursectomy,cfarronjt@cpanel.net,89.42.122.30,48.8373554,2.2682399,2019-10-17 06:20:12
+715,Amery,Radnage,aradnageju,axRwXtLkfWF,Scan of other sites,aradnageju@github.io,202.164.35.212,48.9763601,17.4746428,2019-07-08 16:30:49
+716,Sheff,Deyes,sdeyesjv,1UUUmVHTF,C & s-integument,sdeyesjv@soup.io,74.38.252.155,38.7554084,-9.3408903,2020-02-22 06:41:16
+717,Falkner,Stevenson,fstevensonjw,fAKALB,Adrenal reimplantation,fstevensonjw@who.int,236.44.111.97,53.4102363,24.5338655,2019-03-05 02:51:35
+718,Daron,Goreway,dgorewayjx,2zgkgTRDCkPt,Metacar/car division NEC,dgorewayjx@goo.gl,95.43.219.200,42.9115599,-85.6264635,2019-11-20 00:10:26
+719,Thoma,Tchaikovsky,ttchaikovskyjy,srtn54K,Auto hem stem ct w/o pur,ttchaikovskyjy@trellian.com,34.189.12.251,50.322121,16.2852974,2019-04-14 07:28:57
+720,Winn,Earwaker,wearwakerjz,80v820nq0,Nonmag remov ant seg FB,wearwakerjz@arizona.edu,162.91.124.52,8.5860654,-79.8464804,2020-11-30 21:40:21
+721,Mikol,Jarmain,mjarmaink0,LgwtJbC,Transab proctosigmoidosc,mjarmaink0@foxnews.com,9.130.192.107,50.5799404,23.4060228,2018-12-21 05:13:02
+722,Horatius,Sones,hsonesk1,VyuPgjQj,Dental x-ray NEC,hsonesk1@soundcloud.com,102.96.92.3,-26.8634263,-58.2918546,2021-01-17 17:18:15
+723,Pedro,Germain,pgermaink2,Kbv53I,Open ureteral biopsy,pgermaink2@tumblr.com,108.222.233.189,45.3913779,40.1763516,2021-03-08 03:52:50
+724,Garry,Batts,gbattsk3,F3joNVJFKfQ3,Comb alcohol/drug detox,gbattsk3@imdb.com,3.74.152.236,42.6688027,129.1189472,2020-09-09 05:51:15
+725,Ulises,Kensett,ukensettk4,Df4OwcW,Spinal fusion NOS,ukensettk4@unblog.fr,160.186.209.194,17.263531,121.834345,2020-12-08 04:41:06
+726,Eldridge,Upcraft,eupcraftk5,QwVa1MEr7V,Suture ureteral lacerat,eupcraftk5@last.fm,165.145.82.34,18.5060252,-69.8489425,2019-09-19 07:52:14
+727,Diarmid,Arne,darnek6,KtHQEG,Other perfusion,darnek6@globo.com,112.135.26.183,59.7457795,29.623955,2020-05-13 18:30:30
+728,Owen,Pym,opymk7,ms4SKQ3S4Dj,Suture diaphragm lacerat,opymk7@wunderground.com,104.187.171.138,55.496478,12.9658307,2020-12-30 16:34:18
+729,Osmond,Keywood,okeywoodk8,d3AMYeiw5TV5,Pancreat sphincteroplas,okeywoodk8@tinypic.com,170.250.2.240,-22.6031668,-48.8041532,2020-01-25 10:56:06
+730,Court,Tuffin,ctuffink9,NWQYBoAMS,Pyeloscopy,ctuffink9@oakley.com,51.191.37.1,40.2655961,23.2039759,2020-05-15 19:53:16
+731,Frasquito,Jayes,fjayeska,3hwociojTOj,Fit above knee prosthes,fjayeska@discovery.com,17.218.29.13,36.9923139,-122.0581762,2020-07-07 14:03:17
+732,Samuele,Ruttgers,sruttgerskb,7eHm8yRumvg,Plague vaccination,sruttgerskb@rakuten.co.jp,136.217.47.110,-5.667322,119.648399,2020-02-03 21:18:49
+733,Ramsey,MacGillreich,rmacgillreichkc,uu276Xuhpq6g,Spectacle fit & dispense,rmacgillreichkc@nih.gov,133.23.167.99,-12.0463731,-77.042754,2021-03-01 02:11:02
+734,Lawton,Friel,lfrielkd,oeWKnLEkH,Procedure-four+ vessels,lfrielkd@imageshack.us,224.209.146.238,-8.3010912,112.1489829,2020-05-24 23:29:38
+735,Bevan,Ekell,bekellke,qjw8ZCBVlQc,Ex cereb meningeal les,bekellke@exblog.jp,162.154.25.104,19.4849192,-72.483507,2020-09-08 03:42:48
+736,Lydon,Orrin,lorrinkf,TBHFgkuXv,Thorac esophagogastrost,lorrinkf@utexas.edu,40.166.98.157,-5.7577862,105.6984455,2019-06-14 14:17:21
+737,Will,Bohman,wbohmankg,DYDGdRBX8,Ins spinal fusion device,wbohmankg@vinaora.com,188.156.97.135,54.3202047,19.5273042,2019-10-21 16:16:21
+738,Lemmie,Chorlton,lchorltonkh,ylWNChT,Sphincter of oddi dilat,lchorltonkh@nytimes.com,109.5.136.247,42.896821,-79.2620294,2020-02-07 21:02:54
+739,Lorin,Calverley,lcalverleyki,2bbGYZqLyT,Sutur flex tend hand NEC,lcalverleyki@simplemachines.org,70.188.47.212,-6.5096059,108.4543113,2020-09-09 15:06:14
+740,Cart,Leggen,cleggenkj,7BPgajZn,Vocal cordectomy,cleggenkj@cnbc.com,122.182.216.68,51.2262018,6.7866433,2020-09-20 13:26:19
+741,Cameron,Fawks,cfawkskk,CFmxp0TAgs,Nephrotomogram NEC,cfawkskk@yolasite.com,193.204.126.115,39.7975767,-89.6551671,2019-05-24 10:59:20
+742,Perceval,Hovard,phovardkl,pVwqPzycn,Thyroid field aspiration,phovardkl@instagram.com,226.7.64.158,30.2427011,120.1502699,2020-12-29 07:49:01
+743,Brooke,Goulder,bgoulderkm,bRjfE9X,"Dilate pylorus, incision",bgoulderkm@ehow.com,126.57.110.188,39.6758453,-8.1457625,2021-02-09 10:48:30
+744,Kelsey,Rown,krownkn,t2Qsrh7Xq,Periph nerve dx proc NEC,krownkn@csmonitor.com,77.51.230.89,14.4693883,121.0059518,2019-04-10 17:30:45
+745,Sargent,Laughren,slaughrenko,ZVvAOr1wz0lq,Laryngeal fistula clos,slaughrenko@house.gov,109.6.112.226,14.7699057,100.5639668,2019-10-13 19:05:04
+746,Cazzie,Godridge,cgodridgekp,lZj1xH,Radical abd hyst NEC/NOS,cgodridgekp@foxnews.com,104.85.170.165,6.6148458,-71.1686168,2021-03-09 06:06:16
+747,Sherwood,Aldam,saldamkq,RmqS6uyF4x,Fetal ops-facilitate del,saldamkq@oaic.gov.au,51.127.236.136,22.1564699,-100.9855409,2021-01-29 09:05:36
+748,Harv,Koppen,hkoppenkr,Z1JWrqrsP,Perc ins carotid stent,hkoppenkr@people.com.cn,184.232.140.215,29.885144,107.401279,2020-09-11 12:41:07
+749,Gabby,Burgher,gburgherks,nU4pti,Closure of anal fistula,gburgherks@moonfruit.com,162.240.51.138,-31.730594,-65.006098,2020-07-09 21:44:31
+750,Wilt,Koppes,wkoppeskt,hp5ydktXPYr,Dilation of rectum,wkoppeskt@flavors.me,79.125.95.78,46.3799618,-75.9685597,2021-01-03 14:49:44
+751,Kenton,McTurlough,kmcturloughku,QHn7aP8VQcIm,Culture-lower urinary,kmcturloughku@upenn.edu,81.142.202.73,27.3423771,53.1803558,2019-03-20 10:59:28
+752,Garrott,Tallant,gtallantkv,f5A1Uk,Leg varicos v liga-strip,gtallantkv@europa.eu,138.172.51.224,25.7784224,-103.2605763,2020-11-11 01:26:21
+753,Von,Elliss,vellisskw,ch1xgT,Remove skull tongs,vellisskw@lulu.com,231.131.68.59,35.416734,119.526925,2021-01-11 23:31:43
+754,Lincoln,Bansal,lbansalkx,VrZwdJHuP,Cystostomy irrigation,lbansalkx@amazon.co.jp,27.59.47.66,51.2828145,-114.0371938,2020-01-22 16:11:22
+755,Rutherford,Kepp,rkeppky,zuOQ20L9s,Open cecectomy NEC,rkeppky@zdnet.com,124.62.229.249,52.6435136,4.7270746,2020-06-11 16:28:14
+756,Hinze,Nestle,hnestlekz,8SvhOET,Atlas-axis fusion,hnestlekz@de.vu,52.160.6.204,17.7409147,-91.7660525,2021-03-16 01:11:48
+757,Abeu,Cuss,acussl0,ocUteupXJvZ,Referral psych rehab NEC,acussl0@mail.ru,140.98.150.104,41.6188726,-8.3575438,2020-12-02 18:00:05
+758,Lindsey,Mushart,lmushartl1,WfF78l68xkd,Diather/cryo turbinectom,lmushartl1@bandcamp.com,193.112.142.174,34.253164,117.251076,2019-07-05 01:55:09
+759,Olin,Winteringham,owinteringhaml2,m50Cqvtc,Cell blk/pap-lymph sys,owinteringhaml2@deviantart.com,91.203.31.7,14.8753647,-88.0729754,2020-07-05 03:52:20
+760,Donall,Rubenovic,drubenovicl3,KHqglr6ac,Open reduc-tibia/fib fx,drubenovicl3@com.com,85.2.69.141,44.9993113,19.9820405,2020-06-22 08:23:06
+761,Winfred,Jaggard,wjaggardl4,90N2aNa75,Aorta resection & anast,wjaggardl4@google.co.jp,133.171.1.63,20.9414842,105.9569025,2020-07-12 15:20:38
+762,Yancey,Cuthbertson,ycuthbertsonl5,lA5P5AC,Gas hysterosalpingogram,ycuthbertsonl5@ftc.gov,120.58.38.130,14.8853727,120.8986655,2020-10-14 12:33:08
+763,Peder,Selbach,pselbachl6,lAp74Ecr,Man replace invert uter,pselbachl6@xrea.com,1.236.169.21,14.5713307,121.0273302,2020-08-28 00:04:02
+764,Brigham,Jerzyk,bjerzykl7,OEY3g1BnMext,Bladder sphincterotomy,bjerzykl7@google.fr,53.95.109.160,19.2874648,-99.6494479,2020-12-26 18:22:54
+765,Abbot,Velareal,avelareall8,Ae8YoW0kbm,Oth totl excision thymus,avelareall8@soup.io,25.64.222.156,10.9455193,122.5100535,2020-05-25 15:21:10
+766,North,Kop,nkopl9,9N9pugb5WLe8,Procedure-two vessels,nkopl9@go.com,191.77.202.171,42.891255,129.508945,2020-08-02 19:17:05
+767,Vasili,Kohrs,vkohrsla,5ayJOz,Corneal transplant NEC,vkohrsla@china.com.cn,208.145.41.155,5.153793,-75.03631,2019-04-26 22:02:58
+768,Wilton,Ubach,wubachlb,BGz90yx,Intrcoronry thromb infus,wubachlb@umn.edu,73.74.55.225,10.9155965,106.7692013,2019-03-21 19:08:28
+769,Horatio,Bernardet,hbernardetlc,GRCRY1y,Opn fx red w int fix NOS,hbernardetlc@goodreads.com,177.211.79.125,45.3401583,104.0061889,2019-12-08 00:44:17
+770,Aldwin,Bertomeu,abertomeuld,wRAhjlM8caG,Venous cutdown,abertomeuld@ftc.gov,191.96.145.205,-5.9536723,105.8495796,2020-12-12 15:29:40
+771,Freedman,Bathurst,fbathurstle,3gd6wGc,Pneumoperit-lung collaps,fbathurstle@go.com,172.89.73.199,4.7874827,-76.1635313,2019-04-15 16:32:58
+772,Saunderson,Fiddler,sfiddlerlf,T5eEOCoMw5T,Flexible sigmoidoscopy,sfiddlerlf@mayoclinic.com,86.200.149.130,-31.4505323,-64.1847851,2019-03-11 20:40:29
+773,Markos,Ferrey,mferreylg,PR3WcgCOs6,Excise int mammary node,mferreylg@ca.gov,159.144.228.46,44.16652,133.86495,2021-01-26 01:56:04
+774,Agustin,Pearsall,apearsalllh,bgYxBsU0ge,Gastric freezing,apearsalllh@jugem.jp,134.22.170.58,-7.1272731,108.6828838,2019-04-29 06:22:48
+775,Emmerich,Labbe,elabbeli,N2hPJG,Intraop gastric manipul,elabbeli@goodreads.com,108.72.226.170,49.7634887,129.7905786,2018-12-31 01:20:16
+776,Ira,Postles,ipostleslj,6aMO2A,Aortocoronary bypass NOS,ipostleslj@washingtonpost.com,253.183.103.238,52.2590681,104.2366111,2019-12-15 11:15:02
+777,Lonnie,Wodeland,lwodelandlk,wxD3RAiNt8M,Non-invasive mech vent,lwodelandlk@privacy.gov.au,127.141.131.207,10.21883,-83.274957,2021-03-03 07:14:09
+778,Tate,Clarae,tclaraell,39eGvk,Alcohol rehab/detox,tclaraell@amazon.de,225.146.29.27,33.366735,117.541917,2021-01-26 01:42:16
+779,Arv,Ashleigh,aashleighlm,1jcKtdkgAFFa,Sympathetic nerve repair,aashleighlm@flickr.com,29.193.196.164,-20.495949,57.5497376,2020-09-18 02:23:24
+780,Westbrook,Toke,wtokeln,1vRFdaPiMHNx,Debrid opn fx-metac/car,wtokeln@elegantthemes.com,185.241.207.2,-8.0989645,113.4061697,2019-10-07 02:36:22
+781,Wilburt,Downse,wdownselo,rX7Teaqg0,Skl xray-shoulder/up arm,wdownselo@about.com,169.84.72.78,41.5660579,-8.5793664,2020-12-07 20:38:31
+782,Terri,Marquiss,tmarquisslp,HfSLAx,Drain face & mouth floor,tmarquisslp@earthlink.net,179.221.145.12,27.508801,59.333,2020-05-27 11:39:09
+783,Dewitt,Trobey,dtrobeylq,F5AGsy,General physical exam,dtrobeylq@nyu.edu,204.191.229.160,-33.7974423,151.2502275,2020-04-08 15:32:32
+784,Glenn,Cheer,gcheerlr,RzohvqXR9V,Endo imp oth grf abd aor,gcheerlr@icq.com,151.249.102.26,51.532126,92.8882656,2020-09-03 21:26:36
+785,Wilbur,Cotte,wcottels,nZEMAkBSR,Total exc pituitary NEC,wcottels@npr.org,199.109.217.34,30.531919,117.115101,2021-03-20 04:03:36
+786,Erie,Corkell,ecorkelllt,pPxxgKaH0S9,Lymphatic struct biopsy,ecorkelllt@a8.net,102.58.17.105,51.8971987,21.6149393,2020-12-22 21:35:06
+787,Horatius,Wilber,hwilberlu,im36ideRwn,Micro exam-spln/marr NEC,hwilberlu@digg.com,88.80.148.89,7.7916349,122.7785327,2020-12-01 21:21:20
+788,Mark,Barhem,mbarhemlv,tWFF9a3bkUoL,Open reduct maxillary fx,mbarhemlv@sitemeter.com,211.26.104.107,7.0693618,125.6098096,2021-03-19 01:08:13
+789,Rollo,Biss,rbisslw,tb2WG8bfsC77,Spinal refusion NOS,rbisslw@mashable.com,227.120.76.9,14.5675752,121.0144105,2020-09-10 21:08:38
+790,Enoch,Pomfret,epomfretlx,PJOrXh,Perf keratopl w autogrft,epomfretlx@nhs.uk,207.27.49.134,27.948308,109.599191,2019-01-20 06:58:59
+791,Abdul,Rapa,arapaly,mM03ok,Parasitology NEC,arapaly@weebly.com,165.74.166.36,43.6158299,13.518915,2020-07-24 21:56:32
+792,Vaclav,Patise,vpatiselz,w2kPJL,Eye enuc/implan/musc att,vpatiselz@umich.edu,201.7.15.104,-14.0699124,-39.5278264,2020-10-01 12:20:44
+793,Gerry,Cottisford,gcottisfordm0,wAiJUo,Ophthalmoscopy,gcottisfordm0@clickbank.net,46.30.47.162,51.7286846,5.4008695,2020-05-29 00:52:13
+794,Alister,Dislee,adisleem1,ECKKqsoi,Transabdomin gastroscopy,adisleem1@google.nl,29.232.98.232,35.3252407,51.6471987,2020-04-09 01:08:24
+795,Jase,Casaccio,jcasacciom2,GgrmnFiWha8,Destruc bartholin gland,jcasacciom2@wunderground.com,91.145.119.88,14.5404328,49.127197,2019-09-13 19:33:39
+796,Rock,Brabbs,rbrabbsm3,xCKQEPx0Gq6,Closed uterine biopsy,rbrabbsm3@google.de,43.95.237.57,54.7556556,38.8869951,2019-05-31 02:03:57
+797,Dev,Skedgell,dskedgellm4,pWDEAPfeyNE,Replace vag/vulv packing,dskedgellm4@seattletimes.com,95.166.160.171,11.1649219,-4.3051542,2021-03-23 01:46:26
+798,Pippo,Kislingbury,pkislingburym5,9k6FS2Dcbwx,Myringotomy w intubation,pkislingburym5@bloglovin.com,140.174.24.80,37.8756819,21.2666794,2020-05-18 00:41:37
+799,Paolo,Berget,pbergetm6,9p72vN1iRfP,Fus/refus 2-3 vertebrae,pbergetm6@bandcamp.com,166.235.157.89,30.235005,116.475481,2020-08-04 03:36:42
+800,Baxy,Janiak,bjaniakm7,nUq0WTbx,Removal FB from hand,bjaniakm7@scientificamerican.com,110.236.112.168,33.5617615,131.428737,2020-11-28 06:20:53
+801,Ephraim,Brokenshire,ebrokenshirem8,6q7kMG,Bone incis w/o div NEC,ebrokenshirem8@guardian.co.uk,39.48.66.84,13.83783,45.83488,2020-07-17 17:08:50
+802,Ase,Yannoni,ayannonim9,Wg95F6,Trigeminal nerv division,ayannonim9@bizjournals.com,154.69.209.20,29.325601,107.760025,2020-11-09 13:27:24
+803,Huntlee,Caddell,hcaddellma,jLe3GrZ,Totl reconstc breast NOS,hcaddellma@china.com.cn,110.57.60.51,-21.0800303,-44.2039901,2019-01-15 23:46:14
+804,Bartholomeus,Ginie,bginiemb,AkXX79,Contr mammary ductogram,bginiemb@github.io,97.215.253.219,39.630867,118.180193,2020-08-20 19:30:01
+805,Raimundo,Synnot,rsynnotmc,SXals4J,Type 5 tympanoplasty,rsynnotmc@reference.com,103.152.125.201,-6.1965654,106.8226808,2020-02-19 22:55:21
+806,Jess,Garron,jgarronmd,CtytGXE,Facial bone/jnt op NEC,jgarronmd@washington.edu,35.185.68.80,37.2484774,138.4445735,2021-01-08 05:20:18
+807,Rupert,Riccione,rriccioneme,fksv5YyNOk,Endosc destruc bronc les,rriccioneme@php.net,176.142.67.212,18.4329473,-77.1973997,2019-12-20 05:15:30
+808,August,Gruszecki,agruszeckimf,x6ACObWhu,Other gastrostomy,agruszeckimf@huffingtonpost.com,189.54.164.167,-32.9057716,-60.6869017,2019-10-12 09:20:09
+809,Clevie,Klimpt,cklimptmg,4rELWiC4,Total gastrectomy NEC,cklimptmg@sakura.ne.jp,233.123.44.2,34.26645,108.960747,2020-08-31 22:49:18
+810,Cobbie,Balharrie,cbalharriemh,ha4mECljb78,Lower limb amputat NOS,cbalharriemh@mozilla.com,83.248.126.233,46.3698404,15.8995273,2020-01-21 20:54:00
+811,Arturo,Goomes,agoomesmi,ZwCkWgJOxu3P,Nephrotomogram NEC,agoomesmi@tamu.edu,227.135.80.124,21.244721,110.455332,2019-11-27 05:49:41
+812,Timothy,Dawber,tdawbermj,0ezezTGFF,After-cataract excision,tdawbermj@europa.eu,124.75.15.248,50.3633974,25.1107867,2020-02-18 05:16:40
+813,Lazar,Steers,lsteersmk,04e2MMuOdEpb,Op red-radius/uln epiphy,lsteersmk@ft.com,76.37.162.224,-8.3654775,113.5371368,2020-05-09 22:54:29
+814,Delaney,Boot,dbootml,oeWQqwQmFWr,Rectal massage,dbootml@yale.edu,251.206.187.72,13.3656061,123.3810275,2020-11-09 23:12:28
+815,Shepard,Cantillon,scantillonmm,ksSd7b,Removal superfic FB eye,scantillonmm@github.io,39.242.103.50,5.896774,118.06182,2020-09-20 03:29:33
+816,Dalton,Heliar,dheliarmn,tB9N45OX,Contrast phlebogram NOS,dheliarmn@msu.edu,202.70.195.73,22.996513,113.823603,2020-11-07 22:56:21
+817,Linus,Chaloner,lchalonermo,pd4v3LnZ,Occlude thoracic ves NEC,lchalonermo@boston.com,197.138.204.41,53.9096,37.736,2019-09-06 01:53:41
+818,Reade,Remmer,rremmermp,cj3j16dQcBOx,Open biopsy soft tissue,rremmermp@altervista.org,185.15.177.143,9.7299483,124.5548427,2020-05-28 11:02:09
+819,Bernie,Ellard,bellardmq,eKv92P,Op red-tibia/fib epiphys,bellardmq@scribd.com,38.75.206.200,18.9436472,-69.7912411,2019-10-30 07:41:27
+820,Chad,Djekovic,cdjekovicmr,3vPU6Ta,Referral vocation rehab,cdjekovicmr@earthlink.net,243.65.77.254,58.8882592,45.709456,2020-09-10 04:52:53
+821,Micah,Heeney,mheeneyms,in1n0LgH2,Remov imp device-patella,mheeneyms@sfgate.com,242.247.204.232,40.505361,80.461556,2020-06-04 23:34:06
+822,Elton,Martinolli,emartinollimt,5w3JWnn,Lap wedge resect ovary,emartinollimt@g.co,122.148.99.168,-45.5712254,-72.068265,2020-03-21 06:03:39
+823,Killy,Order,kordermu,xMupzGMy3f8O,Amnioscopy,kordermu@xrea.com,232.12.186.93,49.794097,12.5783985,2021-03-11 07:54:49
+824,Torry,Arnaudin,tarnaudinmv,ZxZrhAQ,Assisted pool exercise,tarnaudinmv@scribd.com,202.201.161.102,53.2140133,87.2799316,2019-08-21 04:09:05
+825,Marcus,Beer,mbeermw,ieLDj8,Biliary tube irrigation,mbeermw@parallels.com,185.90.207.107,-6.0838087,-39.5691841,2019-11-02 17:00:52
+826,Alexandros,Skellern,askellernmx,Hr22Kry7,Complete glossectomy,askellernmx@bloglines.com,138.50.72.143,11.5742086,37.3613533,2019-08-02 08:10:15
+827,Obadias,Conring,oconringmy,bJOcWNsb,Finger reattachment,oconringmy@i2i.jp,153.125.221.116,61.1012691,44.8327881,2020-12-26 06:41:07
+828,Jaimie,Hovey,jhoveymz,SPHFaL,Nasal dx proc NEC,jhoveymz@cam.ac.uk,153.215.202.136,28.864642,115.643727,2019-04-14 13:03:33
+829,Antone,Scranedge,ascranedgen0,Hbo92NHFMEm,"Repl pacem 1-cham, rate",ascranedgen0@ucoz.ru,227.23.50.0,14.5560877,121.0155081,2019-11-14 00:09:09
+830,Clarke,Jagiela,cjagielan1,fDkB3G8j70NJ,Incision of nose,cjagielan1@cam.ac.uk,191.157.59.108,-11.3442564,-75.5655147,2020-01-29 10:27:07
+831,Irv,Brasted,ibrastedn2,yIyifG09OSF,Nonexc destruc iris les,ibrastedn2@cloudflare.com,154.160.254.153,8.5213374,124.5736702,2020-07-20 21:04:39
+832,Orson,Arbon,oarbonn3,zesZPVRbd,Periurethral incision,oarbonn3@unblog.fr,15.55.44.64,35.7029747,53.3420351,2020-04-12 23:14:01
+833,Felix,Mcimmie,fmcimmien4,KoAJfN354NU,Goniosynechiae lysis,fmcimmien4@opensource.org,32.76.200.116,-7.0807005,112.39108,2020-11-22 18:02:41
+834,Erl,Firby,efirbyn5,1CjDFPvO,Imp/rep mchan cochl pros,efirbyn5@webmd.com,95.247.153.231,-29.942289,-50.9907877,2021-01-04 20:20:20
+835,Laurens,Digby,ldigbyn6,fw42d9ZF,Mri spinal canal,ldigbyn6@ucoz.com,146.186.154.21,37.4784878,126.8642888,2020-10-03 11:44:09
+836,Sherm,Carlsen,scarlsenn7,1nLmQiM,Graft repair atrial def,scarlsenn7@goo.ne.jp,42.207.21.130,16.8,120.8333,2020-01-09 22:39:19
+837,Randolf,Punt,rpuntn8,lINjYQl72,Ext maxillary antrot NEC,rpuntn8@globo.com,48.82.45.92,8.7548237,-70.401535,2020-02-11 06:24:11
+838,Chilton,Creegan,ccreegann9,UaeLIT5,Unilat ing hern rep NOS,ccreegann9@sun.com,59.122.98.90,-12.8010669,-76.5257007,2020-12-04 03:04:32
+839,Glenn,Farnhill,gfarnhillna,8ssfdtBP,Opn bi dr ing hrn-gr NEC,gfarnhillna@51.la,139.218.117.173,47.7809616,-2.1084626,2021-02-09 02:33:14
+840,Jervis,Kilgallen,jkilgallennb,PrVKEB,Other diaphragm repair,jkilgallennb@friendfeed.com,136.38.210.3,-18.9105687,47.8081645,2020-06-21 03:25:58
+841,Kelby,Organ,korgannc,OnVQ75,Opn aortic valvuloplasty,korgannc@surveymonkey.com,108.138.34.77,28.074649,119.141473,2019-05-25 13:28:50
+842,Brewster,Madgin,bmadginnd,GURjth4,Cell blk/pap-op wound,bmadginnd@goo.ne.jp,153.55.233.231,41.9253854,43.4907611,2020-05-03 07:53:39
+843,Rooney,Tousey,rtouseyne,l3xjs9N,Breast dx procedure NEC,rtouseyne@patch.com,81.221.140.104,57.9901314,56.2090194,2020-06-28 07:21:41
+844,Barnard,Breawood,bbreawoodnf,l8MjGWW8q,Clos uterine ligament bx,bbreawoodnf@fc2.com,229.39.192.217,-17.9318052,25.8255575,2019-07-15 13:52:58
+845,Meier,Ropert,mropertng,Wg0uZe,Cl fx reduc-metacar/car,mropertng@yelp.com,85.35.68.186,34.0599302,-118.249786,2019-01-28 07:58:37
+846,Perice,Marriott,pmarriottnh,mOgLKAldqu,Ureteroneocystostomy,pmarriottnh@webnode.com,151.203.21.152,55.9180886,39.1784374,2020-02-28 14:35:50
+847,Barri,Edards,bedardsni,xnCz3y,Revise spine theca shunt,bedardsni@statcounter.com,37.217.253.106,-7.3352,108.4184,2019-11-13 19:21:39
+848,Dan,Jarrel,djarrelnj,MBH9DSjsOgdW,Orbitotomy NEC,djarrelnj@blinklist.com,54.70.41.241,46.6202927,-64.386599,2021-02-20 18:13:26
+849,Montague,Duffyn,mduffynnk,pFbZsotw,Systemic-pulm art shunt,mduffynnk@slate.com,105.172.54.146,38.0485803,138.394706,2020-07-04 23:35:39
+850,Ingrim,Coulthurst,icoulthurstnl,InNGlTn,Remov intralum pharyn FB,icoulthurstnl@freewebs.com,7.250.18.175,5.4238154,-75.8185314,2019-10-29 14:10:29
+851,Gabriele,Povah,gpovahnm,1FgBn4p,Contrast phlebogram-leg,gpovahnm@quantcast.com,119.229.244.96,-12.7822122,45.2582086,2020-02-23 19:52:31
+852,Dillie,Dimnage,ddimnagenn,v6GFLQ0,Bowel diagnost proc NEC,ddimnagenn@stanford.edu,128.209.72.7,50.2160221,20.3179338,2019-11-19 06:34:19
+853,Tommie,Hebblethwaite,thebblethwaiteno,LF1CAx,Repair vulvar fistula,thebblethwaiteno@vkontakte.ru,122.42.192.170,43.4945737,5.8978018,2020-09-12 23:48:47
+854,Bendix,Layus,blayusnp,i7DnUquS,Sm bowel endoscopy NEC,blayusnp@skyrock.com,22.241.89.30,11.748142,125.421596,2020-11-14 07:26:34
+855,Barty,Ottewill,bottewillnq,UoFtma,Shoulder arthroplast NEC,bottewillnq@dot.gov,179.111.183.223,52.3738284,4.8886159,2019-03-30 14:53:18
+856,Jozef,Garter,jgarternr,1O4wvHiTfX1U,Local destruc trach les,jgarternr@miibeian.gov.cn,7.40.98.226,-22.3595631,-47.3853435,2020-09-16 12:17:48
+857,Taite,Matzaitis,tmatzaitisns,iFhZ9a,Adhesiolysis mus/ten/fas,tmatzaitisns@tmall.com,105.206.214.73,24.937517,114.455815,2020-08-30 01:58:16
+858,Shamus,Rembaud,srembaudnt,IsHeF90,Suture scrotal lacerat,srembaudnt@issuu.com,168.6.227.84,-10.7194641,-62.2542716,2020-05-23 21:50:36
+859,Brian,McGaffey,bmcgaffeynu,gqm7rtrsSa6,Cystotomy & adhesiolysis,bmcgaffeynu@people.com.cn,143.110.36.80,8.4937903,124.635164,2019-07-31 22:29:16
+860,Kenny,Cuthbertson,kcuthbertsonnv,ggrp05nN,Complete glossectomy,kcuthbertsonnv@umich.edu,100.237.11.22,14.6141298,121.0143507,2020-03-21 23:38:44
+861,Willy,Conre,wconrenw,NfjHGl91W,Adrenal operation NEC,wconrenw@google.com.au,89.24.99.167,38.656755,76.46606,2020-03-04 12:02:45
+862,Carrol,Dureden,cduredennx,es1Zf1,Trachea fistula clos NEC,cduredennx@csmonitor.com,4.76.206.42,44.6035552,22.6098737,2019-04-28 05:28:19
+863,Baird,Froome,bfroomeny,39QHP6eJAs,Aspiration of testes,bfroomeny@abc.net.au,156.64.73.241,30.42594,111.76053,2020-11-05 02:05:16
+864,Aldon,Pietsma,apietsmanz,iDsg9cXo,Other destru urethra les,apietsmanz@google.com.br,3.196.159.85,25.3681203,68.3122196,2019-05-14 11:09:22
+865,Mervin,MacGee,mmacgeeo0,lsz8f0OnEXxO,Mastoidectomy NEC,mmacgeeo0@bizjournals.com,171.32.248.107,13.415029,34.6248039,2021-02-24 08:58:28
+866,Gabriello,Simkin,gsimkino1,BDl3zA55JAwl,Chorioret les destr NEC,gsimkino1@mlb.com,40.48.72.216,1.411517,111.528999,2019-08-02 05:48:39
+867,Wally,Kleewein,wkleeweino2,hkhV001,Repair gb laceration,wkleeweino2@icio.us,97.32.105.233,-22.6604341,-50.4187813,2020-08-17 15:09:30
+868,Findley,Sharper,fsharpero3,OcBKJwNvpv,Per nerve adhesiolys NEC,fsharpero3@google.es,241.227.138.112,-26.183307,27.6830843,2019-11-26 09:20:43
+869,Ambrosio,Bernuzzi,abernuzzio4,nqI7n51yuoB,Chorioret les diathermy,abernuzzio4@elegantthemes.com,232.93.1.193,54.3208627,18.0919377,2019-08-26 15:19:38
+870,Saunder,O'Scully,soscullyo5,clif9550uXp,Impl cardiac support dev,soscullyo5@ameblo.jp,112.144.118.243,12.6703542,123.8732551,2020-10-30 12:33:19
+871,Elisha,Hrycek,ehryceko6,Unyhy7O2s9jW,C-vasc scan/isotop funct,ehryceko6@icq.com,41.181.127.201,42.699311,123.014433,2020-01-26 04:44:49
+872,Clayborne,Purse,cpurseo7,a1z4Ih,Imp/rep lead lf ven sys,cpurseo7@wordpress.org,8.66.187.206,47.3860507,0.7236073,2019-08-13 10:40:20
+873,Murry,Gallichan,mgallichano8,rBx6Z1i,Cholecystectomy,mgallichano8@house.gov,109.245.163.128,10.2581682,105.2721456,2019-10-27 22:47:39
+874,Eziechiele,Elwell,eelwello9,uqUZOhREIEM,Rev jt repl low ext NEC,eelwello9@printfriendly.com,67.191.8.112,38.2537363,48.2999901,2019-11-10 08:55:02
+875,Addison,Lemmen,alemmenoa,gO6xF7SR,Annuloplasty,alemmenoa@bizjournals.com,126.132.84.130,37.1764814,-8.201073,2021-02-25 00:20:49
+876,Rudyard,Finci,rfinciob,Cvv1j4whqZ,Percu endosc jejunostomy,rfinciob@blogtalkradio.com,61.177.29.175,22.8159074,-82.7589859,2019-08-26 03:42:11
+877,Dougy,Propper,dpropperoc,jMT8wteYNn9,Routine chest x-ray,dpropperoc@last.fm,31.131.142.7,3.991663,-73.766129,2019-06-09 04:10:40
+878,Johan,Heatherington,jheatheringtonod,EL2R54,Foot & toe arthroscopy,jheatheringtonod@godaddy.com,55.170.128.249,-14.8119398,24.7973983,2020-05-10 15:03:10
+879,Felicio,Marjanovic,fmarjanovicoe,hLOceR8SP,Ligate gastric varices,fmarjanovicoe@github.io,245.241.249.233,24.34712,117.174685,2020-10-13 14:04:02
+880,Bertie,Wrought,bwroughtof,Q3NlqWj9B6,Activ musculosk exer NEC,bwroughtof@reuters.com,240.158.165.139,49.4931107,36.8206064,2020-07-30 02:48:05
+881,Gib,Hamsley,ghamsleyog,GEonJ1Xlmt,Parasitlolgy-lower urin,ghamsleyog@hubpages.com,77.178.178.157,30.862289,103.915953,2020-05-13 03:45:21
+882,Sandro,Tethcote,stethcoteoh,G8O7xOcbpD,Psychodrama,stethcoteoh@nsw.gov.au,159.210.9.231,9.7652591,8.8597095,2019-10-13 18:44:06
+883,Kristos,Spradbery,kspradberyoi,9WQN6pVuD,SuperSat O2 therapy,kspradberyoi@fotki.com,80.220.28.123,51.5598572,-2.3523889,2020-05-02 11:52:05
+884,Manfred,MacAnellye,mmacanellyeoj,9TyIhaqYm,Hand tendon reattachment,mmacanellyeoj@skyrock.com,215.1.107.151,41.7811503,-8.6240851,2020-12-09 23:34:31
+885,Kim,Goodridge,kgoodridgeok,b3CMdHQ3,Leg vein resect/anastom,kgoodridgeok@nbcnews.com,47.91.169.113,38.1302023,140.0389531,2019-10-19 20:56:47
+886,Evan,de Leon,edeleonol,sUGO0CL,Perc robotic assist proc,edeleonol@redcross.org,215.74.31.167,-17.9659326,-49.6503106,2019-11-26 07:52:59
+887,Karl,Lowsely,klowselyom,60rFcMCgs,Replace nasal packing,klowselyom@ycombinator.com,37.153.155.217,9.1224847,-79.2930312,2020-04-05 17:27:41
+888,Guglielmo,Wheatland,gwheatlandon,wppxVVry,Oth humerus repair/plast,gwheatlandon@house.gov,137.55.249.155,10.4818973,124.0211737,2019-09-19 21:07:27
+889,Beltran,Colomb,bcolomboo,NOQ3NZh,Insert aqueous drain dev,bcolomboo@soup.io,84.233.162.162,30.66044,120.013991,2019-04-24 00:58:33
+890,Alejandro,Byrom,abyromop,ZxHHPYd,Mediastinal pneumogram,abyromop@sbwire.com,7.49.37.134,38.235041,115.726317,2019-03-20 14:05:22
+891,Weber,Ziebart,wziebartoq,zftzocMw,X-ray of gravid uterus,wziebartoq@mashable.com,126.63.34.125,24.4908935,118.1202121,2021-01-15 03:19:59
+892,Silas,Keuning,skeuningor,bWx7oWoy,Lingual frenotomy,skeuningor@google.com.br,8.178.16.196,40.753655,111.673881,2020-01-29 16:13:06
+893,Hermann,Caizley,hcaizleyos,kwN2Ed2kNVu,Other tenotomy,hcaizleyos@addthis.com,14.187.235.118,3.2987908,101.7409946,2020-11-26 13:05:09
+894,Sheffie,Spare,sspareot,33ECRbs0dlg,Superficial radiation,sspareot@elpais.com,30.247.123.31,40.605681,20.9193691,2020-12-29 13:42:37
+895,Sergeant,Dettmar,sdettmarou,kENAT3,Bact smear-op wound,sdettmarou@upenn.edu,114.84.200.56,37.1464563,-8.4833256,2019-02-08 11:29:09
+896,Isidore,Coutts,icouttsov,eRRXCFUpLC,Hrt/pericar dx proc NEC,icouttsov@oakley.com,107.62.127.118,16.6921704,120.3391924,2020-07-01 11:54:24
+897,Barnie,Daubeny,bdaubenyow,9BfTigZDO,Ins/rep sens-crd/vsl mtr,bdaubenyow@e-recht24.de,113.137.250.18,39.77937,76.630955,2019-12-22 05:05:33
+898,Jarid,Hagstone,jhagstoneox,F8J0k34qXb,Opn thorc diaph hern NEC,jhagstoneox@youku.com,128.239.25.119,26.497765,101.738528,2020-08-09 10:39:16
+899,Irving,Littledike,ilittledikeoy,GzIlPO4CEum,Fallop tube dx proc NEC,ilittledikeoy@pinterest.com,247.88.125.144,-0.4532293,39.6460988,2020-05-22 12:57:36
+900,Pincus,Dignum,pdignumoz,oNRv9QpCPiM,Contrast phlebogram-leg,pdignumoz@myspace.com,25.12.19.161,35.1338673,33.0817144,2019-11-21 09:41:52
+901,Regan,Craighill,rcraighillp0,0wXmpurML,Arthrodesis of elbow,rcraighillp0@prweb.com,2.211.2.177,52.7229746,19.6926546,2019-04-01 23:54:42
+902,Dud,Millhill,dmillhillp1,pIBEIfGExA31,Foot & toe joint biopsy,dmillhillp1@narod.ru,6.78.242.45,51.6325636,22.2519345,2021-03-23 15:53:55
+903,Glenden,Bolden,gboldenp2,ZghxLHABAjp,Chorioret les radiother,gboldenp2@blogspot.com,74.154.149.26,55.045149,32.721561,2020-02-29 12:48:06
+904,Leon,Holley,lholleyp3,M1Xg9TFx,Incision of testes,lholleyp3@arstechnica.com,210.6.159.137,26.580584,110.752493,2020-07-01 23:35:28
+905,Constantine,Smeal,csmealp4,N0vq5Gnkt,Electroretinogram,csmealp4@europa.eu,218.165.77.152,-7.2760371,107.6925674,2018-12-29 10:09:59
+906,Berty,Covil,bcovilp5,EB6OLdprtg,Thorac drain pleurl cav,bcovilp5@boston.com,92.45.1.250,-2.9679629,29.2088303,2019-07-29 23:51:53
+907,Rab,Larvor,rlarvorp6,rX7z1zuDe,Bact smear-lower GI,rlarvorp6@businessweek.com,132.65.54.93,41.9799999,-91.66,2019-10-17 21:07:46
+908,Pippo,Dowdell,pdowdellp7,3lHoF9bdQ0sk,Destruct esophag les NEC,pdowdellp7@g.co,28.172.39.150,36.1860016,50.064982,2019-05-03 19:02:43
+909,Lance,Dunleavy,ldunleavyp8,GQeIg2qwYc,Rev knee repl-tibia lin,ldunleavyp8@free.fr,45.213.120.108,39.3195065,-7.4906959,2019-05-16 13:35:56
+910,Benjy,Clampe,bclampep9,VSo5v9es9ha,Pharyngeal operation NEC,bclampep9@cocolog-nifty.com,40.119.98.183,0.465467,33.2391334,2020-01-26 13:37:53
+911,Caryl,Downgate,cdowngatepa,58sTb1pe,Particul teleradioth NEC,cdowngatepa@cdc.gov,98.215.128.39,15.7631488,99.7344154,2020-04-18 23:46:36
+912,Boyd,Gash,bgashpb,f8cLaBkH,Stapes mobilization,bgashpb@yellowbook.com,126.153.95.254,39.9041999,116.4073963,2020-09-07 15:47:16
+913,Krisha,Morican,kmoricanpc,ituq1IPzLSYH,Parastern hernia repair,kmoricanpc@purevolume.com,211.66.87.93,62.7184038,32.7414584,2019-09-17 12:51:37
+914,Hiram,Balloch,hballochpd,sJp3vD0rp,Excision of joint NOS,hballochpd@paginegialle.it,139.172.120.113,53.248446,-0.934063,2019-05-26 05:04:44
+915,Bernarr,Dyerson,bdyersonpe,XSPmNCFbfalF,Incision pilonidal sinus,bdyersonpe@naver.com,137.133.150.211,-6.712398,106.8945456,2020-12-21 06:44:30
+916,Hernando,Langlais,hlanglaispf,tp1jUpSB,Neck support application,hlanglaispf@bigcartel.com,143.2.33.216,29.654838,91.140552,2021-01-18 23:41:09
+917,Corbie,Dakin,cdakinpg,z6rkhhjOGxaO,Testes dx procedure NEC,cdakinpg@paginegialle.it,230.116.117.54,-13.9468358,-39.6724573,2019-06-22 07:37:50
+918,Carmine,Polly,cpollyph,cDrdpu,Ant segment dx proc NEC,cpollyph@com.com,208.233.5.34,-9.4542,119.2271,2019-12-21 15:46:10
+919,Nataniel,Saunders,nsaunderspi,CuIeN2C97,Partial humerectomy NEC,nsaunderspi@gravatar.com,111.172.69.159,11.5358447,124.4553581,2020-03-30 04:14:50
+920,Dorie,Rounds,droundspj,gCbp9vu52h,Bone division NEC,droundspj@cam.ac.uk,121.199.126.182,30.108216,104.677091,2019-07-10 10:47:11
+921,Cleavland,Southwick,csouthwickpk,oxFmkEub,Esophag speech training,csouthwickpk@dedecms.com,96.89.75.80,25.505194,108.484536,2020-01-30 02:27:40
+922,Johnny,Likly,jliklypl,nLIB09rwqrvm,Replace prolapsed cord,jliklypl@bigcartel.com,24.159.114.68,-13.47751,-70.414047,2019-09-07 11:54:31
+923,Olly,Goodings,ogoodingspm,P7zCxYdd,Chest cage sequestrec,ogoodingspm@wordpress.org,206.10.223.146,22.843818,114.164223,2021-03-05 08:31:39
+924,Hadley,Jeannot,hjeannotpn,E1YjkUSLi,Op red-tibia/fib epiphys,hjeannotpn@slate.com,195.207.212.186,49.5904912,19.710237,2019-05-30 00:37:40
+925,Rudy,Tuxsell,rtuxsellpo,r0KnfMZD,Intra-abd lg bowel manip,rtuxsellpo@fastcompany.com,82.37.26.230,12.5840501,-1.2987349,2019-03-17 02:19:12
+926,Danya,Spellar,dspellarpp,Zypl1ylFRJ6,Brief interview & evalua,dspellarpp@ifeng.com,71.17.46.168,21.430823,110.949819,2019-10-06 09:21:22
+927,Muhammad,Tomaszczyk,mtomaszczykpq,imvNCLVYrQ,Other spinal dx proc,mtomaszczykpq@ezinearticles.com,188.99.58.109,38.8062871,139.9346659,2018-12-24 19:06:12
+928,Daryl,Cavolini,dcavolinipr,V9k1Z17HY,Head/neck vessel excis,dcavolinipr@ca.gov,107.216.185.23,18.904265,-3.5275161,2019-01-26 00:06:13
+929,Duncan,Camden,dcamdenps,jWZvOP1goZcZ,Culture-spleen/marrow,dcamdenps@tamu.edu,101.173.233.203,8.1325883,125.1263623,2018-12-24 08:33:53
+930,Barbabas,Overpool,boverpoolpt,oPpywLGS5f,"DIEP flap, free",boverpoolpt@weather.com,215.96.36.111,59.3618675,17.9791475,2019-11-15 23:34:15
+931,Rik,Gyse,rgysepu,i429nhAh6aY,Augmentation rhinoplasty,rgysepu@list-manage.com,201.173.170.158,43.8558336,18.4098275,2019-05-13 17:27:22
+932,Glenn,Lockhart,glockhartpv,HOzsIp9,Opn dir ing hern-gft NEC,glockhartpv@comcast.net,19.152.109.31,-3.9997372,-38.4429274,2019-07-01 03:12:06
+933,Ciro,Yukhnin,cyukhninpw,FEed3n,Oth thorac op thymus NOS,cyukhninpw@buzzfeed.com,249.239.231.163,7.46932,134.60991,2019-02-06 17:58:18
+934,Olav,Shama,oshamapx,Tgo8gA7QJ,Closed breast biopsy,oshamapx@npr.org,111.175.133.227,47.93,-97.03,2019-01-17 01:42:07
+935,Ado,Botterell,abotterellpy,iilVksm,Perc transmyo revascular,abotterellpy@yellowbook.com,219.173.212.98,26.5627867,54.888679,2020-07-01 21:59:37
+936,Gothart,Pirozzi,gpirozzipz,ZP0v3zE,Pedicle graft/flap NOS,gpirozzipz@imageshack.us,70.255.122.187,27.420628,107.159835,2019-03-04 22:45:23
+937,Orton,Cazalet,ocazaletq0,TGTJ6szXVg,Mastoidectomy NEC,ocazaletq0@free.fr,180.205.174.38,43.3433802,132.8303672,2020-07-13 05:46:28
+938,Bram,Biffen,bbiffenq1,VpNphlCwEjJ,Cardiac rhythm conv NEC,bbiffenq1@facebook.com,97.160.53.161,19.4805668,-99.2058279,2019-05-06 01:05:36
+939,Robb,Stopforth,rstopforthq2,kobbZcCohwUq,Lap abd rep-diaphr hern,rstopforthq2@zimbio.com,155.30.196.93,31.53537,34.97192,2019-09-12 04:32:29
+940,Brooks,Woodfin,bwoodfinq3,2KNcwkI,Symbleph rep w free grft,bwoodfinq3@pen.io,31.15.111.149,43.1237608,2.317187,2021-01-25 17:47:28
+941,Skip,Sapson,ssapsonq4,S5RA20Y37sEt,Postop revis per nerv op,ssapsonq4@slate.com,159.128.145.77,-7.5630149,-35.0131428,2019-04-01 22:23:22
+942,Humfrey,Pentony,hpentonyq5,NG0GEUACkUvT,Closed fx reduction NEC,hpentonyq5@exblog.jp,73.126.94.247,11.2755407,49.1878994,2020-04-29 23:02:34
+943,Abbot,Terzi,aterziq6,09D9x5ma,Ankle synovectomy,aterziq6@mapy.cz,181.192.240.165,55.73325,37.0410363,2021-02-13 17:34:02
+944,Eldredge,Rollin,erollinq7,BjpkgdIHguv,Rep anulus fibrosus-grft,erollinq7@weebly.com,81.82.189.13,45.1,120.35,2019-05-28 14:19:11
+945,Sarge,Flement,sflementq8,DmEGneqO2CQd,Arthroplasty carpal w/o,sflementq8@seattletimes.com,109.128.150.144,52.391799,20.1900369,2019-09-06 09:24:06
+946,Vic,Logie,vlogieq9,8ofYmhD5sM3G,Tu remov ureter obstruct,vlogieq9@craigslist.org,57.116.14.229,29.5530941,118.9353968,2020-07-11 04:35:04
+947,Humberto,McKag,hmckagqa,ZdrzUj,Opn/oth rep hrt vlv NOS,hmckagqa@china.com.cn,85.208.36.69,32.7894701,73.8236143,2020-02-20 13:07:55
+948,Keven,Traill,ktraillqb,MygN0VwWQtvk,Egd with closed biopsy,ktraillqb@bbc.co.uk,67.28.10.249,43.2916776,-0.3696612,2020-05-11 03:45:37
+949,Dewie,Stockall,dstockallqc,YIodCGFKv,Trabeculectom ab externo,dstockallqc@xrea.com,71.96.251.133,48.1510123,-80.0330343,2020-09-26 08:37:32
+950,Luca,Viggers,lviggersqd,oWVLLe,Anesth inject symp nerve,lviggersqd@bizjournals.com,106.250.116.69,20.5359964,-103.4325178,2020-12-29 18:59:00
+951,Rube,Dog,rdogqe,Z8RC4zV,Autoimmune dis immunizat,rdogqe@vinaora.com,229.255.132.243,37.6360028,127.2165279,2021-02-26 14:55:18
+952,Randi,Schottli,rschottliqf,GGhrw4BmA,Replantation of penis,rschottliqf@shutterfly.com,103.46.59.169,40.8321934,40.0092505,2019-06-13 00:24:43
+953,Gustavo,Popham,gpophamqg,SEskGEVWu4,Cl fx reduc-int fix NEC,gpophamqg@myspace.com,127.138.9.18,24.031853,104.887114,2021-02-07 00:25:00
+954,Rafaellle,Terram,rterramqh,mFgaPmGxeC,Oth arthrotomy-shoulder,rterramqh@yale.edu,248.189.94.90,28.260141,112.571923,2021-03-16 15:26:40
+955,Joey,Isselee,jisseleeqi,GY3HQrINjaD,Local excis sm bowel NEC,jisseleeqi@cafepress.com,131.206.9.94,10.3043903,104.6354631,2020-07-31 07:30:34
+956,Reynolds,Maccraw,rmaccrawqj,W08jvYAgpaN,Remov trunk device NEC,rmaccrawqj@merriam-webster.com,42.203.1.62,55.4872242,37.3046546,2019-04-10 21:07:41
+957,Logan,Stubbley,lstubbleyqk,JiS1JLX6gYkQ,Op on 1 extraoc musc NEC,lstubbleyqk@weebly.com,4.227.100.227,49.5658236,18.814406,2020-11-29 00:18:08
+958,Pascale,Heino,pheinoql,puil9u,Revision of pedicle grft,pheinoql@usatoday.com,97.246.196.232,48.0288905,123.0199373,2020-05-14 10:17:16
+959,Vick,Netting,vnettingqm,TDWhOM,Other chest cage incis,vnettingqm@google.com.au,113.117.186.151,49.7274403,13.2462275,2019-10-08 06:21:08
+960,Kerwinn,Klimpke,kklimpkeqn,FHlwh3wd,Excision of joint NEC,kklimpkeqn@arizona.edu,144.24.235.242,41.3351832,-8.6022276,2020-10-30 09:10:36
+961,Dougy,Grenkov,dgrenkovqo,iqPsM14D2,Permanent colostomy,dgrenkovqo@soup.io,71.145.106.241,-6.2822524,107.2518631,2020-10-13 05:54:39
+962,Glenden,Sigmund,gsigmundqp,YZhMDIvVtD,Control prostate hemorr,gsigmundqp@so-net.ne.jp,47.167.202.154,10.6340856,106.947666,2020-01-02 09:17:16
+963,Menard,Gallaher,mgallaherqq,bqbZcNZ,C & s-endocrine,mgallaherqq@ca.gov,240.183.136.198,28.0093247,120.6569721,2021-02-13 17:55:24
+964,Marlin,Klee,mkleeqr,5FPG3hK07YY,Endoscop dilate pylorus,mkleeqr@google.co.uk,246.101.6.12,30.651078,120.183168,2019-06-11 10:00:48
+965,Raleigh,Grinsted,rgrinstedqs,kTUsoNQ96gx5,Cell blk/pap-lymph sys,rgrinstedqs@mac.com,61.111.109.120,-1.0460477,-79.6333674,2020-03-09 04:35:48
+966,Aldin,Silcocks,asilcocksqt,Icr3s43R,Lacrim passage incis NEC,asilcocksqt@princeton.edu,185.82.242.100,41.8724387,113.0741002,2021-02-26 06:14:32
+967,Chris,McPhater,cmcphaterqu,aHKRhms,Radioactive elem implant,cmcphaterqu@shutterfly.com,73.34.154.141,34.6718873,133.8964708,2019-08-25 05:49:38
+968,Desmund,Antognozzii,dantognozziiqv,POcESs,Scleral fistula repair,dantognozziiqv@blogger.com,38.65.187.157,35.9547959,139.679652,2020-08-17 13:51:54
+969,Stevie,Sessions,ssessionsqw,CQ5yr2g,Ligation of ureter,ssessionsqw@bandcamp.com,70.106.27.94,60.7651227,26.7869193,2018-12-24 22:14:26
+970,Thorn,Gairdner,tgairdnerqx,7dYgprMrKN,Extracorp immunoabsorpt,tgairdnerqx@qq.com,251.100.150.217,44.1034877,43.2768364,2019-02-14 13:06:13
+971,Coleman,Bowton,cbowtonqy,cP7b1UakgSw,Liver repair NEC,cbowtonqy@time.com,214.133.10.31,16.0080573,120.4068073,2019-05-26 20:29:55
+972,Leslie,Digle,ldigleqz,OxGZqeN8,Total elbow replacement,ldigleqz@a8.net,215.174.173.146,-5.9640712,34.1225927,2020-07-24 08:00:20
+973,Lester,Antcliff,lantcliffr0,cLW0DW82t,Destruct esophag les NEC,lantcliffr0@usnews.com,39.141.73.95,0.9452075,-77.6534904,2019-06-20 12:12:40
+974,Corey,Gricewood,cgricewoodr1,oZXck4kau,Sympathetic nerve op NEC,cgricewoodr1@blinklist.com,19.106.62.116,-7.5996213,111.1116153,2019-03-24 00:16:17
+975,Westbrooke,Possek,wpossekr2,BN4Rva,Lysis of nasal adhesions,wpossekr2@taobao.com,129.80.229.222,3.8459089,96.4876486,2020-04-26 23:10:29
+976,Sydney,Mosten,smostenr3,LOZZWd9S7JE,Cervical cyst marsupial,smostenr3@sciencedirect.com,199.74.87.139,33.6669335,113.1115294,2020-11-25 17:35:48
+977,Peyton,Standidge,pstandidger4,CU4KAOhLQbVW,Int inser lead in atrium,pstandidger4@cnet.com,40.157.30.90,41.2614535,24.9516869,2020-08-11 08:50:57
+978,Esdras,Hember,ehemberr5,JFJqF3tbyIRJ,Comb alco/drug reha/deto,ehemberr5@twitpic.com,44.3.203.96,57.1928469,56.9199638,2019-12-20 03:38:34
+979,Alanson,Yendall,ayendallr6,0zaEZH9gl,Incision of anal septum,ayendallr6@hexun.com,25.94.27.146,31.549333,-97.1466695,2020-07-02 02:50:32
+980,Mandel,Bromidge,mbromidger7,8LgNjU,Tendon pulley reconstruc,mbromidger7@fema.gov,16.46.254.64,28.0105138,120.661569,2020-08-22 02:44:53
+981,Homerus,Giabuzzi,hgiabuzzir8,69upKw,Unilat subq mammect NEC,hgiabuzzir8@mit.edu,222.129.26.136,-8.4813579,122.9634852,2021-03-13 21:09:32
+982,Brandyn,Nyles,bnylesr9,TSmCxo,Opn/oth rep pulm vlv-tis,bnylesr9@jiathis.com,111.176.62.243,13.7866222,120.9767873,2019-12-07 00:06:16
+983,Ephrayim,Wesker,eweskerra,GD4JlYtcwep,Intravas img cor ves OCT,eweskerra@acquirethisname.com,59.18.147.2,38.8905198,-7.5457633,2020-12-25 10:04:09
+984,Elroy,Drillot,edrillotrb,flc9V4,Cystotomy & adhesiolysis,edrillotrb@epa.gov,81.27.71.231,9.029518,1.4168974,2020-10-28 17:45:51
+985,Hunter,Fontenot,hfontenotrc,21pW6axt7BRA,Bact smear-lower resp,hfontenotrc@blogs.com,2.183.81.230,45.991471,4.718821,2020-07-06 00:10:46
+986,Washington,Buckam,wbuckamrd,KqvqBX,Nephrocystanastomosi NOS,wbuckamrd@1und1.de,66.190.176.80,22.170437,111.791539,2019-11-07 01:53:08
+987,Jaye,Redfern,jredfernre,CQVXokXViGXE,Excis/destr les phar NEC,jredfernre@fda.gov,199.37.118.61,10.5423489,122.9635773,2019-04-30 23:23:05
+988,Klemens,Giovanni,kgiovannirf,xbYrhgnbDt,Shoulder struct division,kgiovannirf@webmd.com,254.97.7.1,48.9323908,2.4774664,2020-11-06 04:37:05
+989,Samson,Macrow,smacrowrg,m2VxsKpnuxf,Arterial pressure monit,smacrowrg@pbs.org,102.87.80.245,32.276495,111.468844,2019-02-10 09:43:36
+990,Benedict,Argo,bargorh,VQbMBD,Spine meningocele repair,bargorh@tuttocitta.it,157.236.19.195,-8.2317168,112.5633485,2019-02-16 15:02:22
+991,Kerk,Rafe,kraferi,pS2yh7rA7,Other skin & subq i & d,kraferi@wsj.com,58.43.44.192,22.493937,99.679493,2020-02-22 05:27:59
+992,Jae,Jefferys,jjefferysrj,cquUjl4duc,Hrt revas byps anas NEC,jjefferysrj@nhs.uk,29.61.128.0,29.584292,111.380014,2019-07-19 06:33:04
+993,Prent,Griffith,pgriffithrk,CrvvIH,Suture vulvar laceration,pgriffithrk@mayoclinic.com,125.5.205.183,30.93908,113.733313,2019-12-03 16:13:33
+994,Hobey,Flaxman,hflaxmanrl,1bPa4D,Urethral biopsy,hflaxmanrl@virginia.edu,224.144.63.94,41.0734242,-7.7770505,2021-03-17 05:10:02
+995,Evelin,Dodsley,edodsleyrm,5lql3BxXKy,Remov ant segmnt les NOS,edodsleyrm@jimdo.com,44.12.250.223,-6.8962844,112.2205183,2019-11-12 04:22:58
+996,Cyrille,Christescu,cchristescurn,58TolsinhA0S,Cystoscopy thru stoma,cchristescurn@bizjournals.com,58.160.145.225,-9.5324,119.669,2020-09-27 11:57:30
+997,Mord,Measen,mmeasenro,yuSAYUlvH,Sing source radiosurgery,mmeasenro@devhub.com,223.209.52.175,51.6631882,19.489958,2020-06-04 06:38:16
+998,Walden,Etoile,wetoilerp,C9AQLchSE,Surg tooth extract NEC,wetoilerp@cargocollective.com,12.134.122.236,14.5473421,120.997522,2019-06-03 03:38:49
+999,Coleman,Challener,cchallenerrq,CJbSpLKxHMp,Ther ult head & neck ves,cchallenerrq@mlb.com,125.200.166.65,-20.6405825,-65.2070534,2020-09-09 00:19:16
+1000,Alvie,Mountjoy,amountjoyrr,tCascq,Barium swallow,amountjoyrr@behance.net,26.13.142.164,-17.7765356,177.4356227,2020-09-26 22:29:15
