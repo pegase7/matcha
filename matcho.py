@@ -179,6 +179,8 @@ def profil():
     sexe=us.gender
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if us.birthday ==None:
+        naissance=''
     latitude=us.latitude
     longitude=us.longitude
     return render_template('profil.html',ph1=ph1, nom = nom, prenom = prenom, sexe=sexe, orientation=orientation,bio=bio,email =email, naissance=naissance, latitude=latitude,longitude=longitude)
@@ -309,18 +311,35 @@ def profilmodif():
     login = us.user_name
     prenom = us.first_name
     bio= us.description
+    sexe= us.gender
     if bio==None:\
         bio=""
     orientation = us.orientation
     email= us.email
     sexe=us.gender
-    b=str(us.birthday) #champ date transformé en texte
-    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    
+    naissance=(us.birthday)
     latitude=us.latitude
+    if latitude == None:
+        latitude=0
     longitude=us.longitude
+    if longitude == None:
+        longitude=0
     if request.method=="POST":
+        us.first_name=request.form.get('first_name')
+        us.last_name=request.form.get('name')
+        us.gender=request.form.get('sexe')
+        us.orientation=request.form.get('orientation')
+        us.description=request.form.get('bio')
+        if not(request.form.get('birthday')==''):
+            us.birthday=request.form.get('birthday')
+        if request.form.get('long').isdecimal:
+            us.longitude=request.form.get('long')
+        us.latitude=request.form.get('lat')
+        print (us)
+        DataAccess().merge(us)
         return redirect(url_for('profil'))
-    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance,latitude=latitude,logitude=longitude,msg=msg)
+    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance,latitude=latitude,longitude=longitude,msg=msg,sexe=sexe)
 
 @app.after_request
 def add_header(r):

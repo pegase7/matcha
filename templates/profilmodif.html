@@ -3,48 +3,79 @@
 {% block title %}Modification du profil{% endblock %}
 {% block content %}
 {% include 'nav.html' %}
+<style>
+  #conteneur {
+    display: flex;
+    }
+
+  #saisie {
+    flex-grow: 1;
+    }
+
+  #carte {
+    flex-grow: 3;
+  }
+</style>
 <br><br>
 <h1>bonjour {{session['user']['name']}}</h1>
 <br>
 <h4>{{msg}}</h4>
 <br>
+<div id="conteneur">
+  <div id='saisie'>
+    <form method="post">
+      <p>Nom<br><input type="text" name="name" value="{{nom}}" /></p>
+      <p>Prénom<br><input type="text" name="first_name" value={{prenom}} /></p>
+      <p>E-Mail<br><input type="email" name="courriel" value={{email}} /></p>
+      <p>Lattitude<input type="number" step="0.000001" name="lat" value={{latitude}} /></p>
+      <p>Longitude<input type="number" step="0.000001" name="long" value={{longitude}} /></p>
+      <p>Naissance<input type="date" name="birthday" value={{naissance}} /></p>
 
-<form method="post">
-    <p>Nom : {{nom}}<br><input type="text" name="name" value= "{{nom}}" /></p>
-    <p>Prénom<br><input type="text" name="first_name" value={{prenom}} /></p>
-    <p>E-Mail<br><input type="email" name="courriel" value={{email}} /></p>
-    
-    <p>Sexe</p>
-<div>
-  <input type="radio" id="Male" name="sexe" value="Male"
-         checked>
-  <label for="Male">Male</label>
-</div>
+      <p>Sexe</p>
+      <div>
+        <input type="radio" id="Male" name="sexe" value="Male" "{% if sexe=='Male' %} checked {% endif %}">
+        <label for="Male">Male</label>
+        <input type="radio" id="Female" name="sexe" value="Female" "{% if sexe=='Female' %} checked {% endif %}">
+        <label for="Female">Female</label>
+      </div><br>
 
-<div>
-  <input type="radio" id="Female" name="sexe" value="Female">
-  <label for="Female">Female</label>
-</div><br>
+      <p>Orientation</p>
+      <div>
+        <input type="radio" id="Bi" name="orientation" value="Bi" "{% if orientation=='Bi' %} checked {% endif %}">
+        <label for="Bi">Bi</label>
+        <input type="radio" id="Hetero" name="orientation" value="Hetero" "{% if orientation=='Hetero' %} checked {% endif %}">
+        <label for="Hetero">Hetero</label>
+       <input type="radio" id="Homo" name="orientation" value="Homo""{% if orientation=='Homo' %} checked {% endif %}">
+        <label for="Homo">Homo</label>
+      </div>
+      <p>Présentation<br><textarea name="bio" id='bio' cols="50" rows="5" {{bio}}>{{bio}}</textarea>
 
-<p>Orientation</p>
-<div>
-  <input type="radio" id="Bi" name="orientation" value="Bi"
-         checked>
-  <label for="Bi">Bi</label>
-</div>
-<div>
-  <input type="radio" id="Hetero" name="orientation" value="Hetero">
-  <label for="Hetero">Hetero</label>
-</div>
-<div>
-    <input type="radio" id="Homo" name="orientation" value="Homo">
-    <label for="Homo">Homo</label>
+        <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
+        <a href="{{ url_for('profil')}}">
+          <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a>
+    </form>
   </div>
-  <p>Présentation<br><textarea  name="bio" id='bio' cols="50"  rows= "5" {{bio}} >{{bio}}</textarea>
- 
-    <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
-    <a href="{{ url_for('profil')}}">
-    <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a>  
-</form>
+  <div id='carte'>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <div id="macarte" style="width:80%; height:100%"></div>
+
+    <script>
+      var carte = L.map('macarte').setView([{{latitude}}, {{longitude}}], 14);
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(carte);
+      var marker = L.marker([{{latitude}}, {{longitude}}]).addTo(carte);
+      carte.on('click', placerMarqueur);
+
+      function placerMarqueur(e) {
+        marker.setLatLng(e.latlng);
+        let lati=e.latitude
+        let longi=e.longitude
+        document.getElementsByName('lat').value=lati;
+      };
+    </script>
+  </div>
+</div>
 
 {% endblock %}
