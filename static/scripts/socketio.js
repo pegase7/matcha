@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // display incomming message
     socket.on('message', data => {
+        console.log('data.msg_list')
         const p = document.createElement('p');
         p.className = "msg_p";
         const span_username = document.createElement('span');
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const br = document.createElement('br');
 
         if (data.username) {
+            // console.log('data.username');
             if (data.username == sessionStorage.getItem("current_user")) {
                 p.className = "current";
                 data.username = "Moi";
@@ -24,9 +26,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 br.outerHTML + span_timestamp.outerHTML;
             document.querySelector('#display-message-section').append(p);
             document.getElementById("rigthside-pannel").scrollTop;
+
         } else {
             printSysMsg(data.msg);
         }
+    });
+
+
+    //display old message
+    socket.on('old_messages', data => {
+        msgs_str = data.msgs_list;
+        console.log(data.username)
+        console.log(sessionStorage.getItem("current_user"))
+
+        list = JSON.parse(data.msgs_list)
+        console.log(list)
+        list.forEach(
+            msg => {
+                // console.log(msg)
+                const p = document.createElement('p');
+                p.className = "msg_p";
+                const span_username = document.createElement('span');
+                const span_timestamp = document.createElement('span');
+                span_username.className = "span_username";
+                span_timestamp.className = "span_timestamp";
+                const br = document.createElement('br');
+                console.log('msg.chat : ' + msg.chat)
+                if (data.username) {
+                    // console.log('data.username');
+                    if (data.username == sessionStorage.getItem("current_user")) {
+                        p.className = "current";
+                        data.username = "Moi";
+                    }
+                    span_username.innerHTML = data.username;
+                    span_timestamp.innerHTML = msg.created;
+                    p.innerHTML = msg.chat +
+                        br.outerHTML + span_timestamp.outerHTML;
+                    document.querySelector('#display-message-section').append(p);
+                }
+            }
+        )
+
     });
 
     // display like, recupere l'evenement 'afterlike' envoye du server
@@ -79,8 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.select-room').forEach(p => {
         p.onclick = () => {
             let newRoom = p.value.toString();
-            console.log("room = " + newRoom);
-            console.log("disc" + username)
+            // console.log("room = " + newRoom);
+            // console.log("username = " + username)
             if (newRoom == room) {
                 msg = `Vous êtes déjà connecté à cette discussion.`;
                 printSysMsg(msg);

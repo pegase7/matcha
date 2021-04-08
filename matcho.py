@@ -18,7 +18,9 @@ from matcha.model.Connection import Connection
 import logging
 from pickle import NONE
 from matcha.model.Room import Room
-from matcha.model.Message import Message 
+from matcha.model.Message import Message
+from matcha.config import FlaskEncoder, MyEncoder
+
 
 
 app = Flask(__name__)
@@ -26,7 +28,6 @@ app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.debug = True # a supprimer en production
 socketio = SocketIO(app)
-logging.basicConfig(level=logging.DEBUG)
 ROOMS = ["lounge", "news", "games", "coding"]
 
 def ft_send(unique, nature):
@@ -361,7 +362,26 @@ def message(data):
 def join(data):
     join_room(data['room'])
     # print("\n\ndata join : ", data)
-    send({'msg': data['username'] + " a rejoint cette discussion."}, room=data['room'])
+    msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
+    print("list msgs = ")
+    # msgs_json2 = json.dumps(msgs,cls=FlaskEncoder)
+    # msgs_json = msgs_json2.replace("\\","", -1)
+    # msgs_json = MyEncoder().encode(msgs)
+    msgs_json = json.dumps(msgs)
+    # print(msgs)
+    # print(type(msgs))
+    print(msgs_json)
+    msgs_split = msgs_json.split("}, {")
+    print(msgs_split)
+    for msg in msgs_split:
+        print(msg)
+    # print('data', data)
+    emit('old_messages',{
+        'username': data['username'],
+        'msgs_list': msgs_json,
+          },
+          room=data['room']
+          )
 
 
 @socketio.on('leave')
@@ -394,7 +414,7 @@ def like(data):
     # join the newroom
     # user1.join_room(newroom)
     # user2.join_room(newroom)
-   # emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
+    #emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
 
 
 # @ socketio.on('create')
