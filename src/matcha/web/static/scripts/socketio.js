@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('old_messages', data => {
         msgs_str = data.msgs_list;
         console.log(data.username)
+        console.log(data.user_id)
         console.log(sessionStorage.getItem("current_user"))
 
         list = JSON.parse(data.msgs_list)
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('msg.chat : ' + msg.chat)
                 if (data.username) {
                     // console.log('data.username');
-                    if (data.username == sessionStorage.getItem("current_user")) {
+                    if (data.user_id == msg.sender_id) {
                         p.className = "current";
                         data.username = "Moi";
                     }
