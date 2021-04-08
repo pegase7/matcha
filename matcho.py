@@ -51,6 +51,15 @@ def ft_send(unique, nature):
     serveur.sendmail(Fromadd, Toadds, texte)    ## Envoi du mail
     serveur.quit() 
 
+def coordonnees(c):
+    debut=c.find('(')
+    virgule=c.find(',')
+    fin=c.find(')')
+    lat=c[debut+1:virgule]
+    lon=c[virgule+1:fin]
+    coor=(lat,lon)
+    return (coor)
+
 def lien_unique():
     a=''
     for i in range(17): # compose une chaine aleatoire de lettres et de chiffres
@@ -151,16 +160,25 @@ def accueil():
     else:
         return redirect(url_for('homepage'))   
 
+@app.route('/consultation/<login>/')
+def consultation(login):
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    us = DataAccess().find('Users', conditions=('user_name', login))
+    ph1="/static/photo/"+us.user_name+"1.jpg"
+    ph2="/static/photo/"+us.user_name+"2.jpg"
+    ph3="/static/photo/"+us.user_name+"3.jpg"
+    ph4="/static/photo/"+us.user_name+"4.jpg"
+    ph5="/static/photo/"+us.user_name+"5.jpg"
+    b=str(us.birthday) #champ date transformé en texte
+    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if us.birthday ==None:
+        naissance=''
+    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance)
+
 @app.route('/test/')
 def test():
     return render_template('test.html')
-
-@app.route('/test2/',methods=['GET', 'POST'])
-def test2():
-    if request.method=="POST":
-        a=request.form.get('bou')
-        return a
-    return render_template('test2.html')
 
 @app.route('/profil/')
 def profil():
@@ -191,7 +209,7 @@ def recherche():
         return redirect(url_for('homepage')) 
     user = session['user']['name']
     us = DataAccess().find('Users', conditions=('user_name', user))
-    if us.gender==None or us.description==None or us.orientation==None:
+    if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
         msg = 'Merci de bien remplir votre fiche avant de chercher un profil compatible'
         return redirect(url_for('profilmodif',msg=msg))
     return render_template('recherche.html')
@@ -326,6 +344,10 @@ def profilmodif():
     if longitude == None:
         longitude=0
     if request.method=="POST":
+        coordonnee=request.form.get('longlat')
+        if (coordonnee):
+            us.latitude=coordonnees(coordonnee)[0]
+            us.longitude=coordonnees(coordonnee)[1]
         us.first_name=request.form.get('first_name')
         us.last_name=request.form.get('name')
         us.gender=request.form.get('sexe')
@@ -333,10 +355,6 @@ def profilmodif():
         us.description=request.form.get('bio')
         if not(request.form.get('birthday')==''):
             us.birthday=request.form.get('birthday')
-        if request.form.get('long').isdecimal:
-            us.longitude=request.form.get('long')
-        us.latitude=request.form.get('lat')
-        print (us)
         DataAccess().merge(us)
         return redirect(url_for('profil'))
     return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance,latitude=latitude,longitude=longitude,msg=msg,sexe=sexe)

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultation{% endblock %}
+{% block content %}
+{% include 'nav.html' %}
+<style>
+    #conteneur {
+      display: flex;
+      }
+  
+    #photo {
+      flex-grow: 1;
+      }
+    #texte {
+      flex-grow: 3;
+    }
+    #carte {
+      flex-grow: 3;
+    }
+  </style>
+<h1>Profil de {{profil.user_name}}</h1><br><h2>Popularité  = </h2><br>
+<div id='conteneur'>
+    <div id='photo'>
+    <img src={{ph1}} alt="" width="200"><br><br>
+    <img src={{ph2}} alt="" width="100"><br><br>
+    <img src={{ph3}} alt="" width="100"><br><br>
+    <img src={{ph4}} alt="" width="100"><br><br>
+    <img src={{ph5}} alt="" width="100"><br><br>
+    </div>
+    <div id='texte'>
+        
+        <h2>{{profil.first_name}} {{profil.last_name}}</h2>
+        <br><br><br>
+        <h3>Je suis {{profil.gender}} {{profil.orientation}}<br>
+        Naissance {{naissance}} <br><br>
+        Ma présentation :</h3><br>
+        {{profil.description}}<br><br>
+        <h3>Mes centre d'interets :</h3><br>
+
+
+    </div>
+    <div id='carte'>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <h3>Vous me trouverez ici :</h3><br><br>
+    <div id="macarte" style="width:80%; height:100%"></div>
+
+    <script>
+      var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 14);
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(carte);
+      var marker = L.marker([{{profil.latitude}}, {{profil.longitude}}]).addTo(carte);
+      </script>
+    </div>
+</div>
+{% endblock %}
