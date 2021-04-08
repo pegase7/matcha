@@ -35,39 +35,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //display old message
     socket.on('old_messages', data => {
-        msgs_str = data.msgs_list;
-        console.log(data.username)
-        console.log(data.user_id)
-        console.log(sessionStorage.getItem("current_user"))
+        console.log('1 ' + data.username)
+        console.log('2 ' + data.user_id)
+        console.log('3 ' + sessionStorage.getItem("current_user"))
 
-        list = JSON.parse(data.msgs_list)
-        console.log(list)
-        list.forEach(
-            msg => {
-                // console.log(msg)
-                const p = document.createElement('p');
-                p.className = "msg_p";
-                const span_username = document.createElement('span');
-                const span_timestamp = document.createElement('span');
-                span_username.className = "span_username";
-                span_timestamp.className = "span_timestamp";
-                const br = document.createElement('br');
-                console.log('msg.chat : ' + msg.chat)
-                if (data.username) {
-                    // console.log('data.username');
-                    if (data.user_id == msg.sender_id) {
-                        p.className = "current";
-                        data.username = "Moi";
+        if (sessionStorage.getItem("current_user") == data.username) {
+            list = JSON.parse(data.msgs_list)
+                // console.log(list)
+            list.forEach(
+                msg => {
+                    // console.log(msg)
+                    const p = document.createElement('p');
+                    p.className = "msg_p";
+                    const span_username = document.createElement('span');
+                    const span_timestamp = document.createElement('span');
+                    span_username.className = "span_username";
+                    span_timestamp.className = "span_timestamp";
+                    const br = document.createElement('br');
+                    // console.log('msg.chat : ' + msg.chat)
+                    if (data.username) {
+                        // console.log('data.username');
+                        if (data.user_id == msg.sender_id) {
+                            p.className = "current";
+                            data.username = "Moi";
+                        }
+                        span_username.innerHTML = data.username;
+                        span_timestamp.innerHTML = msg.created;
+                        p.innerHTML = msg.chat +
+                            br.outerHTML + span_timestamp.outerHTML;
+                        document.querySelector('#display-message-section').append(p);
                     }
-                    span_username.innerHTML = data.username;
-                    span_timestamp.innerHTML = msg.created;
-                    p.innerHTML = msg.chat +
-                        br.outerHTML + span_timestamp.outerHTML;
-                    document.querySelector('#display-message-section').append(p);
-                }
-            }
-        )
-
+                },
+                document.getElementById("rigthside-pannel").scrollTop
+            )
+        }
     });
 
     // display like, recupere l'evenement 'afterlike' envoye du server
