@@ -17,21 +17,25 @@
         </nav>
         <hr>
         <!-- Chat -->
-        <div class="receiver">
-
-        </div>
-        <!-- Message area -->
-        <div id="rigthside-pannel">
-            <!-- Display message -->
-            <div id="display-message-section">
-
+        <div id="chat-contener">
+            <div id="chat-message-area">
+                <h3 id="chat-receiver-name">
+                    Pas de discussion
+                </h3>
             </div>
-            <!-- Input message -->
-            <div id="input-area" class="{{ user_id }}">
-                <input type="text" id="user_message" placeholder="Enter your message here">
-                <button id="send_message">
+            <!-- Message area -->
+            <div id="rigthside-pannel">
+                <!-- Display message -->
+                <div id="display-message-section">
+
+                </div>
+                <!-- Input message -->
+                <div id="input-area" class="{{ user_id }}">
+                    <input type="text" id="user_message" placeholder="Enter your message here">
+                    <button id="send_message">
 					<i class="fas fa-paper-plane fa-sm"></i>
 				</button>
+                </div>
             </div>
         </div>
     </div>

@@ -18,14 +18,8 @@ import logging
 from pickle import NONE
 from matcha.model.Room import Room
 from matcha.model.Message import Message
+from matcha.model.Users_room import Users_room
 from matcha.config import FlaskEncoder, MyEncoder
-# from flask import import render_template
-# from routes import *
-# from matcha.web import routes
-# app.register_blueprint(routes)
-
-
-# from matcha.web.__init__ import *
 
 
 app = Flask(__name__)
@@ -136,8 +130,8 @@ def homepage():
         if us == None:
             rep = 'Utilisateur inconnu, merci de vous inscrire'
             return  render_template('home.html', rep=rep)
-        if  not (us.password == hash_pwd(pwd, login)):
-            rep = "Mauvais mot de passe, merci de réessayer"
+        # if  not (us.password == hash_pwd(pwd, login)):
+            # rep = "Mauvais mot de passe, merci de réessayer"
             return  render_template('home.html', rep=rep)
         if us.active == False:
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
@@ -179,7 +173,10 @@ def accueil():
         
         # list sera le resultat de la recherche
         list = DataAccess().fetch('Users')
-        
+        print('list = ',list)
+        # ipExterne = urlopen("https://ip.lafibre.info/ip.php").read()
+        # print('ip = ',ipExterne.decode('ascii'))
+        # request.remodeaddr recupere adresse ip
         return render_template('accueil.html', username=username, rooms=ROOMS, list=list)
     else:
         return redirect(url_for('homepage'))   
@@ -432,7 +429,7 @@ def add_header(r):
 # # Temps réel avec socketio
 @socketio.on('message')
 def message(data):
-    print(f"\n\n{data}\n\n")
+    # print(f"\n\n{data}\n\n")
     msg = Message()
     msg.chat = data['msg']
     msg.room_id = data['room']
@@ -447,6 +444,16 @@ def join(data):
     join_room(data['room'])
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
+    room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
+    print('room = ',data['room'])
+    receiver_id = 0
+    if room_data.slave_id == user.id:
+        receiver_id = room_data.master_id
+    else:
+        receiver_id = room_data.slave_id
+    print('receiver_id = ', receiver_id)
+    receiver = DataAccess().find('Users', conditions=('id', receiver_id))
+    print('receiver = ', receiver.user_name)
     # print(data['username'])
     # print(user.id)
     # print("list msgs = ")
@@ -454,7 +461,8 @@ def join(data):
     emit('old_messages', {
         'username': data['username'],
         'msgs_list': msgs_json,
-        'user_id': user.id
+        'user_id': user.id,
+        'receiver': receiver.user_name,
           },
           room=data['room']
           )

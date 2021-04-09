@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // joinRoom("Lounge");
 
     // display incomming message
+    //manque les notifications en cas de nouveau message à une personne non connectée
     socket.on('message', data => {
         console.log('data.msg_list')
         const p = document.createElement('p');
@@ -35,11 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //display old message
     socket.on('old_messages', data => {
-        console.log('1 ' + data.username)
-        console.log('2 ' + data.user_id)
-        console.log('3 ' + sessionStorage.getItem("current_user"))
-
+        console.log('1 ' + data.username);
+        console.log('2 ' + data.user_id);
+        console.log('3 ' + sessionStorage.getItem("current_user"));
+        console.log('4 ' + data.receiver);
+        // old_receiver = document.getElementById('chat-receiver-name')
+        // console.log(old_receiver)
+        // if (old_receiver) {
+        //     document.getElementById('#chat-receiver-name').removeChild(old_receiver);
+        // }
+        //envoie la liste des messages à l'utilisateur qui a rejoint la room
         if (sessionStorage.getItem("current_user") == data.username) {
+            //display receiver
+
+            // const receiver = document.getElementById('chat-receiver-name')
+            // receiver.outerHTML = "<h3>" + data.receiver + "</h3>";
+
+            const h3 = document.createElement('h3');
+            h3.id = "chat-receiver-name"
+            h3.innerHTML = data.receiver;
+            document.getElementById('chat-message-area').append(h3)
+                //display old messages
             list = JSON.parse(data.msgs_list)
                 // console.log(list)
             list.forEach(
@@ -142,6 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Leave room
     function leaveRoom(room) {
+        old_receiver = document.getElementById('chat-receiver-name');
+        document.getElementById('chat-message-area').removeChild(old_receiver);
         socket.emit('leave', { 'username': username, 'room': room });
     }
 
