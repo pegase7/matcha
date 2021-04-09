@@ -10,7 +10,7 @@
 		"file_error":"resources/traces/error.log"
     },
 	"populate":{
-		"#test_data":"3_populate.sql",
-		"test_data":"faker"
+		"test_data":"3_populate.sql",
+		"#test_data":"faker"
     }
 }

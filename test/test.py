@@ -4,7 +4,9 @@ from test2 import test2
 from matcha.orm.data_access import DataAccess
 from matcha.model.Room import Room
 from matcha.model.Message import Message
+from matcha.model.Users import Users
 import json
+import traceback
 
 if __name__ == "__main__":
     dataAccess = DataAccess()
@@ -29,14 +31,17 @@ if __name__ == "__main__":
     message.sender_id = 3
 #    message.chat = "Ceci est un texte"
 #    message.created = date.today()
-    user = dataAccess.find('Users', conditions=1)
+    users1 = dataAccess.find('Users', conditions=1)
+    users2 = Users()
+    print(users2)
+    print('id', id)
     try:
-#         print(user)
-#         j = jsonify(user)
-#         print('j:',j)
-        toto = json.dumps(user.__dict__, cls=matcha.config.FlaskEncoder)
-        print('toto:', toto)
+        toto = json.dumps(users1, cls=matcha.config.FlaskEncoder)
+        print('toto 1:', toto)
+        toto = json.dumps([users1,users2], cls=matcha.config.FlaskEncoder)
+        print('toto 2:', toto)
         logging.info('OK')
     except (Exception) as e:
         logging.info('KO:' + str(e))
+        traceback.print_exc()
     

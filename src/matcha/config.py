@@ -4,9 +4,12 @@ import logging
 from logging import FileHandler
 from datetime import datetime, date
 import decimal
+from matcha.orm.reflection import ModelObject
 
 class FlaskEncoder(json.JSONEncoder):
     def default(self, o):
+        if isinstance(o, ModelObject):
+            return o.__dict__
         if isinstance(o, datetime):
             return o.isoformat()
         if isinstance(o, date):

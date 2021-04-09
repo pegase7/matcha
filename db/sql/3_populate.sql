@@ -3,6 +3,15 @@ insert into USERS (first_name, last_name, user_name, password, description, emai
 insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude) values ('Emmanuel', 'Macron', 'Le Kiki', 'MyPassword', 'Passionne des antiquites', 'manu@narcisse.com', true, null, 'Male', 'Bi', '1977-12-21', 48.87120, 2.31650);
 insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude) values ('Fogiel', 'Marc-Olivier', 'marcopapolo', 'MyPassword', 'Ouvert a toute les promotions', 'mo-fogiel@tetu.fr', true, null, 'Male', 'Homo', '1969-07-05', 48.83636, 2.27387);
 
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('Elric', 'De Melnibonnée', 'elric', '4c4c369a3342b58413d6449a35f26bd06b8498bd', 'Du sang et des âmes pour mon seigneur Arioch !', 'matcha@ik.me', true, '',  'Male',  'Hetero',  '1967-12-05',  '45.78777',  '4.73096', '2021-04-07 12:24:59.79232', '2021-04-07 12:24:59.79232');
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('Pol', 'Gara', 'Pol', '23edf5afa212043e1631382e70a8177eae87f224', 'Puissante sorcière aux pouvoirs aussi ravageurs que son humour !', 'matcha@ik.me', true, '',  'Female',  'Hetero',  null,  '59.93222',  '30.35308', '2021-04-07 12:25:21.768918', '2021-04-07 12:25:21.768918');
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('Henri', 'de Toulouse Lautrec', 'lautrec', '7cfd125292c5d44696f61cd5f8df16f34a7cd876', 'Peintre, amateur de bordels', 'matcha@ik.me', true, '',  'Male',  'Hetero',  '1864-11-24',  '0.00000',  '0.00000', '2021-04-06 13:20:19.89491', '2021-04-06 13:20:19.89491');
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('Misse', 'Ara', 'Aramis', '5acc6c9048803790e46a7a8770b53afef332e379', '', 'matcha@ik.me', true, '',  null,  null,  null,  null,  null, '2021-04-08 11:45:05.188755', '2021-04-08 11:45:05.188755');
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('LaFronde', 'Thierry', 'Thierry', 'aef3c2254a2fa7a0f20121be24bdcd4c288bf1b6', '', 'matcha@ik.me', true, '',  null,  null,  null,  null,  null, '2021-04-08 12:40:38.403396', '2021-04-08 12:40:38.403396');
+insert into USERS (first_name, last_name, user_name, password, description, email, active, confirm, gender, orientation, birthday, latitude, longitude, created, last_update) values ('Olivier', 'Gasnier', 'pegase7', '657ff497efbe802db68d585a9bf17d4f6fb36530', '""', 'matcha@ik.me', true, '',  'Male',  'Hetero',  '1967-09-18',  '46.10904',  '3.46268', '2021-04-09 07:25:20.498829', '2021-04-09 07:25:20.498829');
+
+
+
 insert into topic(tag) values ('Piscine');
 insert into topic(tag) values ('Peluche');
 insert into topic(tag) values ('Gerontologie');
@@ -24,11 +33,11 @@ insert into room(id, users_ids) values (1, '{2,3}');
 insert into room(id, users_ids) values (2,	'{2,1}');
 
 
-insert into message(room_id, sender_id, receiver_id, chat) values (1,3,2, 'Que dois-je faire pour l''Astra-Zeneca');
-insert into message(room_id, sender_id, receiver_id, chat) values (1,2,3, 'Faut faire gaffe');
-insert into message(room_id, sender_id, receiver_id, chat) values (1,3,2, 'Zut, mon PM a dit hier que c''etait OK');
-insert into message(room_id, sender_id, receiver_id, chat) values (1,2,3, 'T''as plus qu''a le contredire!');
-insert into message(room_id, sender_id, receiver_id, chat) values (1,2,3, 'Ce ne sera qu''une fois de plus!!!!');
+insert into message(room_id, sender_id, chat) values (1,3, 'Que dois-je faire pour l''Astra-Zeneca');
+insert into message(room_id, sender_id, chat) values (1,2, 'Faut faire gaffe');
+insert into message(room_id, sender_id, chat) values (1,3, 'Zut, mon PM a dit hier que c''etait OK');
+insert into message(room_id, sender_id, chat) values (1,2, 'T''as plus qu''a le contredire!');
+insert into message(room_id, sender_id, chat) values (1,2, 'Ce ne sera qu''une fois de plus!!!!');
 
 insert into connection (users_id, ip, connect_date) values(1, '192.0.0.1', TIMESTAMP '2021-03-17 09:09:12');
 insert into connection (users_id, ip, connect_date) values(2, '192.0.0.1', TIMESTAMP '2021-03-17 11:30:34');

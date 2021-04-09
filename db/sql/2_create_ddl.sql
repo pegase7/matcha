@@ -47,6 +47,15 @@ create table USERS (
 );
 alter table USERS owner to MATCHAADMIN;
 
+create table USERS_SUGGEST (
+    sender_id		integer NOT NULL,
+    receiver_id		integer NOT NULL,
+    islike			boolean,
+    isblocked		boolean,
+    created			timestamp without time zone DEFAULT now() NOT NULL,
+    last_update 	timestamp without time zone DEFAULT now() NOT NULL
+);
+alter table USERS_SUGGEST owner to MATCHAADMIN;
 
 
 
@@ -114,8 +123,7 @@ alter table MESSAGE owner to MATCHAADMIN;
 ---
 create table TOPIC(
     tag		character varying(45) NOT NULL,
-    created		timestamp without time zone DEFAULT now() NOT NULL,
-    last_update timestamp without time zone DEFAULT now() NOT NULL
+    created		timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table TOPIC owner to MATCHAADMIN;
 
@@ -125,7 +133,7 @@ alter table TOPIC owner to MATCHAADMIN;
 ---
 create table USERS_TOPIC(
     users_id	integer NOT NULL,
-    tag		character varying(45) NOT NULL
+    tag			character varying(45) NOT NULL
 );
 alter table USERS_TOPIC owner to MATCHAADMIN;
 
