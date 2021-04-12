@@ -6,7 +6,6 @@ class Visit(ModelObject):
     id: IntField(iskey=True)
     visited_id: ManyToOneField(modelname='Users')
     visitor_id: ManyToOneField(modelname='Users')
-    is_like: BoolField
     visit_number: IntField()
     created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)

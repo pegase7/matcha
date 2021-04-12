@@ -86,3 +86,11 @@ if __name__ == "__main__":
     
     users_room = DataAccess().find('Users_room', conditions=[('master_id', 1),], joins=[('master_id', 'UM'), ('room_id')])
     print(users_room.room_id, users_room.master_id, users_room.slave_id )
+    
+    visits = DataAccess().fetch('Visit', conditions=('visited_id', 1), joins=('visitor_id', 'V2')) #visited=1 and left join on visitor_id ==> visitor_id contains Users with id=visitor_id
+    for visit in visits:
+        print(visit)
+        visor = visit.visitor_id
+        print(' ----------------- ')
+        print(type(visor))
+        print(' +++++++++++++++++\n')

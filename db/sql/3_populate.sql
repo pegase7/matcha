@@ -45,3 +45,6 @@ insert into connection (users_id, ip, connect_date) values(3, '192.0.0.1', TIMES
 insert into connection (users_id, ip, connect_date, disconnect_date) values(1, '192.0.0.1', TIMESTAMP '2021-03-16 09:34:31', TIMESTAMP '2021-03-16 10:10:09');
 insert into connection (users_id, ip, connect_date, disconnect_date) values(2, '192.0.0.1', TIMESTAMP '2021-03-16 08:14:12', TIMESTAMP '2021-03-16 09:02:26');
 insert into connection (users_id, ip, connect_date, disconnect_date) values(3, '192.0.0.1', TIMESTAMP '2021-03-16 11:21:45', TIMESTAMP '2021-03-16 12:01:34');
+
+insert into visit(visited_id, visitor_id, visit_number) values (1, 4, 2);
+insert into visit(visited_id, visitor_id, visit_number) values (1, 5, 6);

@@ -40,22 +40,28 @@ create table USERS (
     gender		mpaa_gender DEFAULT 'Female'::mpaa_gender,
     orientation	mpaa_orientation  DEFAULT 'Hetero'::mpaa_orientation,
     birthday	date,
-    latitude	numeric(7,5),
-    longitude 	numeric(7,5),
+    latitude	numeric(8,5),
+    longitude 	numeric(8,5),
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS owner to MATCHAADMIN;
 
-create table USERS_SUGGEST (
+create table USERS_RECOMMANDATION (
     sender_id		integer NOT NULL,
     receiver_id		integer NOT NULL,
     islike			boolean,
     isblocked		boolean,
+    age_diff		number(4,2),
+    distance		number(9,2),
+    dist_ratio		number(2),
+    topics_ratio	number(9,2),
+    nb_consult		number(9),
     created			timestamp without time zone DEFAULT now() NOT NULL,
+    last_consult 	timestamp without time zone DEFAULT now() NOT NULL,    
     last_update 	timestamp without time zone DEFAULT now() NOT NULL
 );
-alter table USERS_SUGGEST owner to MATCHAADMIN;
+alter table USERS_RECOMMANDATION owner to MATCHAADMIN;
 
 
 
@@ -151,7 +157,6 @@ create table VISIT (
     id				integer DEFAULT nextval('VISIT_ID_SEQ'::regclass) NOT NULL,
     visited_id		integer not null,
     visitor_id		integer not null,
-    is_like			boolean DEFAULT False NOT NULL,
     visit_number	int,
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL

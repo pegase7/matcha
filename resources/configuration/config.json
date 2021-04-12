@@ -6,7 +6,7 @@
 		"password":"matchapass"
     },
 	"logging":{
-		"level":20,
+		"level":10,
 		"file_error":"resources/traces/error.log"
     },
 	"populate":{

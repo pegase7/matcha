@@ -5,4 +5,3 @@ from matcha.orm.reflection import ModelObject, CharField, DateTimeField
 class Topic(ModelObject):
     tag: CharField(length=45)
     created: DateTimeField(iscomputed=True)
-    last_update: DateTimeField(iscomputed=True)
