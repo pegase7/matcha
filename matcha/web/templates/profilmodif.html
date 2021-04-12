@@ -4,32 +4,51 @@
 {% block content %}
 {% include 'nav.html' %}
 <style>
-  #conteneur {
+  .conteneur {
     display: flex;
+    flex-flow : row wrap;
+    justify-content: space-around;
     }
 
-  #saisie {
-    flex-grow: 1;
+  .saisie {
+    min-width: 500px;
+    width: 30%;
     }
 
-  #carte {
-    flex-grow: 3;
+  .carte {
+    min-width: 600px;
+    height: 400px;
+    }
+
+  .bouton {
+    width: 500px;
+    text-align: center;
   }
+  
+  .interets {
+    width: 600px;
+    column-width: 120px;
+    /* flex-grow: 2; */
+    height: 500px;
+    
+    overflow:scroll;
+  }
+  
 </style>
-<br><br>
+<br>
 <h1>bonjour {{session['user']['name']}}</h1>
 <br>
 <h4>{{msg}}</h4>
 <br>
-<div id="conteneur">
-  <div id='saisie'>
+<div class="conteneur">
+  <div class='saisie'>
     <form method="post">
-      <p>Nom<br><input type="text" name="name" value="{{nom}}" /></p>
-      <p>Prénom<br><input type="text" name="first_name" value={{prenom}} /></p>
-      <p>E-Mail<br><input type="email" name="courriel" value={{email}} /></p>
+      <p>Nom<br><input type="text" name="name" value="{{profil.last_name}}" /></p>
+      <p>Prénom<br><input type="text" name="first_name" value={{profil.first_name}} /></p>
+      <p>E-Mail<br><input type="email" name="courriel" value={{profil.email}} /></p>
       
-      <p>Latitude : {{latitude}}</p>
-      <p>Longitude : {{longitude}}</p>
+      <p>Latitude : {{profil.latitude}}</p>
+      <p>Longitude : {{profil.longitude}}</p>
       <p>Nouvelles coordonnées<input type="text" step="0.000001" name="longlat" id='coor' size="30"/></p>
       (cliquez dur la carte !)<br>
 
@@ -37,39 +56,54 @@
 
       <p>Sexe</p>
       <div>
-        <input type="radio" id="Male" name="sexe" value="Male" "{% if sexe=='Male' %} checked {% endif %}">
+        <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">
         <label for="Male">Male</label>
-        <input type="radio" id="Female" name="sexe" value="Female" "{% if sexe=='Female' %} checked {% endif %}">
+        <input type="radio" id="Female" name="sexe" value="Female" "{% if profil.gender=='Female' %} checked {% endif %}">
         <label for="Female">Female</label>
       </div><br>
-
       <p>Orientation</p>
       <div>
-        <input type="radio" id="Bi" name="orientation" value="Bi" "{% if orientation=='Bi' %} checked {% endif %}">
+        <input type="radio" id="Bi" name="orientation" value="Bi" "{% if profil.orientation=='Bi' %} checked {% endif %}">
         <label for="Bi">Bi</label>
-        <input type="radio" id="Hetero" name="orientation" value="Hetero" "{% if orientation=='Hetero' %} checked {% endif %}">
+        <input type="radio" id="Hetero" name="orientation" value="Hetero" "{% if profil.orientation=='Hetero' %} checked {% endif %}">
         <label for="Hetero">Hetero</label>
-       <input type="radio" id="Homo" name="orientation" value="Homo""{% if orientation=='Homo' %} checked {% endif %}">
+       <input type="radio" id="Homo" name="orientation" value="Homo""{% if profil.orientation=='Homo' %} checked {% endif %}">
         <label for="Homo">Homo</label>
       </div>
-      <p>Présentation<br><textarea name="bio" id='bio' cols="50" rows="5" {{bio}}>{{bio}}</textarea>
-
-        <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
-        <a href="{{ url_for('profil')}}">
-          <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a>
-    </form>
+      <p>Présentation<br><textarea name="bio" id='bio' cols="50" rows="5" {{profil.description}}>{{profil.description}}</textarea><br>
+       
+       
   </div>
-  <div id='carte'>
+
+  <div class='interets'>
+     <h2>Mes centres d'intérêts</h2><br><br>
+     <div class="checkbox_box">
+          <fieldset>
+          {% for topic in topics %}
+            <input type="checkbox" id={{topic}} name="interest" value={{topic}}          
+            {% for tag in tags %}
+               {% if tag == topic %}checked{% endif %} 
+            {% endfor %} /><label for={{topic}}>{{topic}}</label><br>
+          {% endfor %}
+        </div>
+      </fieldset>
+  </div>
+    
+    
+    
+  
+  
+  <div class='carte'>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <div id="macarte" style="width:80%; height:100%"></div>
-
+  
     <script>
-      var carte = L.map('macarte').setView([{{latitude}}, {{longitude}}], 14);
+      var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 14);
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(carte);
-      var marker = L.marker([{{latitude}}, {{longitude}}]).addTo(carte);
+      var marker = L.marker([{{profil.latitude}}, {{profil.longitude}}]).addTo(carte);
       carte.on('click', placerMarqueur);
 
       function placerMarqueur(e) {
@@ -78,6 +112,12 @@
       };
     </script>
   </div>
+<div class="bouton">
+       <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
+        <a href="{{ url_for('profil')}}">
+          <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a><br><br><br>
+        </div>
+</form>
 </div>
 
 {% endblock %}

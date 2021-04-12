@@ -36,7 +36,11 @@
         Ma présentation :</h3><br>
         {{profil.description}}<br><br>
         <h3>Mes centre d'interets :</h3><br>
-
+        <ul>
+          {% for tag in tags %}
+          <li> {{tag}}</li>
+          {% endfor %}
+      </ul>
 
     </div>
     <div id='carte'>

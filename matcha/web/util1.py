@@ -24,13 +24,13 @@ def hash_pwd(pwd,login):
     result_hash=Hash.hashing(pwd,'SHA1')
     return result_hash
 
+
 def ft_send(unique, nature):
     if nature == 'registration':
         lien = 'http://127.0.0.1:5000/validation/'+unique
     elif nature == 'password':
         lien = 'http://127.0.0.1:5000/newpassword/'+unique
     f_time = time.asctime(time.localtime(time.time())).split()
-    
     Fromadd = "matcha@ik.me"
     Toadd = session['user']['email']   ##  Spécification du destinataire
     message = MIMEMultipart()    
@@ -52,7 +52,8 @@ def ft_send(unique, nature):
     serveur.sendmail(Fromadd, Toadds, texte)    ## Envoi du mail
     serveur.quit() 
 
-def coordonnees(c):
+
+def coordonnees(c): #separe latitude et longitude  
     debut=c.find('(')
     virgule=c.find(',')
     fin=c.find(')')
@@ -60,6 +61,7 @@ def coordonnees(c):
     lon=c[virgule+1:fin]
     coor=(lat,lon)
     return (coor)
+
 
 def lien_unique():
     a=''

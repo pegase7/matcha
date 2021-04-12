@@ -3,6 +3,18 @@ import matcha.config
 import logging
 from matcha.orm.reflection import ListField, ModelDict, ModelObject
 
+"""
+Append member to value whith prefix, returning value
+    if first equal true append firstprefix otherwise otherprefix, then concatenate member
+    return False (for first), concatenated strings   
+"""
+def appendif(first, value, member, firstprefix, otherprefix):
+    if first:
+        return False, ('' if value is None else value) + firstprefix + member
+    else:
+        return False, value + otherprefix + member
+
+
 class Query():
     """
     Class Query for buildinq a sql command from parameters list
@@ -14,16 +26,6 @@ class Query():
         self.orderby = orderby
         self.whereaddon = whereaddon
     
-    """
-    Append member to value whith prefix, returning value
-        if current value equal None append firstprefix otherwise otherprefix, then concatenate member  
-    """
-    def append(self, value, member, firstprefix, otherprefix):
-        if value is None:
-            return firstprefix + member
-        else:
-            return value + otherprefix + member
-
     """
     get formatted condition from raw condition
     """
@@ -49,12 +51,13 @@ class Query():
         if not type(conditions) is list:
             conditions = [conditions]
         where = None
+        first = True
         parameters = tuple()
         for condition in conditions:
             fcondition = self.get_condition(condition)
             member = fcondition[0] + fcondition[1] + '%s'
             parameters += (fcondition[2],)
-            where = self.append(where, member, " where ", " and ")
+            first, where = appendif(first, where, member, " where ", " and ")
         return where, parameters
     
     """
@@ -67,11 +70,11 @@ class Query():
         query = "select "
         from_clause = " from " + self.model.name + ' ' + self.suffix
         first = True
-        model = ModelDict().get_model(model_name)
+        model = ModelDict().get_model_class(model_name)
         for field in model.get_fields():
             if not isinstance(field.type, ListField):
-                query += (" " if first else ", ") + self.suffix + '.' + field.name
-                first = False
+#                query += (" " if first else ", ") + self.suffix + '.' + field.name
+                first, query = appendif(first, query, self.suffix + '.' + field.name, ' ', ', ')
         """
         leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
         """
@@ -86,7 +89,7 @@ class Query():
         query += from_clause
         where_clause, parameters = self.build_where(self.conditions)
         if not self.whereaddon is None:
-            where_clause = self.append(where_clause, self.whereaddon[0], " where ", " and ")
+            _, where_clause = appendif(where_clause is None, where_clause, self.whereaddon[0], " where ", " and ")
             size = len(self.whereaddon)
             for i in range(1,size):
                 parameters += (self.whereaddon[i],)
@@ -105,7 +108,7 @@ class DataAccess():
     """
     Singleton DataAccess class provides:
         - get_connection ->    connection
-        - populate:      ->    Populate model object from record of result set
+        - sql:      ->    Populate model object from record of result set
         - fetch:         ->    fetch model object from database with jointures according to conditions and order by clause
         - merge:         ->    Update database object from model object
         - persist:       ->    Insert database object from model object
@@ -123,9 +126,9 @@ class DataAccess():
         if previous instance is null instantiate and connect to database, elsewhere return current instance        
         """
         if DataAccess.__instance is None:
-            DataAccess.__instance = object.__new__(cls)
             postgresql = matcha.config.config['postgresql']
             DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+            DataAccess.__instance = object.__new__(cls)
         return DataAccess.__instance
 
     def populate(self, record, model, start):
@@ -137,14 +140,14 @@ class DataAccess():
                 i += 1
         return (modelobject, i)
     
-    def get_model(self, record):
+    def get_model_class(self, record):
         model_name = type(record).get_model_name()
-        return ModelDict().get_model(model_name), model_name
+        return ModelDict().get_model_class(model_name), model_name
         
     def set_elements(self, record, listfieldname):
-        (model, _) = self.get_model(record)
+        (model, _) = self.get_model_class(record)
         listfield = model.get_field(listfieldname)
-        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model(listfield.type.modelname), listfield)
+        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model_class(listfield.type.modelname), listfield)
         setattr(record, listfieldname, self.get_elements(model.get_id(record), setjoin))
         
     def get_elements(self, _id, setjoin):
@@ -164,7 +167,7 @@ class DataAccess():
     def get_model_attr(self, record, field):
         attr = getattr(record, field.name)
         if isinstance(attr, ModelObject):
-            fieldmodel = ModelDict.get_model(self, field.type.modelname)
+            fieldmodel = ModelDict.get_model_class(self, field.type.modelname)
             attr = fieldmodel.get_id(attr)
         return attr
 
@@ -176,7 +179,7 @@ class DataAccess():
             return records
 
     def fetch(self, model_name, joins=[], conditions=[], whereaddon=None, orderby=None):
-        model = ModelDict().get_model(model_name)
+        model = ModelDict().get_model_class(model_name)
         objects = []
         """
         leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
@@ -195,7 +198,7 @@ class DataAccess():
             if suffix is None:
                 suffix = join_name[0].upper()
             try:
-                joinModel = ModelDict().get_model(model.get_field(join_name).type.modelname)
+                joinModel = ModelDict().get_model_class(model.get_field(join_name).type.modelname)
                 joinfield = model.get_field(join_name)          
                 leftjoin = (join_name, suffix, joinModel, joinfield)
                 if not isinstance(joinfield.type, ListField):
@@ -232,9 +235,8 @@ class DataAccess():
                 logging.warning("Several records found ("+ str(len(objects)) + ")" + message + '.')           
         return objects[0]
         
-    def execute(self, cmd, parameters=None, model=None, record=None):
+    def execute(self, cmd, parameters=None, model=None, record=None, autocommit=True):
         logging.debug("Excecute:" + cmd)
-        print("Excecute:" + cmd)
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(cmd, parameters)
             if not record is None:
@@ -247,12 +249,12 @@ class DataAccess():
                 returnvalue = record
             else:
                 returnvalue = None
-            DataAccess.__connection.commit()
+            if autocommit:
+                self.commit()
             return returnvalue
         
-    def merge(self, record):
-        model, model_name = self.get_model(record)
-        print('Model:', type(model))
+    def merge(self, record, autocommit=True):
+        model, model_name = self.get_model_class(record)
         model.pre_merge(record)
         cmd = "update " + model_name + " set"
         addon = ' '
@@ -266,10 +268,10 @@ class DataAccess():
                 cmd += addon + "last_update = DEFAULT"
         key_field = model.get_key_field().name
         cmd += ' where ' +  key_field + ' = ' + str(getattr(record, key_field)) + ' returning *'
-        self.execute(cmd, parameters, model, record)
+        self.execute(cmd, parameters, model, record, autocommit=autocommit)
                    
-    def persist(self, record):
-        model, model_name = self.get_model(record)
+    def persist(self, record, autocommit=True):
+        model, model_name = self.get_model_class(record)
         model.pre_persist(record)
         cmd = "insert into " + model_name
         columns = ''
@@ -283,12 +285,28 @@ class DataAccess():
                 parameters += (self.get_model_attr(record,field),)
                 addon = ', '
         cmd += columns + ') values ' + values + ') returning *'
-        self.execute(cmd, parameters, model, record)
+        self.execute(cmd, parameters, model, record, autocommit=autocommit)
 
-    def remove(self, record):
-        model, model_name = self.get_model(record)
+    def remove(self, record, autocommit=True):
+        model, model_name = self.get_model_class(record)
         model.pre_remove(record)
-        key_field = model.get_key_field().name
-        cmd = 'delete from ' + model_name + ' where ' +  key_field + ' = ' + str(getattr(record, key_field)) + " returning *"
-        self.execute(cmd)
+        key_field = model.get_key_field()
+        parameters = (self.get_model_attr(record,key_field),)
+        cmd = 'delete from ' + model_name + ' where ' +  key_field.name + ' = %s'
+        self.execute(cmd, parameters, autocommit=autocommit)
         
+    def call_procedure(self, procedure, parameters=None, autocommit=True):
+        with DataAccess.__connection.cursor() as cursor:
+            cmd = 'call '+ procedure + '('
+            addon = ''
+            for _ in range(len(parameters)):
+                cmd += (addon +  '%s')
+                addon = ', '
+            cmd += ')'
+            logging.debug("procedure: " + cmd)
+            cursor.execute(cmd, parameters)
+            if autocommit:
+                self.commit()
+        
+    def commit(self):
+        DataAccess.__connection.commit()

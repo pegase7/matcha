@@ -8,9 +8,13 @@ from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from util1 import *
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
+from matcha.model.Visit import Visit
 from matcha.model.Connection import Connection
 import logging
-from pickle import NONE
+from matcha.model.Room import Room
+from matcha.model.Message import Message
+
+#from matcha.config import FlaskEncoder, MyEncoder
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -37,8 +41,13 @@ def homepage():
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
             return  render_template('home.html', rep = rep)
         session['user']= {'name' : login}
-        return redirect(url_for('accueil'))
-                 #               date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment           
+        connect=Connection()
+        connect.users_id=us.id
+        connect.connect_date=datetime.now()
+        connect.ip=request.remote_addr
+        connect.disconnect_date=None
+        DataAccess().persist(connect)
+        return redirect(url_for('accueil'))                      
     else:   
         return render_template('home.html')
 
@@ -77,7 +86,22 @@ def accueil():
 def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
+    user = session['user']['name']
+    visitor = DataAccess().find('Users', conditions=('user_name', user))
     us = DataAccess().find('Users', conditions=('user_name', login))
+    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))
+    
+    visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+    
+    for visit in visits:
+        print(visit)
+        visor = visit.visited_id
+        print(type(visor))
+        #print(visor.first_name, visor.last_name)
+    
+    tags=[]
+    for t in tag:
+        tags.append(t.tag)
     ph1="/static/photo/"+us.user_name+"1.jpg"
     ph2="/static/photo/"+us.user_name+"2.jpg"
     ph3="/static/photo/"+us.user_name+"3.jpg"
@@ -87,7 +111,8 @@ def consultation(login):
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
         naissance=''
-    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance)
+    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags)
+
 
 @app.route('/test/')
 def test():
@@ -98,10 +123,14 @@ def test():
 def profil():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    #users = USERS_MANAGER().get_users()
     user = session['user']['name']
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
     us = DataAccess().find('Users', conditions=('user_name', user))
+    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))
+    #visit=DataAccess().find('Visit',conditions=('visited_id',us.id))
+    tags=[]
+    for t in tag:
+        tags.append(t.tag)
     nom = us.last_name
     login = us.user_name
     prenom = us.first_name
@@ -115,7 +144,7 @@ def profil():
         naissance=''
     latitude=us.latitude
     longitude=us.longitude
-    return render_template('profil.html',ph1=ph1, profil=us,naissance=naissance )
+    return render_template('profil.html',ph1=ph1, profil=us,naissance=naissance,tags=tags )
 
 
 @app.route('/recherche/',methods=['GET', 'POST'])
@@ -161,14 +190,15 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
-        new.latitude = None
-        new.longitude = None
+        new.latitude = 0
+        new.longitude = 0
         DataAccess().persist(new)
 
         ft_send(lien,'registration')
         return redirect(url_for('accueil'))
     else:
         return render_template('registration.html')
+
 
 @app.route('/forgot/',methods=['GET', 'POST'])
 def forgot():
@@ -194,11 +224,19 @@ def forgot():
             return redirect(url_for('logout')) 
     return render_template('forgot_password.html',user=user)
 
+
 @app.route('/logout/')
 def logout():
+    login = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', login))
+    connections = DataAccess().fetch('Connection', conditions=('users_id', us.id), orderby='connect_date desc')
+    last_connect=connections[0]
+    last_connect.disconnect_date=datetime.now()
+    DataAccess().merge(last_connect)
     session.clear()
     return redirect(url_for('homepage'))
     
+
 @app.route('/validation/<code>')
 def validation(code):
     us = DataAccess().find('Users', conditions=('confirm', code))
@@ -230,6 +268,7 @@ def newpassword(code):
             return redirect(url_for('logout'))
     return render_template('newpassword.html', login=us.user_name)
 
+
 @app.route('/profilmodif/',methods=['GET', 'POST'])
 def profilmodif():
     try:
@@ -237,21 +276,19 @@ def profilmodif():
     except:
         msg=''
     if "user" not in session:
-        return redirect(url_for('homepage')) 
+        return redirect(url_for('homepage'))
+    dataAccess = DataAccess()
     user = session['user']['name']
-    us = DataAccess().find('Users', conditions=('user_name', user))
+    us = dataAccess.find('Users', conditions=('user_name', user))
+    tops = dataAccess.fetch('Topic')
+    tag = dataAccess.fetch('Users_topic', conditions=('users_id',us.id))
+    topics=[]
+    tags=[]
+    for topic in tops:
+        topics.append(topic.tag)
+    for t in tag:
+        tags.append(t.tag)
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
-    nom = us.last_name
-    login = us.user_name
-    prenom = us.first_name
-    bio= us.description
-    sexe= us.gender
-    if bio==None:
-        bio=""
-    orientation = us.orientation
-    email= us.email
-    sexe=us.gender
-    
     naissance=(us.birthday)
     latitude=us.latitude
     if latitude == None:
@@ -264,6 +301,8 @@ def profilmodif():
         if (coordonnee):
             us.latitude=coordonnees(coordonnee)[0]
             us.longitude=coordonnees(coordonnee)[1]
+        interets=request.form.getlist('interest')#cette liste est a integrer dans la table user topic
+        dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
         us.first_name=request.form.get('first_name')
         us.last_name=request.form.get('name')
         us.gender=request.form.get('sexe')
@@ -273,7 +312,8 @@ def profilmodif():
             us.birthday=request.form.get('birthday')
         DataAccess().merge(us)
         return redirect(url_for('profil'))
-    return render_template('profilmodif.html',nom=nom,prenom=prenom,bio=bio,orientation=orientation,email=email,naissance=naissance,latitude=latitude,longitude=longitude,msg=msg,sexe=sexe)
+    return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
+
 
 @app.after_request
 def add_header(r):
@@ -286,6 +326,25 @@ def add_header(r):
     r.headers["Expires"] = "0"
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
+
+@app.route('/chat/')
+def chat():
+    if "user" in session:
+        username = session['user']['name']
+        user = DataAccess().find('Users', conditions=('user_name', username))
+        print(user)
+        # msgs = DataAccess()fetch('Message',)
+        # print(f"\n\n{username}\n\n")
+        # print(f"\n\n{session}\n\n")
+        liste = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
+        # print("liste : ", liste)
+        print("\n\n")
+        return render_template('chat.html',
+                                username=username,
+                                user_id=user.id, 
+                                rooms=liste)
+    else:
+        return redirect(url_for('homepage'))  
 
 if __name__ =="__main__":
     app.run()
