@@ -35,10 +35,13 @@
   }
   
 </style>
+<div>
+<h1>bonjour {{session['user']['name']}} </h1>
 <br>
-<h1>bonjour {{session['user']['name']}}</h1>
-<br>
-<h4>{{msg}}</h4>
+<h4>{{msg}}
+  <p> <? php echo $_GET['msg'] ?> </p>
+</h4>
+</div>
 <br>
 <div class="conteneur">
   <div class='saisie'>
@@ -49,8 +52,8 @@
       
       <p>Latitude : {{profil.latitude}}</p>
       <p>Longitude : {{profil.longitude}}</p>
-      <p>Nouvelles coordonnées<input type="text" step="0.000001" name="longlat" id='coor' size="30"/></p>
-      (cliquez dur la carte !)<br>
+      <p>Pour de nouvelles coordonnées,<input type="hidden" step="0.000001" name="longlat" id='coor' size="30"/></p>
+      cliquez dur la carte !<br>
 
       <p>Naissance<input type="date" name="birthday" value={{naissance}} /></p>
 
@@ -88,10 +91,6 @@
         </div>
       </fieldset>
   </div>
-    
-    
-    
-  
   
   <div class='carte'>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />

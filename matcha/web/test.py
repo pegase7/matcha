@@ -1,19 +1,22 @@
+from datetime import datetime,date
 import os
-import tkinter as tk
-
-from datetime import datetime
 from matcha.orm.data_access import DataAccess
+from matcha.model.Users import Users
 
-dateconnection=datetime.now()
 
-print(dateconnection)
-#tags = DataAccess().find('Users_topic', conditions=('users_id',5))
-#print(tags[0])
-tops = DataAccess().fetch('Users_topic', conditions=('users_id',5))
-tags=[]
-for t in tops:
-        tags.append(t.tag)
-print (tags)
-#os.remove('matcha/web/static/photo/pegase73.jpg')
-#fichier = open("pegase.txt", "w")
-#fichier.close
+liste = DataAccess().fetch('Users')
+print(type(46.10904))
+for user in liste:
+    if user.birthday:
+  
+        #print('age :', datetime.now()-user.birthday)
+        today = date.today()
+        try: 
+            birthday = user.birthday.replace(year=today.year)
+        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = user.birthday.replace(year=today.year, month=user.birthday.month+1, day=1)
+        if birthday > today:
+            print( today.year - user.birthday.year - 1)
+        else:
+            print(today.year - user.birthday.year)
+

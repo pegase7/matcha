@@ -3,15 +3,111 @@
 {% block title %}Ma recherche{% endblock %}
 {% block content %}
 {% include 'nav.html' %}
+<meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+
+    <!-- Load Leaflet from CDN-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet-src.js"></script>
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet"></script>
+
+    <!-- Esri Leaflet Geocoder -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css"
+    />
+    <script src="https://unpkg.com/esri-leaflet-geocoder"></script>
+
+<style>
+  input:invalid {
+  border: 2px dashed red;
+}
+
+  input:valid {
+  border: 1px solid black;
+}
+    .conteneur {
+    display: flex;
+    flex-flow : row wrap;
+    justify-content: space-around;
+    }
+    .contenu {
+    min-width: 600px;
+    height: 400px;
+    }
+
+    .checkbox_box{
+        width: 600px;
+    column-width: 120px;
+    /* flex-grow: 2; */
+    height: 500px;
+    
+    overflow:scroll;
+    }
+    #map {
+        /* height: 500px; */
+      }
+</style>
 <br><br>
 <h1>Je recherche... </h1>
 <br><br>
+<div class="conteneur">
+<div class="contenu">
 <form method="post" >
-    <p>Age compris entre <input type="text" name="agemin" /> et  <input type="text" name="agemax" /></p>
-    <p>Poularite   entre <input type="text" name="popmin" /> et  <input type="text" name="popmax" /></p>
+  <div>
+    <input type="radio" id="Male" name="sexe" value="Male" "{% if sex_to_find=='Male' %} checked {% endif %}">
+    <label for="Male">un homme</label>
+    <input type="radio" id="Female" name="sexe" value="Female" "{% if sex_to_find=='Female' %} checked {% endif %}">
+    <label for="Female">une femme</label>
+  </div><br>
+    <p>Age compris entre <input type="number" name="agemin" min="18" max="110" size =8/> et  <input type="number" name="agemax" min="18" max="110" size =8 /></p>
+    <p>Popularite  entre <input type="number" name="popmin" min="0" max="100" />et  <input type="number" name="popmax" min="0" max="100" /></p>
+    <p>Localisation <input type="hidden" name="longlat" id="coor" visible =false> dans un rayon de <input type="number" name='km' value =20 min="0" max="20000" >kms autour de votre position, <br> ou bien autour de la ville choisie sur la carte</p>
 <br>
+<strong>Centres d'interets :</strong><br><br>
+
+<div class="checkbox_box">
+    <fieldset>
+    {% for topic in topics %}
+      <input type="checkbox" id={{topic}} name="interest" value={{topic}} /><label for={{topic}}>{{topic}}</label><br>
+    {% endfor %}
+  </div>
+
+</fieldset>
 <button type="submit" class="btn btn-primary btn-lg mb-2" >Chercher</button>
-</form>
+</form></div>
+<div id="map" class="contenu"></div>
+</div>
+    <script>
+      var map = L.map("map").setView([46.10, 3.6764], 7);
+      var tiles = L.esri.basemapLayer("Streets").addTo(map);
+
+      // create the geocoding control and add it to the map
+      var searchControl = L.esri.Geocoding.geosearch({
+        providers: [
+          L.esri.Geocoding.arcgisOnlineProvider({
+            // API Key to be passed to the ArcGIS Online Geocoding Service
+            apikey: 'AAPKfaf63277666a420e99b58b0f3684d806TGgoleiMaxVY4JXkzFkR2DPMte6T7IZyAr_3z7MtSTrc-ROCRaMZUCln3xrBz2KS'
+          })
+        ]
+      }).addTo(map);
+
+      // create an empty layer group to store the results and add it to the map
+      var results = L.layerGroup().addTo(map);
+
+      // listen for the results event and add every result to the map
+      searchControl.on("results", function (data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+          results.addLayer(L.marker(data.results[i].latlng));
+        document.getElementById('coor').value=data.results[i].latlng;}
+        
+      });
+    </script>
 <br>
 
 {% endblock %}

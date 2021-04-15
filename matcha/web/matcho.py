@@ -77,7 +77,12 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        return render_template('accueil.html', username=username, rooms=ROOMS)
+        us = DataAccess().find('Users', conditions=('user_name', username))
+        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        visitors=[]
+        for visit in visits:
+            visitors.append(visit.visitor_id)
+        return render_template('accueil.html', username=username, rooms=ROOMS,visitors=visitors)
     else:
         return redirect(url_for('homepage'))   
 
@@ -87,18 +92,22 @@ def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
     user = session['user']['name']
-    visitor = DataAccess().find('Users', conditions=('user_name', user))
-    us = DataAccess().find('Users', conditions=('user_name', login))
-    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))
-    
-    visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-    
-    for visit in visits:
-        print(visit)
-        visor = visit.visited_id
-        print(type(visor))
-        #print(visor.first_name, visor.last_name)
-    
+    dataAccess = DataAccess()
+    visitor = dataAccess.find('Users', conditions=('user_name', user))
+    us = dataAccess.find('Users', conditions=('user_name', login))
+    tag = dataAccess.fetch('Users_topic', conditions=('users_id',us.id))
+    ###########
+    visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
+    if visit:
+        visit.visit_number = visit.visit_number + 1
+        dataAccess.merge(visit)
+    else:
+        visit = Visit()
+        visit.visited_id = us.id
+        visit.visitor_id = visitor.id
+        visit.visit_number = 1
+        dataAccess.persist(visit)
+    ###########
     tags=[]
     for t in tag:
         tags.append(t.tag)
@@ -127,7 +136,7 @@ def profil():
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
     us = DataAccess().find('Users', conditions=('user_name', user))
     tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))
-    #visit=DataAccess().find('Visit',conditions=('visited_id',us.id))
+            
     tags=[]
     for t in tag:
         tags.append(t.tag)
@@ -144,7 +153,7 @@ def profil():
         naissance=''
     latitude=us.latitude
     longitude=us.longitude
-    return render_template('profil.html',ph1=ph1, profil=us,naissance=naissance,tags=tags )
+    return render_template('profil.html',ph1=ph1, profil=us,naissance=naissance,tags=tags)
 
 
 @app.route('/recherche/',methods=['GET', 'POST'])
@@ -153,10 +162,43 @@ def recherche():
         return redirect(url_for('homepage')) 
     user = session['user']['name']
     us = DataAccess().find('Users', conditions=('user_name', user))
+    tops = DataAccess().fetch('Topic')
+    topics=[]
+    for topic in tops:
+        topics.append(topic.tag)
     if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
         msg = 'Merci de bien remplir votre fiche avant de chercher un profil compatible'
-        return redirect(url_for('profilmodif',msg=msg))
-    return render_template('recherche.html')
+        return render_template('alerte.html',msg=msg)
+    if us.orientation != "Hetero":
+        sex_to_find=us.gender
+    else:
+        if us.gender=="Male":
+            sex_to_find="Female"
+        else:
+            sex_to_find="Male"
+    ##### Criteres de recherches
+    if request.method=="POST":
+        coordonnee=request.form.get('longlat')
+        if (coordonnee):
+            latitude=coordonnees(coordonnee)[0]
+            longitude=coordonnees(coordonnee)[1]
+        else:
+            latitude=us.latitude
+            longitude=us.longitude
+        criteres={}
+        criteres['sexe']=sex_to_find
+        criteres['latitude']=latitude
+        criteres['longitude']=longitude
+        criteres['dist_max']=request.form.get('km')
+        criteres['age_min']=request.form.get('agemin')
+        criteres['age_max']=request.form.get('agemax')
+        criteres['pop_min']=request.form.get('popmin')
+        criteres['pop_max']=request.form.get('popmax')
+        criteres['interets']=request.form.getlist('interest')
+    ##### Recherche
+        find_profil(criteres)
+        return render_template('resultats.html',candidats=find_profil(criteres))
+    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
 
 
 @app.route('/registration/',methods=['GET', 'POST'])
@@ -271,10 +313,6 @@ def newpassword(code):
 
 @app.route('/profilmodif/',methods=['GET', 'POST'])
 def profilmodif():
-    try:
-        msg = request.args['msg']
-    except:
-        msg=''
     if "user" not in session:
         return redirect(url_for('homepage'))
     dataAccess = DataAccess()
@@ -301,7 +339,7 @@ def profilmodif():
         if (coordonnee):
             us.latitude=coordonnees(coordonnee)[0]
             us.longitude=coordonnees(coordonnee)[1]
-        interets=request.form.getlist('interest')#cette liste est a integrer dans la table user topic
+        interets=request.form.getlist('interest')
         dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
         us.first_name=request.form.get('first_name')
         us.last_name=request.form.get('name')

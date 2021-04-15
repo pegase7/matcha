@@ -6,9 +6,11 @@
     <br> mon tableau de bord
     <br><br><br> Popularité
     <br> Qui m'a liké ?
-    <br> Qui a consulté mon profil ?
-</h3>
-<hr>
+    <br> Qui a consulté mon profil ?</h3>
+
+    {% for visitor in visitors %}
+    <a href="{{ url_for('consultation', login=visitor.user_name)}}">{{visitor.user_name}}</a><br>
+    {% endfor %}
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
