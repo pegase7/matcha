@@ -1,5 +1,6 @@
 drop table if exists CONNECTION;
 drop table if exists VISIT;
+drop table if exists USERS_RECOMMANDATION;
 drop table if exists USERS_TOPIC;
 drop table if exists TOPIC;
 drop table if exists USERS_ROOM;

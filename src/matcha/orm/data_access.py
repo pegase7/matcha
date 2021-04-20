@@ -19,12 +19,12 @@ class Query():
     """
     Class Query for buildinq a sql command from parameters list
     """
-    def __init__(self, model, leftjoins, conditions, whereaddon, orderby):
+    def __init__(self, model, conditions, leftjoins, whereaddon, orderby):
         self.model = model
-        self.leftjoins = leftjoins
         self.conditions = conditions
-        self.orderby = orderby
+        self.leftjoins = leftjoins
         self.whereaddon = whereaddon
+        self.orderby = orderby
     
     """
     get formatted condition from raw condition
@@ -87,14 +87,28 @@ class Query():
                     if field.type.iskey:
                         from_clause += " on " +self.suffix + '.' + leftjoin[0] + ' = ' + leftjoin[1] + '.' + field.name
         query += from_clause
+
+        '''
+        Add conditions
+        '''
         where_clause, parameters = self.build_where(self.conditions)
+
+        '''
+        Add where addon
+        '''
         if not self.whereaddon is None:
+            if isinstance(self.whereaddon, str):
+                self.whereaddon = (self.whereaddon, [])
             _, where_clause = appendif(where_clause is None, where_clause, self.whereaddon[0], " where ", " and ")
-            size = len(self.whereaddon)
-            for i in range(1,size):
-                parameters += (self.whereaddon[i],)
-        if not where_clause is None:
-            query += where_clause
+            if 0 < len(self.whereaddon[1]):
+                if isinstance(self.whereaddon[1], list):
+                    parameters.extends(self.whereaddon[1])                
+                else:
+                    parameters.append(self.whereaddon[1])
+ 
+        '''
+        Add order by clause
+        '''
         if not self.orderby is None:
             query += ' order by ' + self.orderby
         logging.debug("query:" + query)
@@ -171,14 +185,14 @@ class DataAccess():
             attr = fieldmodel.get_id(attr)
         return attr
 
-    def __fetch_records(self, model, leftjoins, conditions, whereaddon, orderby):
-        query, parameters = Query(model, leftjoins, conditions, whereaddon, orderby).build_query()
+    def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby):
+        query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby).build_query()
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
             records = cursor.fetchall()
             return records
 
-    def fetch(self, model_name, joins=[], conditions=[], whereaddon=None, orderby=None):
+    def fetch(self, model_name, conditions=[], joins=[], whereaddon=None, orderby=None):
         model = ModelDict().get_model_class(model_name)
         objects = []
         """
@@ -207,7 +221,7 @@ class DataAccess():
                     setjoins.append(leftjoin)
             except (ValueError) as e:
                 logging.error("Bad jointure '"+ join_name +"' for class " + model.name + ": " + str(e))
-        records = self.__fetch_records(model, leftjoins, conditions, whereaddon, orderby)
+        records = self.__fetch_records(model, conditions, leftjoins, whereaddon, orderby)
         for record in records:
             (modelobject, start) = self.populate(record, model, 0)
             objects.append(modelobject)
@@ -219,8 +233,8 @@ class DataAccess():
                 setattr(modelobject, setjoin[0], self.get_elements(_id, setjoin))
         return objects
 
-    def find(self, model_name, joins=[], conditions=[], orderby=None):
-        objects = self.fetch(model_name, joins, conditions, orderby)
+    def find(self, model_name, conditions=[], joins=[], whereaddon=None, orderby=None):
+        objects = self.fetch(model_name, conditions, joins, whereaddon, orderby)
         size = len(objects)
         if 1 != size:
             message = ' for model object ' + model_name

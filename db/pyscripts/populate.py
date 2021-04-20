@@ -1,9 +1,9 @@
-import insert_users_topic
-import os
-import insert_users
-import insert_topic
 import matcha.config
 import logging
+import insert_users
+import insert_topic
+import insert_users_topic
+import os
 import traceback
 
 def launch_sql_file(sql_file, sql_dir = '../sql/'):

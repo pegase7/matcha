@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, IntField, DateTimeField, ManyToOneField, BoolField
+from matcha.orm.reflection import ModelObject, IntField, DateTimeField, ManyToOneField, dispatcher
 
 @dataclass(init=False)
+@dispatcher
 class Visit(ModelObject):
     id: IntField(iskey=True)
     visited_id: ManyToOneField(modelname='Users')

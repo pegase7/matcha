@@ -1,9 +1,9 @@
+import logging
 from random import randint, shuffle
 from faker import Faker
 from matcha.model.Users import Users
 from unidecode import unidecode
 from matcha.orm.data_access import DataAccess
-import logging
 
 mail_providers = ['free.fr','gmail.com', 'hotmail.com', 'yahoo.com', 'gmx.fr', 'gmail.com', 'gmail.com', 'gmail.com', 'free.fr', 'orange.fr', 'numericable.fr']
 coordinates = []

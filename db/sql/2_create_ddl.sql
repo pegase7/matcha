@@ -42,6 +42,7 @@ create table USERS (
     birthday	date,
     latitude	numeric(8,5),
     longitude 	numeric(8,5),
+    popularity	numeric(3),
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -52,11 +53,11 @@ create table USERS_RECOMMANDATION (
     receiver_id		integer NOT NULL,
     islike			boolean,
     isblocked		boolean,
-    age_diff		number(4,2),
-    distance		number(9,2),
-    dist_ratio		number(2),
-    topics_ratio	number(9,2),
-    nb_consult		number(9),
+    age_diff		numeric(4,2),
+    distance		numeric(9,2),
+    dist_ratio		numeric(2),
+    topics_ratio	numeric(9,2),
+    nb_consult		numeric(9),
     created			timestamp without time zone DEFAULT now() NOT NULL,
     last_consult 	timestamp without time zone DEFAULT now() NOT NULL,    
     last_update 	timestamp without time zone DEFAULT now() NOT NULL
