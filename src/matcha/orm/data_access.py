@@ -1,5 +1,5 @@
 import psycopg2 as p
-import matcha.config
+from matcha.config import Config
 import logging
 from matcha.orm.reflection import ListField, ModelDict, ModelObject
 
@@ -17,7 +17,7 @@ def appendif(first, value, member, firstprefix, otherprefix):
 
 class Query():
     """
-    Class Query for buildinq a sql command from parameters list
+    Class Query for buildinq a sql command from parameter list
     """
     def __init__(self, model, conditions, leftjoins, whereaddon, orderby):
         self.model = model
@@ -72,19 +72,18 @@ class Query():
         first = True
         model = ModelDict().get_model_class(model_name)
         for field in model.get_fields():
-            if not isinstance(field.type, ListField):
-#                query += (" " if first else ", ") + self.suffix + '.' + field.name
+            if not isinstance(field, ListField):
                 first, query = appendif(first, query, self.suffix + '.' + field.name, ' ', ', ')
         """
         leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
         """
         for leftjoin in self.leftjoins:
             field = leftjoin[3]          
-            from_clause += " left outer join " + field.type.modelname + ' ' + leftjoin[1]
+            from_clause += " left outer join " + field.modelname + ' ' + leftjoin[1]
             for field in leftjoin[2].get_fields():
-                if not isinstance(field.type, ListField):
+                if not isinstance(field, ListField):
                     query += ", " + leftjoin[1] + '.' + field.name
-                    if field.type.iskey:
+                    if field.iskey:
                         from_clause += " on " +self.suffix + '.' + leftjoin[0] + ' = ' + leftjoin[1] + '.' + field.name
         query += from_clause
 
@@ -106,6 +105,8 @@ class Query():
                 else:
                     parameters.append(self.whereaddon[1])
  
+        if not where_clause is None:
+            query += where_clause
         '''
         Add order by clause
         '''
@@ -122,7 +123,7 @@ class DataAccess():
     """
     Singleton DataAccess class provides:
         - get_connection ->    connection
-        - sql:      ->    Populate model object from record of result set
+        - populate:      ->    Populate model object from record of result set
         - fetch:         ->    fetch model object from database with jointures according to conditions and order by clause
         - merge:         ->    Update database object from model object
         - persist:       ->    Insert database object from model object
@@ -140,7 +141,7 @@ class DataAccess():
         if previous instance is null instantiate and connect to database, elsewhere return current instance        
         """
         if DataAccess.__instance is None:
-            postgresql = matcha.config.config['postgresql']
+            postgresql = Config().config['postgresql']
             DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
             DataAccess.__instance = object.__new__(cls)
         return DataAccess.__instance
@@ -149,7 +150,7 @@ class DataAccess():
         modelobject = model.new_instance()
         i = start
         for field in model.get_fields():
-            if not isinstance(field.type, ListField):
+            if not isinstance(field, ListField):
                 setattr(modelobject,field.name,record[i])
                 i += 1
         return (modelobject, i)
@@ -161,7 +162,7 @@ class DataAccess():
     def set_elements(self, record, listfieldname):
         (model, _) = self.get_model_class(record)
         listfield = model.get_field(listfieldname)
-        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model_class(listfield.type.modelname), listfield)
+        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model_class(listfield.modelname), listfield)
         setattr(record, listfieldname, self.get_elements(model.get_id(record), setjoin))
         
     def get_elements(self, _id, setjoin):
@@ -169,9 +170,9 @@ class DataAccess():
         setjoin--> 0:fieldName, 1:suffix, 2:join model, 3:Set field 
         """
         objects = []
-        logging.debug("Excecute:" + setjoin[3].type.select)
+        logging.debug("Excecute:" + setjoin[3].select)
         with DataAccess.__connection.cursor() as cursor:            
-            cursor.execute(setjoin[3].type.select, (_id,))
+            cursor.execute(setjoin[3].select, (_id,))
             records = cursor.fetchall()
             for record in records:
                 (modelobject, _) = self.populate(record, setjoin[2], 0)
@@ -181,13 +182,14 @@ class DataAccess():
     def get_model_attr(self, record, field):
         attr = getattr(record, field.name)
         if isinstance(attr, ModelObject):
-            fieldmodel = ModelDict.get_model_class(self, field.type.modelname)
+            fieldmodel = ModelDict.get_model_class(field.modelname)
             attr = fieldmodel.get_id(attr)
         return attr
 
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby):
         query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby).build_query()
         with DataAccess.__connection.cursor() as cursor:
+            print('Query:', query)
             cursor.execute(query, parameters)
             records = cursor.fetchall()
             return records
@@ -212,10 +214,10 @@ class DataAccess():
             if suffix is None:
                 suffix = join_name[0].upper()
             try:
-                joinModel = ModelDict().get_model_class(model.get_field(join_name).type.modelname)
+                joinModel = ModelDict().get_model_class(model.get_field(join_name).modelname)
                 joinfield = model.get_field(join_name)          
                 leftjoin = (join_name, suffix, joinModel, joinfield)
-                if not isinstance(joinfield.type, ListField):
+                if not isinstance(joinfield, ListField):
                     leftjoins.append(leftjoin)
                 else:
                     setjoins.append(leftjoin)
@@ -257,7 +259,7 @@ class DataAccess():
                 updatedrecord = cursor.fetchone()
                 i = 0
                 for field in model.get_fields():
-                    if field.type.iskey or field.type.iscomputed:
+                    if field.iskey or field.iscomputed:
                         setattr(record,field.name,updatedrecord[i])
                     i += 1
                 returnvalue = record
@@ -275,11 +277,11 @@ class DataAccess():
         addon = ' '
         parameters = tuple()
         for field in model.get_fields():
-            if not field.type.iskey and not field.type.iscomputed and not isinstance(field.type, ListField):
+            if not field.iskey and not field.iscomputed and not isinstance(field, ListField):
                 cmd += addon + field.name + " = %s"
                 addon = ', '
                 parameters += (self.get_model_attr(record,field),)
-            elif 'last_update' == field.name and field.type.iscomputed:
+            elif 'last_update' == field.name and field.iscomputed:
                 cmd += addon + "last_update = DEFAULT"
         key_field = model.get_key_field().name
         cmd += ' where ' +  key_field + ' = ' + str(getattr(record, key_field)) + ' returning *'
@@ -294,7 +296,7 @@ class DataAccess():
         addon = '('
         parameters = tuple()
         for field in model.get_fields():
-            if not field.type.iskey and not field.type.iscomputed and not isinstance(field.type, ListField):
+            if not field.iskey and not field.iscomputed and not isinstance(field, ListField):
                 columns += addon + field.name
                 values += addon + '%s'
                 parameters += (self.get_model_attr(record,field),)

@@ -48,18 +48,26 @@ create table USERS (
 );
 alter table USERS owner to MATCHAADMIN;
 
+
+---
+--- sequence USERS_RECOMMANDATION_ID_SEQ
+---
+create sequence USERS_RECOMMANDATION_ID_SEQ increment by 1 cache 1;
+alter table USERS_RECOMMANDATION_ID_SEQ owner to MATCHAADMIN;
+
+---
+--- table USERS_RECOMMANDATION
+---
 create table USERS_RECOMMANDATION (
+    id              integer DEFAULT nextval('USERS_RECOMMANDATION_ID_SEQ'::regclass) NOT NULL,
     sender_id		integer NOT NULL,
     receiver_id		integer NOT NULL,
-    islike			boolean,
-    isblocked		boolean,
     age_diff		numeric(4,2),
     distance		numeric(9,2),
     dist_ratio		numeric(2),
     topics_ratio	numeric(9,2),
-    nb_consult		numeric(9),
-    created			timestamp without time zone DEFAULT now() NOT NULL,
-    last_consult 	timestamp without time zone DEFAULT now() NOT NULL,    
+    last_consult 	timestamp,    
+    created         timestamp without time zone DEFAULT now() NOT NULL,
     last_update 	timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS_RECOMMANDATION owner to MATCHAADMIN;
@@ -158,7 +166,9 @@ create table VISIT (
     id				integer DEFAULT nextval('VISIT_ID_SEQ'::regclass) NOT NULL,
     visited_id		integer not null,
     visitor_id		integer not null,
-    visit_number	int,
+    visits_number	int,
+    islike          boolean DEFAULT FALSE,
+    isblocked       boolean DEFAULT FALSE,
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );

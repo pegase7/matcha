@@ -75,6 +75,7 @@ if __name__ == "__main__":
     boris.birthday = '1964-06-19'
     boris.latitude = None
     boris.longitude = None
+    boris.popularity = 10
     dataAccess.persist(boris)
     print(boris)
 
@@ -116,13 +117,13 @@ if __name__ == "__main__":
     dataAccess = dataAccess
     visit = dataAccess.find('Visit', conditions=[('visited_id', visited_id), ('visitor_id', visitor_id)])
     if visit:
-        visit.visit_number = visit.visit_number + 1
+        visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
     else:
         visit = Visit()
         visit.visited_id = visited_id
         visit.visitor_id = visitor_id
-        visit.visit_number = 1
+        visit.visits_number = 1
         dataAccess.persist(visit)
         
 

@@ -7,9 +7,12 @@ import decimal
 from matcha.orm.reflection import ModelObject
 
 '''
-Encoder used when deserializing for communicqtion with JavaScript 
+Encoder used when deserializing for communication with JavaScript 
 '''
+
+
 class FlaskEncoder(json.JSONEncoder):
+
     def default(self, o):
         if isinstance(o, ModelObject):
             return o.__dict__
@@ -21,34 +24,58 @@ class FlaskEncoder(json.JSONEncoder):
             return str(o)
         return json.JSONEncoder.default(self, o)
 
-basepath = Path(__file__).parent.parent
-if 'src' == basepath.name:
-    basepath = basepath.parent
-configpath = basepath.joinpath('resources/configuration/config.json')
-with open(configpath, 'r') as f:
-    config = json.load(f)
-print('Configuration:', config['postgresql'])
 
+class Config():
+    __instance = None
+    """
+    Check for singleton
+    """
 
-'''
-Create logging whith:
-    - level = loggingconfig['level'] ()
-'''
-loggingconfig = config['logging']
-__logger = logging.getLogger()
-__werkzeug__logger = logging.getLogger("werkzeug")
-loggingformat = '%(levelname) -7s %(asctime)-15s%(lineno)4s:%(module lineno)-20.20s: %(message)s'
-logging.basicConfig(
-    format='%(asctime)s,%(msecs)d %(levelname)-8s [%(module)s:%(lineno)d] %(message)s',
-    datefmt='%Y-%m-%d:%H:%M:%S',
-    level=logging.DEBUG
-)
+    def __new__(cls):
+        """
+        if previous instance is null instantiate and connect to database, elsewhere return current instance        
+        """
+        if Config.__instance is None:
+            Config.__instance = object.__new__(cls)
+        return Config.__instance
+    
+    def __init__(self, basepath=None, configpath=None):
+        if basepath:
+            self.basepath = basepath
+        else:
+            self.basepath = Path(__file__).parent.parent
+            if 'src' == self.basepath.name:
+                self.basepath = self.basepath.parent
+        if not configpath:
+            configpath = 'resources/configuration/config.json'
+        with open(self.basepath.joinpath(configpath), 'r') as f:
+            self.config = json.load(f)
+            if 'logging' in self.config:
+                self.configLogging()
+            
+    def configLogging(self):
+        jsonlogging = self.config['logging']
+        logginglevel = jsonlogging['level'] if 'level' in jsonlogging.keys() else 20
+        loggingformat = jsonlogging['format'] if 'format' in jsonlogging.keys() else '%(asctime)s,%(msecs)d %(levelname)-8s [%(module)s:%(lineno)d] %(message)s'
+        loggingdatefmt = jsonlogging['dateFormat'] if 'dateFormat' in jsonlogging.keys() else '%Y-%m-%d:%H:%M:%S'
+        
+        logging.basicConfig(format=loggingformat, datefmt=loggingdatefmt, level=logginglevel)
 
-configpath = basepath.joinpath('resources/traces/error.log')
-if not configpath.parent.exists():
-    configpath.parent.mkdir()
-error_fh = FileHandler(str(configpath))
-__logger.addHandler(error_fh)
-error_fh.setFormatter(logging.Formatter(loggingformat))
-error_fh.setLevel(logging.ERROR)
+        jsonloggers = jsonlogging['loggers'] if 'loggers' in jsonlogging else { "loggers":[{}] }
+        for jsonlogger in jsonloggers:
+            if "name" in jsonlogger.keys():
+                __logger = logging.getLogger(jsonlogger["name"])
+            else:
+                __logger = logging.getLogger()
+            if 'level' in jsonlogger:
+                __logger.setLevel(jsonlogger['level'])
 
+            if "file_error" in jsonlogger.keys():
+                errorpath = self.basepath.joinpath(jsonlogger["file_error"])
+                if not errorpath.parent.exists():
+                    errorpath.parent.mkdir()
+                error_fh = FileHandler(str(errorpath))
+                __logger.addHandler(error_fh)
+                error_fh.setFormatter(logging.Formatter(loggingformat))
+                error_fh.setLevel(logging.ERROR)
+    

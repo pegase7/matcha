@@ -6,8 +6,12 @@
 		"password":"matchapass"
     },
 	"logging":{
-		"level":10,
-		"file_error":"resources/traces/error.log"
+        "level":10,
+        "dateFormat":"%Y-%m-%d:%H:%M:%S", 
+        "loggers": [
+            { "file_error":"resources/traces/standard_error.log", "loggingFormat":"%(levelname) -7s %(asctime)-15s%(lineno)4s:%(module lineno)-20.20s: %(message)s" },
+        	{ "name":"werkzeug", "file_error":"resources/traces/web_error.log" }
+        ]
     },
 	"populate":{
 		"test_data":"3_populate.sql",

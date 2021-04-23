@@ -7,6 +7,7 @@ from matcha.model.Message import Message
 from matcha.model.Users import Users
 import json
 import traceback
+import decimal
 
 if __name__ == "__main__":
     dataAccess = DataAccess()
@@ -16,7 +17,9 @@ if __name__ == "__main__":
     logging.debug(populateconfig)
     logging.info(populateconfig)
     logging.warning(populateconfig)
-
+    
+    i = decimal.Decimal(10).__int__()
+    print('i:', i, type(i))
     users = dataAccess.find('Users', 1)
     print(users)
-    
+

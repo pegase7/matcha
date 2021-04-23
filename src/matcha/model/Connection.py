@@ -1,11 +1,10 @@
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, CharField, IntField, DateTimeField, ManyToOneField, dispatcher
+from matcha.orm.reflection import metamodelclass, ModelObject, CharField, IntField, DateTimeField, ManyToOneField, dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Connection(ModelObject):
-    id: IntField(iskey=True)
-    users_id: ManyToOneField(modelname='Users')
-    ip: CharField()
-    connect_date: DateTimeField()
-    disconnect_date: DateTimeField()
+    id = IntField(iskey=True)
+    users_id = ManyToOneField(modelname='Users')
+    ip = CharField()
+    connect_date = DateTimeField()
+    disconnect_date = DateTimeField()

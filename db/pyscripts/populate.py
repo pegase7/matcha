@@ -1,4 +1,4 @@
-import matcha.config
+from matcha.config import Config
 import logging
 import insert_users
 import insert_topic
@@ -11,7 +11,7 @@ def launch_sql_file(sql_file, sql_dir = '../sql/'):
 
 if __name__ == "__main__":
     try:
-        populateconfig = matcha.config.config['populate']
+        populateconfig = Config().config['populate']
         launch_sql_file('1_drop.sql')
         launch_sql_file('2_create_ddl.sql')
         if populateconfig['test_data'] == '3_populate.sql':

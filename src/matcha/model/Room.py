@@ -1,11 +1,10 @@
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, IntField, DateTimeField, ArrayField, BoolField,dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, IntField, DateTimeField, ArrayField, BoolField,dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Room(ModelObject):
-    id: IntField(iskey=True)
-    users_ids: ArrayField(arraytype=int, length=2)
-    active: BoolField()
-    created: DateTimeField(iscomputed=True)
-    last_update: DateTimeField(iscomputed=True)
+    id = IntField(iskey=True)
+    users_ids = ArrayField(arraytype=int, length=2)
+    active = BoolField()
+    created = DateTimeField(iscomputed=True)
+    last_update = DateTimeField(iscomputed=True)
