@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 import re
 import importlib
 import dataclasses
@@ -100,17 +100,26 @@ class BoolField(Field):
 class DateField(Field):
 
     def __set__(self, instance, value):
-        if not isinstance(value, datetime):
-            raise TypeError(instance, self._name, datetime, value)
-        super().__set__(instance, datetime.datetime(value.year, value.month, value.day))
+        if isinstance(value, str):
+            super().__set__(instance, date.fromisoformat(value))
+        elif isinstance(value, datetime):
+            super().__set__(instance, datetime.date(value.year, value.month, value.day))
+        else:
+            if not isinstance(value, date):
+                raise TypeError(instance, self._name, datetime, value)
+            super().__set__(instance, value)
 
 
 class DateTimeField(Field):
 
     def __set__(self, instance, value):
-        if not isinstance(value, datetime):
-            raise TypeError(instance, self._name, datetime, value)
-        super().__set__(instance, value)
+        if isinstance(value, str):
+            super().__set__(instance, datetime.fromisoformat(value))
+        else:
+            if not isinstance(value, datetime):
+                raise TypeError(instance, self._name, datetime, value)
+            super().__set__(instance, value)
+
 
 
 class ArrayField(Field):
@@ -158,6 +167,39 @@ class ListField(Field):
         if not isinstance(value, list):
             raise TypeError(instance, self._name, list, value)
         self.value = value
+
+
+class _Dispatcher:
+
+    def __init__(self, classname_key='__class__'):
+        self._key = classname_key
+        self._classes = {}  # to keep a reference to the classes used
+
+    def __call__(self, class_):  # decorate a class
+        self._classes[class_.__name__] = class_
+        return class_
+
+    def decoder_hook(self, d):
+        classname = d.pop(self._key, None)
+        modelclass = ModelDict().get_model_class(classname)
+        if classname:
+            if modelclass:
+                for field in modelclass.get_fields():
+                    if isinstance(field.type, DateTimeField):
+                        d[field.name] = datetime.fromisoformat(d[field.name])
+                    elif isinstance(field.type, DateField):
+                        d[field.name] = date.fromisoformat(d[field.name])
+            obj = self._classes[classname]()
+            for name, value in d.items():
+                setattr(obj, name, value)
+        return obj
+
+    def encoder_default(self, obj):
+        if isinstance(obj, date) or isinstance(obj, datetime):
+            return str(obj)
+        d = obj._as_dict()
+        d[self._key] = type(obj).__name__
+        return d
 
 
 class ModelObject(object):
@@ -273,4 +315,4 @@ class ModelDict(object):
             ModelDict.__models[model_name] = model
         return model
     
-    
+dispatcher = _Dispatcher()

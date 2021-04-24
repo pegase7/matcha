@@ -134,7 +134,19 @@ def find_profil(criteres):
     liste = DataAccess().fetch('Users')
     profil_found=[]
     for user in liste:
+        info={}
+        info['nom']=user.user_name
         ok=1
+        #Si l'utilisateur a bloqué
+        visit = DataAccess().find('Visit', conditions=[('visited_id', user.id), ('visitor_id', criteres['id'])])
+        if (visit):
+            if(visit.isblocked==True):
+                ok=0
+        #Si l'utilisateur a été bloqué
+        visit = DataAccess().find('Visit', conditions=[('visited_id', criteres['id']), ('visitor_id', user.id)])
+        if (visit):
+            if(visit.isblocked==True):
+                ok=0
         #profil actif
         if user.active==False:
             ok=0
@@ -144,34 +156,50 @@ def find_profil(criteres):
                 ok=0
         #Critere Age
         if ok==1:
+            if user.birthday:
+                age=calculate_age(user.birthday)
+            else:
+                age=0
+            info['age']=age
             if criteres['age_min']=="" and criteres['age_max']=="":
                 ok=1
             else:
-                if user.birthday:
-                    age=calculate_age(user.birthday)
-                    if age <criteres['age_min'] or age >criteres['age_max']:
+                if age <int(criteres['age_min']) or age >int(criteres['age_max']):
                         ok=0
-                else:
-                    ok=0
         #Critere Distance
         if ok==1:
+            info['distance']=int(distanceGPS(float(criteres['latitude']),float(criteres['longitude']),float(user.latitude),float(user.longitude)))
             if distanceGPS(float(criteres['latitude']),float(criteres['longitude']),float(user.latitude),float(user.longitude))>int(criteres['dist_max']):
                 ok=0
         #Critere interets
         if ok==1 and len(criteres['interets'])>0:
             tags = DataAccess().fetch('Users_topic', conditions=('users_id',user.id))
             nb_int=0
+            tag_correspondant=[]
             for interet in criteres['interets']:
                 for tag in tags:
-                    print(tag.tag)
                     if interet==tag.tag:
+                        tag_correspondant.append(interet)
                         nb_int=nb_int+1
-            print('total trouvé :', nb_int)
+            info['tags']=tag_correspondant
             if nb_int==0:
                 ok=0
+        # Critere popularité
+        if ok==1:
+            if (user.popularity):
+                pop=user.popularity
+            else:
+                pop=0
+            if criteres['pop_min']=="" and criteres['pop_max']=="":
+                info['popularity']=user.popularity
+                ok=1
+            else:
+                if pop<int(criteres['pop_min']) or pop >int(criteres['pop_max']):
+                    ok=0
         #Selection du user
         if ok==1:
-            profil_found.append(user.user_name)
+            profil_found.append(info)
+           # profil_found = sorted(profil_found, key=lambda k: k['age'])
     return profil_found
 
 def calculate_age(born):
@@ -184,3 +212,18 @@ def calculate_age(born):
         return today.year - born.year - 1
     else:
         return today.year - born.year
+
+
+def comptage_photo(ph1,ph2,ph3,ph4,ph5):
+    nb=0
+    if os.path.isfile('.'+ph1):
+        nb=nb +1
+    if os.path.isfile('.'+ph2):
+        nb=nb +1
+    if os.path.isfile('.'+ph3):
+        nb=nb +1
+    if os.path.isfile('.'+ph4):
+        nb=nb +1
+    if os.path.isfile('.'+ph5):
+        nb=nb +1
+    return nb

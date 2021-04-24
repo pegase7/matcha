@@ -1,20 +1,80 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
-<br><br>
-<h1>bonjour {{session['user']['name']}}</h1>
-<br><br><br><br>
-<h3>
-    <br> mon tableau de bord
-    <br><br><br> Popularité
-    <br> Qui m'a liké ?
-    <br> Qui a consulté mon profil ?</h3>
+<style>
+    table {
+border: medium solid #0b3688;
+border-collapse: collapse;
+/* width: 50%; */
+}
 
-    {% for visitor in visitors %}
-    <a href="{{ url_for('consultation', login=visitor.user_name)}}">{{visitor.user_name}}</a><br>
-    {% endfor %}
+td,th {
+border: thin solid #6495ed;
+/* width: 50%; */
+padding: 5px;
+}
+th{
+    text-align: center;
+    cursor: pointer;
+}
+th:hover{
+    background: lightblue;}
+
+.lien{
+        color: greenyellow;
+    }
+.alert{
+    color: orangered;
+    font-weight: bold;
+}
+</style>
+
+<br>
+
+    <h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
+    <h3> Popularité : {{pop}} </h3><br>
+     <br>
+    <h3>Qui a consulté mon profil ?</h3>
+        <table>
+            <thead>
+                <tr><th>Pseudo</th><th>Sexe</th><th>Age</th><th >Popularité</th>
+                <th>distance</th><th >Date</th><th>A liké</th></tr>
+            </thead>
+            <tbody>
+               
+        {% for visitor in visitors %}
+            <tr class="visiteur_ligne">
+    <td><a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">{{visitor.pseudo}}</a></td>
+    <td align="center">{% if visitor.sex=='Male' %}M{% else %}F{% endif %}</td>
+    <td align="right">{{visitor.age}}</td><td align="center">{{visitor.popul}}</td>
+    <td align="right">{{visitor.distance}}</td><td>{{visitor.date}}</td><td align="center">{% if visitor.like==True %}oui{% endif %}</td>
+            </tr>
+        {% endfor %}
+                
+            </tbody>
+        </table>
+   
+<br><br>
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
+    {% if matching==False %} <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
+    {% else %}
     {% include 'matching.html' %}
+    {% endif %}
 </div>
+<script>
+    const compare = (ids, asc) => (row1, row2) => {
+    const tdValue = (row, ids) => row.children[ids].textContent;
+    const tri = (v1, v2) => v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+    return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
+  };
+  
+  const tbody = document.querySelector('tbody');
+const thx = document.querySelectorAll('th');
+const trxb = tbody.querySelectorAll('tr');
+thx.forEach(th => th.addEventListener('click', () => {
+  let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
+  classe.forEach(tr => tbody.appendChild(tr));
+}));
+      </script>
 {% endblock %}

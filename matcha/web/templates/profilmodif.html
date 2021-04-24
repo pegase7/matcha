@@ -31,7 +31,7 @@
     /* flex-grow: 2; */
     height: 500px;
     
-    overflow:scroll;
+    /* overflow:scroll; */
   }
   
 </style>
@@ -60,9 +60,9 @@
       <p>Sexe</p>
       <div>
         <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">
-        <label for="Male">Male</label>
+        <label for="Male">Masculin</label>
         <input type="radio" id="Female" name="sexe" value="Female" "{% if profil.gender=='Female' %} checked {% endif %}">
-        <label for="Female">Female</label>
+        <label for="Female">Féminin</label>
       </div><br>
       <p>Orientation</p>
       <div>
@@ -88,8 +88,12 @@
                {% if tag == topic %}checked{% endif %} 
             {% endfor %} /><label for={{topic}}>{{topic}}</label><br>
           {% endfor %}
-        </div>
-      </fieldset>
+        </fieldset>
+      </div>
+      
+      <strong> Rajouter un centre d'interet :</strong>
+      <input type="text" name="interet">
+    
   </div>
   
   <div class='carte'>

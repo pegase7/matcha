@@ -11,21 +11,25 @@
     #colonne {
         flex: 3;
         padding: 20px;
+        column-count: auto;
     }
     #profil
     {
         flex: 1;
     }
-   
+   p{
+       font-size: 1rem;
+       text-align: justify;
+   }
 </style>
-
 <br><br><h1>Mon profil </h1>
 
-<h5><div id='conteneur'>
+<div id='conteneur'>
     <div id='profil'>
-       <img src={{ph1}} alt="" width=100%> 
+       <img src={{ph1}} alt="" width=200px> 
     </div>
     <div id='colonne'>
+        <h5>
             <table>
                 <colgroup>
                     <col style="color: #9fe8e9">
@@ -41,14 +45,16 @@
             <td>{{naissance}}</td></tr>
             <tr>
             <td> Sexe :</td>
-            <td>{{profil.gender}}</td></tr>
+            <td>{%if profil.gender=='Male' %}Masculin{% else %} {%if profil.gender=='Female' %}Féminin{% endif %}{% endif %}</td></tr>
             <tr>
             <td> Orientation sexuelle :</td>
             <td>{{profil.orientation}}</td></tr>
-            <tr>
-            <td> Présentation :</td>
-            <td>{{profil.description}}</td></tr>
-            <tr>
+            </table>
+            
+            Présentation : </h5>
+            <p>{{profil.description}}</p>
+            <h5>
+            <table>
             <td> Email :</td>
             <td>{{profil.email}}</td></tr>
             <tr>
@@ -58,6 +64,7 @@
             <td> Longitude :</td>
             <td>{{profil.longitude}}</td></tr>
             </table>
+            </h5>
                            
     </div>
     <div id='colonne'>

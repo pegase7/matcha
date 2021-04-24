@@ -80,14 +80,29 @@ def accueil():
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
         visitors=[]
+        matching=True
+        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
+            matching=False
         for visit in visits:
-            visitors.append(visit.visitor_id)
-        return render_template('accueil.html', username=username, rooms=ROOMS,visitors=visitors)
+            info={}
+            info["pseudo"]=visit.visitor_id.user_name
+            info["sex"]=visit.visitor_id.gender
+            info["popul"]=visit.visitor_id.popularity
+            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
+            info["like"]=visit.islike
+            if (visit.visitor_id.birthday):
+                info["age"]=calculate_age(visit.visitor_id.birthday)
+            else:
+               info["age"]=0
+            info["date"]=visit.last_update.date().isoformat()
+            if(visit.isblocked==False):
+                visitors.append(info)
+        return render_template('accueil.html', username=username, rooms=ROOMS,visitors=visitors, pop=us.popularity,matching=matching)
     else:
         return redirect(url_for('homepage'))   
 
 
-@app.route('/consultation/<login>/')
+@app.route('/consultation/<login>/',methods=['GET', 'POST'])
 def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
@@ -96,19 +111,36 @@ def consultation(login):
     visitor = dataAccess.find('Users', conditions=('user_name', user))
     us = dataAccess.find('Users', conditions=('user_name', login))
     tag = dataAccess.fetch('Users_topic', conditions=('users_id',us.id))
+    date_connect=dataAccess.fetch('Connection', conditions=('users_id',us.id))
+    dates_c=[]
+    for da in date_connect:
+        dates_c.append(da.connect_date)
+    b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
+    last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     ###########
     visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
+    visited =DataAccess().find('Visit', conditions=[('visited_id', visitor.id), ('visitor_id', us.id)])
+    liked=False
+    if visited:
+        liked=visited.islike
     if visit:
-        visit.visit_number = visit.visit_number + 1
+        visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
     else:
         visit = Visit()
         visit.visited_id = us.id
         visit.visitor_id = visitor.id
-        visit.visit_number = 1
+        visit.visits_number = 1
+        visit.islike=False
+        visit.isblocked=False
         dataAccess.persist(visit)
+    visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
+    #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
+    us.popularity=len(visits)
+    DataAccess().merge(us)
     ###########
     tags=[]
+   
     for t in tag:
         tags.append(t.tag)
     ph1="/static/photo/"+us.user_name+"1.jpg"
@@ -116,16 +148,34 @@ def consultation(login):
     ph3="/static/photo/"+us.user_name+"3.jpg"
     ph4="/static/photo/"+us.user_name+"4.jpg"
     ph5="/static/photo/"+us.user_name+"5.jpg"
+    nb_photo=comptage_photo(ph1,ph2,ph3,ph4,ph5)
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
         naissance=''
-    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags)
+    if request.method=="POST":
+        like=request.form.get('like')
+        block=request.form.get('block')
+        if like:
+            like=True
+        else:
+            like=False
+        if block:
+            block=True
+        else:
+            block=False
+        #fake=request.form.get('fake')
+        if like != visit.islike:
+            visit.islike = like #modifier le score popularité et envoyer une notification
+        if block != visit.isblocked:
+            visit.isblocked=block
+        dataAccess.merge(visit)
+    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked)
 
 
 @app.route('/test/')
 def test():
-    return render_template('test.html')
+   return render_template('test.html')
 
 
 @app.route('/profil/')
@@ -135,8 +185,7 @@ def profil():
     user = session['user']['name']
     ph1="/static/photo/"+session['user']['name']+"1.jpg"
     us = DataAccess().find('Users', conditions=('user_name', user))
-    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))
-            
+    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))    
     tags=[]
     for t in tag:
         tags.append(t.tag)
@@ -186,7 +235,7 @@ def recherche():
             latitude=us.latitude
             longitude=us.longitude
         criteres={}
-        criteres['sexe']=sex_to_find
+        criteres['sexe']=request.form.get('sexe')
         criteres['latitude']=latitude
         criteres['longitude']=longitude
         criteres['dist_max']=request.form.get('km')
@@ -195,8 +244,9 @@ def recherche():
         criteres['pop_min']=request.form.get('popmin')
         criteres['pop_max']=request.form.get('popmax')
         criteres['interets']=request.form.getlist('interest')
+        criteres['id']=us.id
     ##### Recherche
-        find_profil(criteres)
+        #find_profil(criteres)
         return render_template('resultats.html',candidats=find_profil(criteres))
     return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
 
@@ -234,6 +284,7 @@ def registration():
         new.birthday = None
         new.latitude = 0
         new.longitude = 0
+        new.popularity = 0
         DataAccess().persist(new)
 
         ft_send(lien,'registration')
@@ -252,13 +303,13 @@ def forgot():
         user=request.form.get('login')
         mail = rep =''
         us = DataAccess().find('Users', conditions=('user_name', user))
-        mail=us.email
-        session['user']= {'name' : user, 'email' : mail}
         if us == None:
             rep='Utilisateur inconnu !'
             return render_template('forgot_password.html',rep=rep)
         else :
             lien=lien_unique()
+            mail=us.email
+            session['user']= {'name' : user, 'email' : mail}
             nature='password'
             us.confirm=lien
             DataAccess().merge(us)  
@@ -297,6 +348,7 @@ def newpassword(code):
     if us==None:
         rep="ce lien n'est pas valable !"
         return render_template('newpasswordfalse.html', rep =rep)
+    session['user']= {'name' : us.user_name}
     if request.method=="POST":
         pwd=request.form.get('password')
         pwd2=request.form.get('password2')
@@ -349,6 +401,12 @@ def profilmodif():
         if not(request.form.get('birthday')==''):
             us.birthday=request.form.get('birthday')
         DataAccess().merge(us)
+        tagset = set()
+        if (request.form.get('interet')):
+            tagset.add(request.form.get('interet'))
+        for inte in interets:
+            tagset.add(inte)
+        dataAccess.call_procedure(procedure='insert_topics', parameters=(us.id, list(tagset)))
         return redirect(url_for('profil'))
     return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
 

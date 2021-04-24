@@ -46,7 +46,7 @@
     /* flex-grow: 2; */
     height: 500px;
     
-    overflow:scroll;
+    /* overflow:scroll; */
     }
     #map {
         /* height: 500px; */
@@ -64,8 +64,10 @@
     <input type="radio" id="Female" name="sexe" value="Female" "{% if sex_to_find=='Female' %} checked {% endif %}">
     <label for="Female">une femme</label>
   </div><br>
-    <p>Age compris entre <input type="number" name="agemin" min="18" max="110" size =8/> et  <input type="number" name="agemax" min="18" max="110" size =8 /></p>
-    <p>Popularite  entre <input type="number" name="popmin" min="0" max="100" />et  <input type="number" name="popmax" min="0" max="100" /></p>
+  <table>
+    <tr><td>Age compris entre </td><td><input type="number" name="agemin" min="18" max="110" size =8/> et  <input type="number" name="agemax" min="18" max="110" size =8 /></td></tr>
+    <tr><td>Popularite  entre </td><td><input type="number" name="popmin" min="0" max="100" /> et  <input type="number" name="popmax" min="0" max="100" /></td></tr> 
+  </table>  
     <p>Localisation <input type="hidden" name="longlat" id="coor" visible =false> dans un rayon de <input type="number" name='km' value =20 min="0" max="20000" >kms autour de votre position, <br> ou bien autour de la ville choisie sur la carte</p>
 <br>
 <strong>Centres d'interets :</strong><br><br>
