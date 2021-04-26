@@ -70,7 +70,7 @@ class Query():
         query = "select "
         from_clause = " from " + self.model.name + ' ' + self.suffix
         first = True
-        model = ModelDict().get_model(model_name)
+        model = ModelDict().get_model_class(model_name)
         for field in model.get_fields():
             if not isinstance(field.type, ListField):
 #                query += (" " if first else ", ") + self.suffix + '.' + field.name
@@ -140,14 +140,14 @@ class DataAccess():
                 i += 1
         return (modelobject, i)
     
-    def get_model(self, record):
+    def get_model_class(self, record):
         model_name = type(record).get_model_name()
-        return ModelDict().get_model(model_name), model_name
+        return ModelDict().get_model_class(model_name), model_name
         
     def set_elements(self, record, listfieldname):
-        (model, _) = self.get_model(record)
+        (model, _) = self.get_model_class(record)
         listfield = model.get_field(listfieldname)
-        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model(listfield.type.modelname), listfield)
+        setjoin = (listfieldname, listfieldname[0].upper(), ModelDict().get_model_class(listfield.type.modelname), listfield)
         setattr(record, listfieldname, self.get_elements(model.get_id(record), setjoin))
         
     def get_elements(self, _id, setjoin):
@@ -167,7 +167,7 @@ class DataAccess():
     def get_model_attr(self, record, field):
         attr = getattr(record, field.name)
         if isinstance(attr, ModelObject):
-            fieldmodel = ModelDict.get_model(self, field.type.modelname)
+            fieldmodel = ModelDict.get_model_class(self, field.type.modelname)
             attr = fieldmodel.get_id(attr)
         return attr
 
@@ -179,7 +179,7 @@ class DataAccess():
             return records
 
     def fetch(self, model_name, joins=[], conditions=[], whereaddon=None, orderby=None):
-        model = ModelDict().get_model(model_name)
+        model = ModelDict().get_model_class(model_name)
         objects = []
         """
         leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
@@ -198,7 +198,7 @@ class DataAccess():
             if suffix is None:
                 suffix = join_name[0].upper()
             try:
-                joinModel = ModelDict().get_model(model.get_field(join_name).type.modelname)
+                joinModel = ModelDict().get_model_class(model.get_field(join_name).type.modelname)
                 joinfield = model.get_field(join_name)          
                 leftjoin = (join_name, suffix, joinModel, joinfield)
                 if not isinstance(joinfield.type, ListField):
@@ -254,8 +254,7 @@ class DataAccess():
             return returnvalue
         
     def merge(self, record, autocommit=True):
-        model, model_name = self.get_model(record)
-        print('Model:', type(model))
+        model, model_name = self.get_model_class(record)
         model.pre_merge(record)
         cmd = "update " + model_name + " set"
         addon = ' '
@@ -272,7 +271,7 @@ class DataAccess():
         self.execute(cmd, parameters, model, record, autocommit=autocommit)
                    
     def persist(self, record, autocommit=True):
-        model, model_name = self.get_model(record)
+        model, model_name = self.get_model_class(record)
         model.pre_persist(record)
         cmd = "insert into " + model_name
         columns = ''
@@ -289,7 +288,7 @@ class DataAccess():
         self.execute(cmd, parameters, model, record, autocommit=autocommit)
 
     def remove(self, record, autocommit=True):
-        model, model_name = self.get_model(record)
+        model, model_name = self.get_model_class(record)
         model.pre_remove(record)
         key_field = model.get_key_field()
         parameters = (self.get_model_attr(record,key_field),)
@@ -311,4 +310,3 @@ class DataAccess():
         
     def commit(self):
         DataAccess.__connection.commit()
-

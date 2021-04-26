@@ -11,8 +11,11 @@
             <h4>Discussions</h4>
             <ul>
                 {% for room in rooms %} {% if room.slave_id == user_id %}
-                <li class="select-room" value="{{ room.room_id }}">{{ room.master_id.user_name }}</p>
-                    {% endif %} {% endfor %}
+                <li class="select-room" value="{{ room.room_id }}">
+                    {{ room.master_id.user_name }}
+                    <p class="state-connection">Déconnecté</p>
+                </li>
+                {% endif %} {% endfor %}
             </ul>
         </nav>
         <hr>

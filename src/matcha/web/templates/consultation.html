@@ -1,0 +1,208 @@
+{% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
+<style>
+    #conteneur {
+        display: flex;
+    }
+    
+    #photo {
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px;
+    }
+    
+    #texte {
+        flex-grow: 3;
+    }
+    
+    #carte {
+        flex-grow: 3;
+    }
+    
+    table {
+        border: medium solid #0b3688;
+        border-collapse: collapse;
+    }
+    
+    td,
+    th {
+        text-align: center;
+        padding-left: 8px;
+        padding-right: 8px;
+        border: navy 2px;
+        background: rgba(64, 224, 208, 0.358);
+    }
+    
+    .colonne {
+        columns: 80px;
+        background: rgba(64, 224, 208, 0.358);
+        margin-right: 40px;
+        margin-left: 40px;
+    }
+    
+    ul {
+        list-style-type: none;
+    }
+    
+    img {
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    #photo img:hover {
+        opacity: 0.7;
+    }
+    
+    strong {
+        color: crimson;
+        font-size: 1.5rem;
+    }
+    
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 10000;
+        /* Sit on top */
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+    
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+<h1>Profil de {{profil.user_name}}</h1><br>
+<form method="post">
+
+    <table>
+        <thead>
+
+            <tr>
+                <th>J'aime</th>
+                <th>Bloquer</th>
+                <th>Faux compte</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{% if nb_photo>0 %}<input type="checkbox" name="like" {% if visit.islike==True %}checked="checked" {% endif %}>{% endif %}</td>
+                <td><input type="checkbox" name="block" {% if visit.isblocked==True %}checked="checked" {% endif %}></td>
+                <td><input type="checkbox" name="fake" id=""></td>
+                <td><button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Enregistrer</button></td>
+            </tr>
+
+            {% if liked==True %}
+            <tr>
+                <td colspan="4"><strong> M'a liké !!!</strong></td>
+            </tr>{% endif %}
+        </tbody>
+</form>
+</table><br>
+
+<div id='conteneur'>
+    <div id='photo'>
+        <img src={{ph1}} id="i1" alt="" width="200" onclick="affiche(this)"><br><br>
+        <img src={{ph2}} id="i2" alt="" width="100" onclick="affiche(this)"><br><br>
+        <img src={{ph3}} id="i3" alt="" width="100" onclick="affiche(this)"><br><br>
+        <img src={{ph4}} id="i4" alt="" width="100" onclick="affiche(this)"><br><br>
+        <img src={{ph5}} id="i5" alt="" width="100" onclick="affiche(this)"><br><br>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close" onclick="ferme()">X</span>
+        <img class="modal-content" id="img">
+    </div>
+
+    <div id='texte'>
+
+        <h2>{{profil.first_name}} {{profil.last_name}}</h2>
+        <h2> Popularité : {{profil.popularity}}</h2>
+        <h3>Dernière connection le : {{last_connection}}</h3>
+        <h3>Je suis {%if profil.gender=='Male' %}un homme{% else %}{%if profil.gender=='Female' %}une femme {% endif %}{% endif %} {% if profil.orientation==None %}Bi {% else %} {{profil.orientation}} {% endif %}<br> Naissance {{naissance}} <br><br> Ma présentation
+            :
+        </h3><br> {{profil.description}}
+        <br><br>
+        <h3>Mes centre d'interets :</h3><br>
+        <div class="colonne">
+            <ul>
+                {% for tag in tags %}
+                <li> {{tag}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id='carte'>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+        <h3>Vous me trouverez ici :</h3><br>
+        <div id="macarte" style="width:400px; height:500px"></div>
+
+
+
+        <script>
+            var carte = L.map('macarte').setView([{
+                {
+                    profil.latitude
+                }
+            }, {
+                {
+                    profil.longitude
+                }
+            }], 14);
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(carte);
+            var marker = L.marker([{
+                {
+                    profil.latitude
+                }
+            }, {
+                {
+                    profil.longitude
+                }
+            }]).addTo(carte);
+
+            function affiche(a) {
+                var modal = document.getElementById("myModal");
+                var modalImg = document.getElementById("img");
+                modal.style.display = "block";
+                modalImg.src = a.src;
+            }
+
+            function ferme(a) {
+                var modal = document.getElementById("myModal");
+                modal.style.display = "none";
+            }
+        </script>
+    </div>
+</div>
+{% endblock %}

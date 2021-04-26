@@ -1,96 +1,195 @@
-{% extends 'base.html' %}
-
-{% block title %}Mon profil{% endblock %}
-{% block content %}
-{% include 'nav.html' %}
+{% extends 'base.html' %} {% block title %}Mon profil{% endblock %} {% block content %} {% include 'nav.html' %}
+<style>
+    #conteneur {
+        display: flex;
+    }
+    
+    #colonne {
+        flex: 3;
+        padding: 20px;
+        column-count: auto;
+    }
+    
+    #profil {
+        flex: 1;
+    }
+    
+    p {
+        font-size: 1rem;
+        text-align: justify;
+    }
+</style>
 <br><br>
 <h1>Mon profil </h1>
-<br><img src={{ph1}} alt="" width="200"><br>
-<h3>
-    
-    <div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Nom : 
-        </div>
-        <div class="col-9">
-            {{nom}}
-        </div>
-    </div>
-    <div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Prénom: 
-        </div>
-        <div class="col-9">
-            {{prenom}}
-        </div>
-    </div>
-    <div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Naissance : 
-        </div>
-        <div class="col-9">
-            {{naissance}}
-        </div>
-    </div>
-</h3>
-    <div class="row"> -</div>
-    <h3><div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Sexe :
-        </div>
-        <div class="col-9">
-            {{sexe}}
-        </div>
-    </div>
-    <div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Orientation sexuelle :
-        </div>
-        <div class="col-9">
-            {{orientation}}
-        </div>
-    </div>
-        <div class="row"><div class="col-1"></div>
-        <div class="col-2">
-            Présentation :
-        </div>
-        <div class="col-9">
-            {{bio}}
-        </div>
-    </div>
-    <br>
-    <div class="row"><div class="col-1"></div>
-    <div class="col-2">
-        Email :
-    </div>
-    <div class="col-9">
-        {{email}}
-    </div>
-</div>    
-<div class="row"><div class="col-1"></div>
-    <div class="col-2">
-        Latitude :
-    </div>
-    <div class="col-9">
-        {{latitude}}
-    </div>
-</div>    
-<div class="row"><div class="col-1"></div>
-    <div class="col-2">
-        Longitude :
-    </div>
-    <div class="col-9">
-        {{longitude}}
-    </div>
-</div> 
-</h3>
-     <br>
-     <h1>
-        <a href="{{ url_for('profilmodif')}}">
-     <button type="button" class="btn btn-primary btn-lg mb-2" >Modifier mes informations</button></a>
-     <a href="{{ url_for('forgot')}}">
-        <button type="button" class="btn btn-primary btn-lg mb-2" >Modifier mon mot de passe</button></a>
-     <br><br></h1>
-<br><br>
 
-{% endblock %}
+<div id='conteneur'>
+    <div id='profil'>
+        <img src={{ph1}} alt="" width=200px>
+    </div>
+    <div id='colonne'>
+        <h5>
+            <table>
+                <colgroup>
+                    <col style="color: #9fe8e9">
+                </colgroup>
+                <tr>
+                    <td> Prénom:</t>
+                        <td>{{profil.first_name}}</td>
+                </tr>
+                <tr>
+                    <td> Nom :</td>
+                    <td>{{profil.last_name}}</td>
+                </tr>
+                <tr>
+                    <td>Naissance : </td>
+                    <td>{{naissance}}</td>
+                </tr>
+                <tr>
+                    <td> Sexe :</td>
+                    <td>{%if profil.gender=='Male' %}Masculin{% else %} {%if profil.gender=='Female' %}Féminin{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td> Orientation sexuelle :</td>
+                    <td>{{profil.orientation}}</td>
+                </tr>
+            </table>
+
+            Présentation : </h5>
+        <p>{{profil.description}}</p>
+        <h5>
+            <table>
+                <td> Email :</td>
+                <td>{{profil.email}}</td>
+                </tr>
+                <tr>
+                    <td> Latitude :</td>
+                    <td>{{profil.latitude}}</td>
+                </tr>
+                <tr>
+                    <td> Longitude :</td>
+                    <td>{{profil.longitude}}</td>
+                </tr>
+            </table>
+        </h5>
+
+    </div>
+    <div id='colonne'>
+        Mes centres d'intérêts :<br><br>
+
+        <ul>
+            {% for tag in tags %}
+            <li> {{tag}}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+
+</h5>
+<br>
+<h1>
+    <a href="{{ url_for('profilmodif')}}">
+        <button type="button" class="btn btn-primary btn-lg mb-2">Modifier mes informations</button></a>
+    <a href="{{ url_for('forgot')}}">
+        <button type="button" class="btn btn-primary btn-lg mb-2">Modifier mon mot de passe</button></a>
+    <br><br>
+</h1>
+<br><br> {% endblock %}{% extends 'base.html' %} {% block title %}Mon profil{% endblock %} {% block content %} {% include 'nav.html' %}
+<style>
+    #conteneur {
+        display: flex;
+    }
+    
+    #colonne {
+        flex: 3;
+        padding: 20px;
+        column-count: auto;
+    }
+    
+    #profil {
+        flex: 1;
+    }
+    
+    p {
+        font-size: 1rem;
+        text-align: justify;
+    }
+</style>
+<br><br>
+<h1>Mon profil </h1>
+
+<div id='conteneur'>
+    <div id='profil'>
+        <img src={{ph1}} alt="" width=200px>
+    </div>
+    <div id='colonne'>
+        <h5>
+            <table>
+                <colgroup>
+                    <col style="color: #9fe8e9">
+                </colgroup>
+                <tr>
+                    <td> Prénom:</t>
+                        <td>{{profil.first_name}}</td>
+                </tr>
+                <tr>
+                    <td> Nom :</td>
+                    <td>{{profil.last_name}}</td>
+                </tr>
+                <tr>
+                    <td>Naissance : </td>
+                    <td>{{naissance}}</td>
+                </tr>
+                <tr>
+                    <td> Sexe :</td>
+                    <td>{%if profil.gender=='Male' %}Masculin{% else %} {%if profil.gender=='Female' %}Féminin{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td> Orientation sexuelle :</td>
+                    <td>{{profil.orientation}}</td>
+                </tr>
+            </table>
+
+            Présentation : </h5>
+        <p>{{profil.description}}</p>
+        <h5>
+            <table>
+                <td> Email :</td>
+                <td>{{profil.email}}</td>
+                </tr>
+                <tr>
+                    <td> Latitude :</td>
+                    <td>{{profil.latitude}}</td>
+                </tr>
+                <tr>
+                    <td> Longitude :</td>
+                    <td>{{profil.longitude}}</td>
+                </tr>
+            </table>
+        </h5>
+
+    </div>
+    <div id='colonne'>
+        Mes centres d'intérêts :<br><br>
+
+        <ul>
+            {% for tag in tags %}
+            <li> {{tag}}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+</div>
+
+
+</h5>
+<br>
+<h1>
+    <a href="{{ url_for('profilmodif')}}">
+        <button type="button" class="btn btn-primary btn-lg mb-2">Modifier mes informations</button></a>
+    <a href="{{ url_for('forgot')}}">
+        <button type="button" class="btn btn-primary btn-lg mb-2">Modifier mon mot de passe</button></a>
+    <br><br>
+</h1>
+<br><br> {% endblock %}

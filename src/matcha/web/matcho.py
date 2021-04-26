@@ -1,21 +1,16 @@
 from flask import *
 from PIL import Image  
 import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import time
 import psycopg2
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from time import localtime, strftime
-from matcha.web.hashage import *
+from matcha.web.util1 import *
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
 from matcha.model.Connection import Connection
 import logging
-from pickle import NONE
 from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
@@ -29,119 +24,38 @@ app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
 ROOMS = ["lounge", "news", "games", "coding"]
 
-
-def ft_send(unique, nature):
-    if nature == 'registration':
-        lien = 'http://127.0.0.1:5000/validation/' + unique
-    elif nature == 'password':
-        lien = 'http://127.0.0.1:5000/newpassword/' + unique
-    f_time = time.asctime(time.localtime(time.time())).split()
-    
-    Fromadd = "matcha@ik.me"
-    Toadd = session['user']['email']  # #  Spécification du destinataire
-    message = MIMEMultipart()    
-    message['From'] = Fromadd   
-    message['To'] = Toadd 
-    message['Date'] = f_time[0] + ', ' + f_time[2] + ' ' + f_time[1] + ' ' + f_time[4] + ' ' + f_time[3] + ' +0100' + '\r\n'
-    if nature == 'registration':
-        message['Subject'] = "inscription"
-        msg = "Bomjour, " + session['user']['name'] + " merci de valider votre inscription  en cliquant sur  ce lien " + lien 
-    elif nature == 'password':
-        message['Subject'] = "Reinitialisation du mot de passe" 
-        msg = "Bomjour, merci de suivre ce lien pour réinitialiser votre mot de passe " + lien
-    message.attach(MIMEText(msg.encode('utf-8'), 'plain', 'utf-8'))  
-    serveur = smtplib.SMTP('mail.infomaniak.com', 587)  # # Connexion au serveur sortant 
-    serveur.starttls()  # # Spécification de la sécurisation
-    serveur.login(Fromadd, "42Flask@lyon")  # # Authentification
-    texte = message.as_string().encode('utf-8')  
-    Toadds = [Toadd]
-    serveur.sendmail(Fromadd, Toadds, texte)  # # Envoi du mail
-    serveur.quit() 
+# @app.before_request
+# def make_session_permanent():
+#     session.permanent = True
+#     app.permanent_session_lifetime = timedelta(minutes=1)
 
 
-def coordonnees(c):
-    debut = c.find('(')
-    virgule = c.find(',')
-    fin = c.find(')')
-    lat = c[debut + 1:virgule]
-    lon = c[virgule + 1:fin]
-    coor = (lat, lon)
-    return (coor)
-
-
-def lien_unique():
-    a = ''
-    for i in range(17):  # compose une chaine aleatoire de lettres et de chiffres
-        ok = False
-        while ok == False:
-            x = randint(48, 122)
-            if (x >= 58 and x <= 64) or (x >= 91 and x <= 96):
-                ok = False
-            else:
-                ok = True
-        a = a + chr(x)
-    return(a)
-
-
-def verif_login(login):
-    message = 'ok'
-    if len(login) < 3:
-        message = 'Le login doit comporter au moins 3 caractéres et etre uniquement compose de lettres et chiffres'
-    for letter in login:
-        if not(letter >= 'a' and letter <= 'z' or letter >= 'A' and letter <= 'Z' or letter >= '0' and letter <= '9'): 
-         message = 'Le login doit comporter au moins 3 caractéres et etre uniquement compose de lettres et chiffres'
-    if 0 != len(DataAccess().fetch("Users", conditions=('user_name', login))):
-         message = 'Le login ' + login + " est deja utilisé, merci d'en choisir un autre !"
-    return message 
-
-
-def verif_password(pwd, pwd2):
-    message = 'ok'
-    if len(pwd) < 8:
-        message = 'Le mot de passe doit avoir au moins 8 caracteres !!!'
-    if pwd != pwd2:
-        message = 'Les 2 mots de passe ne sont pas vraiment identiques !!!'
-    maj = min = nbr = 0
-    for letter in pwd:
-        if letter >= 'a' and letter <= 'z':
-            min = min + 1
-        if letter >= 'A' and letter <= 'Z':
-            maj = maj + 1
-        if letter >= '0' and letter <= '9':
-            nbr = nbr + 1
-    if maj == 0 or min == 0 or nbr == 0:
-        message = 'Votre mot de passe doit comporter au moins une minuscule, une majuscule et un chiffre'
-    return message
-
-
-def verif_identity(nom, prenom):
-    message = 'ok'
-    if len(nom) < 2 or len(prenom) < 2:
-        message = "Nom et prénom doivent obligatoirement comporter au moins 2 caracteres"
-    return message
-
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/',methods=['GET', 'POST'])
 def homepage():
-    if request.method == "POST":
-        login = request.form.get('login')
-        pwd = request.form.get('password')
+    if request.method=="POST":
+        login=request.form.get('login')
+        pwd=request.form.get('password')
         us = DataAccess().find('Users', conditions=('user_name', login))
-        if us == None:
-            rep = 'Utilisateur inconnu, merci de vous inscrire'
-            return  render_template('home.html', rep=rep)
-        # if  not (us.password == hash_pwd(pwd, login)):
-            # rep = "Mauvais mot de passe, merci de réessayer"
-            return  render_template('home.html', rep=rep)
-        if us.active == False:
+        if us==None:
+            rep='Utilisateur inconnu, merci de vous inscrire'
+            return  render_template('home.html', rep = rep)
+        if  not (us.password == hash_pwd(pwd,login)):
+            rep = "Mauvais mot de passe, merci de réessayer"
+            return  render_template('home.html', rep = rep)
+        if us.active==False:
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
-            return  render_template('home.html', rep=rep)
-        session['user'] = {'name': login}
-        return redirect(url_for('accueil'))
-        
-        # date_connexion = datetime.now()# rajouter cette info dans la fiche user a ce moment           
-    else: 
+            return  render_template('home.html', rep = rep)
+        session['user']= {'name' : login}
+        connect=Connection()
+        connect.users_id=us.id
+        connect.connect_date=datetime.now()
+        connect.ip=request.remote_addr
+        connect.disconnect_date=None
+        DataAccess().persist(connect)
+        return redirect(url_for('accueil'))                      
+    else:   
         return render_template('home.html')
+
     
 
 @app.route('/photo/', methods=['GET', 'POST'])
@@ -155,7 +69,6 @@ def photo():
     ph5 = "/static/photo/" + session['user']['name'] + "5.jpg"
     if request.method == "POST":
         f = request.files['maphoto']
-        b = f.filename
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
         if request.form.get('bou') == 'raz':
@@ -170,33 +83,100 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        
-        # list sera le resultat de la recherche
-        list = DataAccess().fetch('Users')
-        print('list = ',list)
-        # ipExterne = urlopen("https://ip.lafibre.info/ip.php").read()
-        # print('ip = ',ipExterne.decode('ascii'))
-        # request.remodeaddr recupere adresse ip
-        return render_template('accueil.html', username=username, rooms=ROOMS, list=list)
+        us = DataAccess().find('Users', conditions=('user_name', username))
+        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        visitors=[]
+        matching=True
+        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
+            matching=False
+        for visit in visits:
+            info={}
+            info["pseudo"]=visit.visitor_id.user_name
+            info["sex"]=visit.visitor_id.gender
+            info["popul"]=visit.visitor_id.popularity
+            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
+            info["like"]=visit.islike
+            if (visit.visitor_id.birthday):
+                info["age"]=calculate_age(visit.visitor_id.birthday)
+            else:
+               info["age"]=0
+            info["date"]=visit.last_update.date().isoformat()
+            if(visit.isblocked==False):
+                visitors.append(info)
+        return render_template('accueil.html', username=username, rooms=ROOMS,visitors=visitors, pop=us.popularity,matching=matching)
     else:
         return redirect(url_for('homepage'))   
 
 
-@app.route('/consultation/<login>/')
+@app.route('/consultation/<login>/',methods=['GET', 'POST'])
 def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
-    us = DataAccess().find('Users', conditions=('user_name', login))
-    ph1 = "/static/photo/" + us.user_name + "1.jpg"
-    ph2 = "/static/photo/" + us.user_name + "2.jpg"
-    ph3 = "/static/photo/" + us.user_name + "3.jpg"
-    ph4 = "/static/photo/" + us.user_name + "4.jpg"
-    ph5 = "/static/photo/" + us.user_name + "5.jpg"
-    b = str(us.birthday)  # champ date transformé en texte
-    naissance = b[8:] + '/' + b[5:7] + '/' + b[:4]  # conversion date americaine en europeene
-    if us.birthday == None:
-        naissance = ''
-    return render_template('consultation.html', profil=us, ph1=ph1, ph2=ph2, ph3=ph3, ph4=ph4, ph5=ph5, naissance=naissance)
+    user = session['user']['name']
+    dataAccess = DataAccess()
+    visitor = dataAccess.find('Users', conditions=('user_name', user))
+    us = dataAccess.find('Users', conditions=('user_name', login))
+    tag = dataAccess.fetch('Users_topic', conditions=('users_id',us.id))
+    date_connect=dataAccess.fetch('Connection', conditions=('users_id',us.id))
+    dates_c=[]
+    for da in date_connect:
+        dates_c.append(da.connect_date)
+    b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
+    last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    ###########
+    visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
+    visited =DataAccess().find('Visit', conditions=[('visited_id', visitor.id), ('visitor_id', us.id)])
+    liked=False
+    if visited:
+        liked=visited.islike
+    if visit:
+        visit.visits_number = visit.visits_number + 1
+        dataAccess.merge(visit)
+    else:
+        visit = Visit()
+        visit.visited_id = us.id
+        visit.visitor_id = visitor.id
+        visit.visits_number = 1
+        visit.islike=False
+        visit.isblocked=False
+        dataAccess.persist(visit)
+    visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
+    #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
+    us.popularity=len(visits)
+    DataAccess().merge(us)
+    ###########
+    tags=[]
+   
+    for t in tag:
+        tags.append(t.tag)
+    ph1="/static/photo/"+us.user_name+"1.jpg"
+    ph2="/static/photo/"+us.user_name+"2.jpg"
+    ph3="/static/photo/"+us.user_name+"3.jpg"
+    ph4="/static/photo/"+us.user_name+"4.jpg"
+    ph5="/static/photo/"+us.user_name+"5.jpg"
+    nb_photo=comptage_photo(ph1,ph2,ph3,ph4,ph5)
+    b=str(us.birthday) #champ date transformé en texte
+    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if us.birthday ==None:
+        naissance=''
+    if request.method=="POST":
+        like=request.form.get('like')
+        block=request.form.get('block')
+        if like:
+            like=True
+        else:
+            like=False
+        if block:
+            block=True
+        else:
+            block=False
+        #fake=request.form.get('fake')
+        if like != visit.islike:
+            visit.islike = like #modifier le score popularité et envoyer une notification
+        if block != visit.isblocked:
+            visit.isblocked=block
+        dataAccess.merge(visit)
+    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked)
 
 
 @app.route('/test/')
@@ -216,57 +196,99 @@ def test2():
 def profil():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    # users = USERS_MANAGER().get_users()
     user = session['user']['name']
-    ph1 = "/static/photo/" + session['user']['name'] + "1.jpg"
+    ph1="/static/photo/"+session['user']['name']+"1.jpg"
     us = DataAccess().find('Users', conditions=('user_name', user))
+    tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))    
+    tags=[]
+    for t in tag:
+        tags.append(t.tag)
     nom = us.last_name
     login = us.user_name
     prenom = us.first_name
-    bio = us.description
+    bio= us.description
     orientation = us.orientation
-    email = us.email
-    sexe = us.gender
-    b = str(us.birthday)  # champ date transformé en texte
-    if us.birthday == None:
-        naissance = ''
-    naissance = b[8:] + '/' + b[5:7] + '/' + b[:4]  # conversion date americaine en europeene
-    latitude = us.latitude
-    longitude = us.longitude
-    return render_template('profil.html', ph1=ph1, nom=nom, prenom=prenom, sexe=sexe, orientation=orientation, bio=bio, email=email, naissance=naissance, latitude=latitude, longitude=longitude)
+    email= us.email
+    sexe=us.gender
+    b=str(us.birthday) #champ date transformé en texte
+    naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if us.birthday ==None:
+        naissance=''
+    latitude=us.latitude
+    longitude=us.longitude
+    return render_template('profil.html',ph1=ph1, profil=us,naissance=naissance,tags=tags)
 
 
-@app.route('/recherche/', methods=['GET', 'POST'])
+@app.route('/recherche/',methods=['GET', 'POST'])
 def recherche():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    return render_template('recherche.html')
+    user = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', user))
+    tops = DataAccess().fetch('Topic')
+    topics=[]
+    for topic in tops:
+        topics.append(topic.tag)
+    if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
+        msg = 'Merci de bien remplir votre fiche avant de chercher un profil compatible'
+        return render_template('alerte.html',msg=msg)
+    if us.orientation != "Hetero":
+        sex_to_find=us.gender
+    else:
+        if us.gender=="Male":
+            sex_to_find="Female"
+        else:
+            sex_to_find="Male"
+    ##### Criteres de recherches
+    if request.method=="POST":
+        coordonnee=request.form.get('longlat')
+        if (coordonnee):
+            latitude=coordonnees(coordonnee)[0]
+            longitude=coordonnees(coordonnee)[1]
+        else:
+            latitude=us.latitude
+            longitude=us.longitude
+        criteres={}
+        criteres['sexe']=request.form.get('sexe')
+        criteres['latitude']=latitude
+        criteres['longitude']=longitude
+        criteres['dist_max']=request.form.get('km')
+        criteres['age_min']=request.form.get('agemin')
+        criteres['age_max']=request.form.get('agemax')
+        criteres['pop_min']=request.form.get('popmin')
+        criteres['pop_max']=request.form.get('popmax')
+        criteres['interets']=request.form.getlist('interest')
+        criteres['id']=us.id
+    ##### Recherche
+        #find_profil(criteres)
+        return render_template('resultats.html',candidats=find_profil(criteres))
+    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
 
 
-@app.route('/registration/', methods=['GET', 'POST'])
+@app.route('/registration/',methods=['GET', 'POST'])
 def registration():
-    if request.method == "POST":
-        login = request.form.get('login')
-        # if verif_login(login) != 'ok':
-            # return render_template('registration.html', message=verif_login(user))
-        mail = request.form.get('courriel')
-        pwd = request.form.get('password')
-        pwd2 = request.form.get('password2')
-        nom = request.form.get('name')
-        prenom = request.form.get('first_name')
-        if verif_password(pwd, pwd2) != 'ok':
-            return render_template('registration.html', message=verif_password(pwd, pwd2))
-        if verif_identity(nom, prenom) != 'ok':
-            return render_template('registration.html', message=verif_identity(nom, prenom))
-        session['user'] = {'name': login, 'email': mail}   
-        lien = lien_unique()
+    if request.method=="POST":
+        login=request.form.get('login')
+        if verif_login(login) !='ok':
+            return render_template('registration.html', message = verif_login(login))
+        mail=request.form.get('courriel')
+        pwd=request.form.get('password')
+        pwd2 =request.form.get('password2')
+        nom=request.form.get('name')
+        prenom=request.form.get('first_name')
+        if verif_password(pwd,pwd2) !='ok':
+            return render_template('registration.html', message = verif_password(pwd,pwd2))
+        if verif_identity(nom,prenom) !='ok':
+            return render_template('registration.html', message = verif_identity(nom,prenom))
+        session['user']= {'name' : login, 'email' : mail}   
+        lien=lien_unique()
         new = Users()
-        print('Prenom ' + prenom)
+        print('Prenom '+prenom)
         new.first_name = prenom
-        print("nom" + nom)
+        print("nom"+nom)
         new.last_name = nom
         new.user_name = login
-        new.password = hash_pwd(pwd, login)
+        new.password = hash_pwd(pwd,login)
         new.description = None
         new.email = mail
         new.active = False
@@ -274,11 +296,12 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
-        new.latitude = None
-        new.longitude = None
+        new.latitude = 0
+        new.longitude = 0
+        new.popularity = 0
         DataAccess().persist(new)
 
-        ft_send(lien, 'registration')
+        ft_send(lien,'registration')
         return redirect(url_for('accueil'))
     else:
         return render_template('registration.html')
@@ -311,6 +334,12 @@ def forgot():
 
 @app.route('/logout/')
 def logout():
+    login = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', login))
+    connections = DataAccess().fetch('Connection', conditions=('users_id', us.id), orderby='connect_date desc')
+    last_connect=connections[0]
+    last_connect.disconnect_date=datetime.now()
+    DataAccess().merge(last_connect)
     session.clear()
     return redirect(url_for('homepage'))
 
@@ -333,6 +362,7 @@ def newpassword(code):
     if us == None:
         rep = "ce lien n'est pas valable !"
         return render_template('newpasswordfalse.html', rep=rep)
+    session['user']= {'name' : us.user_name}
     if request.method == "POST":
         pwd = request.form.get('password')
         pwd2 = request.form.get('password2')
@@ -347,50 +377,52 @@ def newpassword(code):
     return render_template('newpassword.html', login=us.user_name)
 
 
-@app.route('/profilmodif/', methods=['GET', 'POST'])
+@app.route('/profilmodif/',methods=['GET', 'POST'])
 def profilmodif():
-    try:
-        msg = request.args['msg']
-    except:
-        msg = ''
     if "user" not in session:
-        return redirect(url_for('homepage')) 
+        return redirect(url_for('homepage'))
+    dataAccess = DataAccess()
     user = session['user']['name']
-    us = DataAccess().find('Users', conditions=('user_name', user))
-    ph1 = "/static/photo/" + session['user']['name'] + "1.jpg"
-    nom = us.last_name
-    login = us.user_name
-    prenom = us.first_name
-    bio = us.description
-    sexe = us.gender
-    if bio == None:\
-        bio = ""
-    orientation = us.orientation
-    email = us.email
-    sexe = us.gender
-    
-    naissance = (us.birthday)
-    latitude = us.latitude
+    us = dataAccess.find('Users', conditions=('user_name', user))
+    tops = dataAccess.fetch('Topic')
+    tag = dataAccess.fetch('Users_topic', conditions=('users_id',us.id))
+    topics=[]
+    tags=[]
+    for topic in tops:
+        topics.append(topic.tag)
+    for t in tag:
+        tags.append(t.tag)
+    ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    naissance=(us.birthday)
+    latitude=us.latitude
     if latitude == None:
-        latitude = 0
-    longitude = us.longitude
+        latitude=0
+    longitude=us.longitude
     if longitude == None:
-        longitude = 0
-    if request.method == "POST":
-        coordonnee = request.form.get('longlat')
+        longitude=0
+    if request.method=="POST":
+        coordonnee=request.form.get('longlat')
         if (coordonnee):
-            us.latitude = coordonnees(coordonnee)[0]
-            us.longitude = coordonnees(coordonnee)[1]
-        us.first_name = request.form.get('first_name')
-        us.last_name = request.form.get('name')
-        us.gender = request.form.get('sexe')
-        us.orientation = request.form.get('orientation')
-        us.description = request.form.get('bio')
-        if not(request.form.get('birthday') == ''):
-            us.birthday = request.form.get('birthday')
+            us.latitude=coordonnees(coordonnee)[0]
+            us.longitude=coordonnees(coordonnee)[1]
+        interets=request.form.getlist('interest')
+        dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
+        us.first_name=request.form.get('first_name')
+        us.last_name=request.form.get('name')
+        us.gender=request.form.get('sexe')
+        us.orientation=request.form.get('orientation')
+        us.description=request.form.get('bio')
+        if not(request.form.get('birthday')==''):
+            us.birthday=request.form.get('birthday')
         DataAccess().merge(us)
+        tagset = set()
+        if (request.form.get('interet')):
+            tagset.add(request.form.get('interet'))
+        for inte in interets:
+            tagset.add(inte)
+        dataAccess.call_procedure(procedure='insert_topics', parameters=(us.id, list(tagset)))
         return redirect(url_for('profil'))
-    return render_template('profilmodif.html', nom=nom, prenom=prenom, bio=bio, orientation=orientation, email=email, naissance=naissance, latitude=latitude, longitude=longitude, msg=msg, sexe=sexe)
+    return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
 
 
 @app.route('/chat/')
@@ -426,7 +458,15 @@ def add_header(r):
     return r
 
 
-# # Temps réel avec socketio
+# ---- Temps réel avec socketio  ------
+
+# Connexions des users
+@socketio.on('connect_user')
+def login_connect(data):
+    print('login-connect = ', data['msg'])
+
+
+# Chat
 @socketio.on('message')
 def message(data):
     # print(f"\n\n{data}\n\n")
@@ -458,7 +498,7 @@ def join(data):
     # print(user.id)
     # print("list msgs = ")
     msgs_json = json.dumps(msgs)
-    emit('old_messages', {
+    emit('display_old_messages', {
         'username': data['username'],
         'msgs_list': msgs_json,
         'user_id': user.id,

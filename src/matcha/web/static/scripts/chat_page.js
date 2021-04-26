@@ -1,4 +1,4 @@
-document.addEventListener('DOmContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // Make 'enter' key submit message
     let msg = document.querySelector('#user_message');
     msg.addEventListener('keyup', event => {

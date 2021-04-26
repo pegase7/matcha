@@ -42,22 +42,30 @@
         <!-- Custom Chat JS -->
         <script src="{{ url_for('static', filename='scripts/chat_page.js')}}"></script>
 
+        <!-- Connect users -->
+        <!-- <script src="{{ url_for('static', filename='scripts/connect_users.js')}}"></script> -->
+
         <!-- Get username -->
         <script>
             const username = `{{ username }}`;
         </script>
 
         <style>
-            h1 {
-                text-align: center;
-                color: #1d5b5c;
+            P {
+                margin: 1px;
             }
             
+            h1 {
+                text-align: center;
+            }
+            
+            h1,
             h3 {
-                color: #1d5b5c;
+                color: rgb(19, 19, 154);
             }
             
             h4 {
+                text-align: center;
                 color: #fe0000;
             }
             
@@ -68,19 +76,14 @@
             body {
                 margin: 0;
                 padding: 0;
-                /* background: url("{{url_for('static', filename='polynesie.jpg')}}") no-repeat center fixed; */
+                background: url("{{url_for('static', filename='polynesie.jpg')}}") no-repeat center fixed;
                 background-size: cover;
-                background-color: #def0ed;
                 /* version standardisée */
             }
             
             html {
                 position: relative;
                 min-height: 100%;
-            }
-            
-            #center {
-                text-align: center;
             }
             
             .footer {
@@ -103,8 +106,6 @@
             {% block content %}{% endblock %}
 
         </div>
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-        <script src="dist/js/bootstrap.bundle.min.js"></script>
     </body>
     <!-- <footer class="footer">
         <div class="container">

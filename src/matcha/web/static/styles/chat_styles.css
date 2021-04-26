@@ -13,11 +13,22 @@
 }
 
 .select-room {
+    font-size: large;
+    font-weight: 700;
     border: 2px solid black;
     border-radius: 5px;
     padding: 5px;
     margin: 5px;
     list-style: none;
+}
+
+.state-connection {
+    font-size: x-small;
+    font-weight: 300;
+    font-style: italic;
+    color: red;
+    /* border: 1px solid black; */
+    margin-top: 5px;
 }
 
 #chat-contener {

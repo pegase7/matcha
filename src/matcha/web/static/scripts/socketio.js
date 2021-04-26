@@ -35,23 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     //display old message
-    socket.on('old_messages', data => {
+    socket.on('display_old_messages', data => {
         console.log('1 ' + data.username);
         console.log('2 ' + data.user_id);
         console.log('3 ' + sessionStorage.getItem("current_user"));
         console.log('4 ' + data.receiver);
-        // old_receiver = document.getElementById('chat-receiver-name')
-        // console.log(old_receiver)
-        // if (old_receiver) {
-        //     document.getElementById('#chat-receiver-name').removeChild(old_receiver);
-        // }
+
         //envoie la liste des messages à l'utilisateur qui a rejoint la room
         if (sessionStorage.getItem("current_user") == data.username) {
-            //display receiver
-
-            // const receiver = document.getElementById('chat-receiver-name')
-            // receiver.outerHTML = "<h3>" + data.receiver + "</h3>";
-
             const h3 = document.createElement('h3');
             h3.id = "chat-receiver-name"
             h3.innerHTML = data.receiver;
@@ -69,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     span_username.className = "span_username";
                     span_timestamp.className = "span_timestamp";
                     const br = document.createElement('br');
-                    // console.log('msg.chat : ' + msg.chat)
                     if (data.username) {
                         // console.log('data.username');
                         if (data.user_id == msg.sender_id) {
@@ -107,6 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     //voir comment recuperer l'evenement 'like' envoyé par le serveur
 
+
+    socket.on('login', data => {
+        console.log('socket login : ' + data['msg'])
+    });
 
     // Send message
     document.querySelector('#send_message').onclick = () => {

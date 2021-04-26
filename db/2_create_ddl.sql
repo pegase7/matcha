@@ -40,13 +40,29 @@ create table USERS (
     gender		mpaa_gender DEFAULT 'Female'::mpaa_gender,
     orientation	mpaa_orientation  DEFAULT 'Hetero'::mpaa_orientation,
     birthday	date,
-    latitude	numeric(7,5),
-    longitude 	numeric(7,5),
+    latitude	numeric(8,5),
+    longitude 	numeric(8,5),
+    popularity	numeric(3),
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS owner to MATCHAADMIN;
 
+create table USERS_RECOMMANDATION (
+    sender_id		integer NOT NULL,
+    receiver_id		integer NOT NULL,
+    islike			boolean,
+    isblocked		boolean,
+    age_diff		numeric(4,2),
+    distance		numeric(9,2),
+    dist_ratio		numeric(2),
+    topics_ratio	numeric(9,2),
+    nb_consult		numeric(9),
+    created			timestamp without time zone DEFAULT now() NOT NULL,
+    last_consult 	timestamp without time zone DEFAULT now() NOT NULL,    
+    last_update 	timestamp without time zone DEFAULT now() NOT NULL
+);
+alter table USERS_RECOMMANDATION owner to MATCHAADMIN;
 
 
 
@@ -114,8 +130,7 @@ alter table MESSAGE owner to MATCHAADMIN;
 ---
 create table TOPIC(
     tag		character varying(45) NOT NULL,
-    created		timestamp without time zone DEFAULT now() NOT NULL,
-    last_update timestamp without time zone DEFAULT now() NOT NULL
+    created		timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table TOPIC owner to MATCHAADMIN;
 
@@ -125,7 +140,7 @@ alter table TOPIC owner to MATCHAADMIN;
 ---
 create table USERS_TOPIC(
     users_id	integer NOT NULL,
-    tag		character varying(45) NOT NULL
+    tag			character varying(45) NOT NULL
 );
 alter table USERS_TOPIC owner to MATCHAADMIN;
 
@@ -143,7 +158,6 @@ create table VISIT (
     id				integer DEFAULT nextval('VISIT_ID_SEQ'::regclass) NOT NULL,
     visited_id		integer not null,
     visitor_id		integer not null,
-    is_like			boolean DEFAULT False NOT NULL,
     visit_number	int,
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
