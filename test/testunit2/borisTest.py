@@ -5,7 +5,7 @@ import logging
 
 class BorisTestCase(unittest.TestCase):
 
-    def runTest(self):
+    def test_boris(self):
         dataAccess = DataAccess()
         logging.info('Test Boris')
         borises = dataAccess.fetch('Users', conditions=('user_name', 'borisjohnson'), joins=(['topics', 'asvisiteds', 'asvisitors', 'messages', 'connections', 'rooms']))
@@ -36,7 +36,7 @@ class BorisTestCase(unittest.TestCase):
         boris.first_name = 'Boris'
         boris.last_name = 'Johnson'
         boris.user_name = 'borisjohnson'
-        boris.password = 'fb1691a24e1099dce33ef3d0a398b39d297f2e1c'
+        boris.password = 'ElisabethGetOnMyNerves'
         boris.description = 'Blond, intelligent mais menteur'
         boris.email = 'boris.johnson@england.uk'
         boris.active = True

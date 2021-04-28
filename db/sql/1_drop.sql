@@ -13,6 +13,7 @@ drop sequence if exists ROOM_ID_SEQ;
 drop sequence if exists MESSAGE_ID_SEQ;
 drop sequence if exists VISIT_ID_SEQ;
 drop sequence if exists CONNECTION_ID_SEQ;
+drop sequence if exists USERS_RECOMMANDATION_ID_SEQ;
 
 drop type if exists mpaa_gender;
 drop type if exists mpaa_orientation;

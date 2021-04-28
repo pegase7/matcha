@@ -3,6 +3,7 @@ from matcha.config import Config
 import logging
 from matcha.orm.reflection import ListField, ModelDict, ModelObject
 
+
 """
 Append member to value whith prefix, returning value
     if first equal true append firstprefix otherwise otherprefix, then concatenate member
@@ -122,12 +123,15 @@ class Query():
 class DataAccess():
     """
     Singleton DataAccess class provides:
-        - get_connection ->    connection
-        - populate:      ->    Populate model object from record of result set
-        - fetch:         ->    fetch model object from database with jointures according to conditions and order by clause
-        - merge:         ->    Update database object from model object
-        - persist:       ->    Insert database object from model object
-        - remove:        ->    Delete database object corresponding to model object
+        - populate:     ->    Populate model object from record of result set
+        - fetch:        ->    fetch model objects from database with jointures according to conditions and order by clause
+        - find:         ->    fetch first model object from database with jointures according to conditions and order by clause.
+                              Send warning when several or none row are returned.  
+        - execute:      ->    execute one SQL order.
+        - executescript ->    exeute order contained in a SQL script file
+        - merge:        ->    Update database object from model object
+        - persist:      ->    Insert database object from model object
+        - remove:       ->    Delete database object corresponding to model object
     """
     __instance = None
     __modelDict = ModelDict()
@@ -142,7 +146,13 @@ class DataAccess():
         """
         if DataAccess.__instance is None:
             postgresql = Config().config['postgresql']
-            DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+            if 'LoggingConnection' in postgresql:
+                from psycopg2.extras import LoggingConnection
+                DataAccess.__connection = p.connect(connection_factory=LoggingConnection, host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+                DataAccess.__connection.initialize(logging.getLogger())
+            else:
+                DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+
             DataAccess.__instance = object.__new__(cls)
         return DataAccess.__instance
 
@@ -151,7 +161,8 @@ class DataAccess():
         i = start
         for field in model.get_fields():
             if not isinstance(field, ListField):
-                setattr(modelobject,field.name,record[i])
+                value = field.check(modelobject, record[i])
+                setattr(modelobject,field.name,value)
                 i += 1
         return (modelobject, i)
     
@@ -179,12 +190,16 @@ class DataAccess():
                 objects.append(modelobject)
         return objects;
 
-    def get_model_attr(self, record, field):
-        attr = getattr(record, field.name)
-        if isinstance(attr, ModelObject):
-            fieldmodel = ModelDict.get_model_class(field.modelname)
-            attr = fieldmodel.get_id(attr)
-        return attr
+    def __get_model_attr(self, record, field):
+        try:
+            attr = getattr(record, field.name)
+            if isinstance(attr, ModelObject):
+                fieldmodel = ModelDict.get_model_class(field.modelname)
+                attr = fieldmodel.get_id(attr)
+            return attr
+        except (AttributeError):
+            setattr(record, field, None)
+            return None
 
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby):
         query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby).build_query()
@@ -269,6 +284,15 @@ class DataAccess():
                 self.commit()
             return returnvalue
         
+    def executescript(self, filepath):
+        """
+        Execute sql script contained in file 'filepath'.
+        """
+        logging.debug("Excecute script:" + filepath)
+        with DataAccess.__connection.cursor() as cursor:
+            script = open(filepath,'r').read()
+            cursor.execute(script)
+        
     def merge(self, record, autocommit=True):
         model, model_name = self.get_model_class(record)
         print('Model:', type(model))
@@ -280,7 +304,7 @@ class DataAccess():
             if not field.iskey and not field.iscomputed and not isinstance(field, ListField):
                 cmd += addon + field.name + " = %s"
                 addon = ', '
-                parameters += (self.get_model_attr(record,field),)
+                parameters += (self.__get_model_attr(record,field),)
             elif 'last_update' == field.name and field.iscomputed:
                 cmd += addon + "last_update = DEFAULT"
         key_field = model.get_key_field().name
@@ -299,7 +323,7 @@ class DataAccess():
             if not field.iskey and not field.iscomputed and not isinstance(field, ListField):
                 columns += addon + field.name
                 values += addon + '%s'
-                parameters += (self.get_model_attr(record,field),)
+                parameters += (self.__get_model_attr(record,field),)
                 addon = ', '
         cmd += columns + ') values ' + values + ') returning *'
         self.execute(cmd, parameters, model, record, autocommit=autocommit)
@@ -308,7 +332,7 @@ class DataAccess():
         model, model_name = self.get_model_class(record)
         model.pre_remove(record)
         key_field = model.get_key_field()
-        parameters = (self.get_model_attr(record,key_field),)
+        parameters = (self.__get_model_attr(record,key_field),)
         cmd = 'delete from ' + model_name + ' where ' +  key_field.name + ' = %s'
         self.execute(cmd, parameters, autocommit=autocommit)
         

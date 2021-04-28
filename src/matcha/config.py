@@ -31,7 +31,7 @@ class Config():
     Check for singleton
     """
 
-    def __new__(cls):
+    def __new__(cls, basepath=None, configpath=None):
         """
         if previous instance is null instantiate and connect to database, elsewhere return current instance        
         """
@@ -40,18 +40,20 @@ class Config():
         return Config.__instance
     
     def __init__(self, basepath=None, configpath=None):
-        if basepath:
-            self.basepath = basepath
-        else:
-            self.basepath = Path(__file__).parent.parent
-            if 'src' == self.basepath.name:
-                self.basepath = self.basepath.parent
-        if not configpath:
-            configpath = 'resources/configuration/config.json'
-        with open(self.basepath.joinpath(configpath), 'r') as f:
-            self.config = json.load(f)
-            if 'logging' in self.config:
-                self.configLogging()
+        if not hasattr(self, "basepath"): #self.basepath is Null only on the first pass 
+            if basepath:
+                self.basepath = basepath
+            else:
+                self.basepath = Path(__file__).parent.parent
+                if 'src' == self.basepath.name:
+                    self.basepath = self.basepath.parent
+            if not configpath:
+                configpath = 'resources/configuration/config.json'
+            with open(self.basepath.joinpath(configpath), 'r') as f:
+                self.config = json.load(f)
+                if 'logging' in self.config:
+                    self.configLogging()
+            Config.__instance = self
             
     def configLogging(self):
         jsonlogging = self.config['logging']

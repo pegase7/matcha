@@ -169,6 +169,7 @@ create table VISIT (
     visits_number	int,
     islike          boolean DEFAULT FALSE,
     isblocked       boolean DEFAULT FALSE,
+    isfake          boolean DEFAULT FALSE,
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );

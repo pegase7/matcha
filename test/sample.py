@@ -65,7 +65,7 @@ if __name__ == "__main__":
     boris.first_name = 'Boris'
     boris.last_name = 'Johnson'
     boris.user_name = 'borisjohnson'
-    boris.password = 'ElisabethGetOnMyNerves'
+    boris.password = 'fb1691a24e1099dce33ef3d0a398b39d297f2e1c'
     boris.description = 'Blond, intelligent mais menteur'
     boris.email = 'boris.johnson@england.uk'
     boris.active = True

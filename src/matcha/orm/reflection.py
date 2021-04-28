@@ -17,19 +17,17 @@ class Field:
         self.value = None
         self.iscomputed = iscomputed
         self.iskey = iskey
-        self.name = None
     
-    def __get__(self, instance, owner):
-        return self.value
-
-    def __set__(self, instance, value):
-        self.value = value
+    def check(self, instance, value):
+        return value
     
-    def __error__(self, value, fieldname, message):
-        return "value '" + str(value) + "' for field '" + fieldname + "' " + message
+    def __error__(self, value, message, instance=None):
+        if not instance is None:
+            instance.haserror=True
+        return "value '" + str(value) + "' for field '" + self.name + "' " + message
 
-    def __typeerror__(self, value, fieldname, _type):
-        return self.__error__(value, self.name, "bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!")
+    def __typeerror__(self, value, _type, instance=None):
+        return self.__error__(value, self.name, "bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!", instance)
 
 
 class IntField(Field):
@@ -37,13 +35,13 @@ class IntField(Field):
     def __init__(self, iscomputed=False, iskey=False):
         Field.__init__(self, iscomputed, iskey)
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if value:
             if isinstance(value, Decimal):
                 value = int(value)
             elif not isinstance(value, int):
                 raise TypeError(instance, self.name, int, value)
-        super().__set__(instance, value)
+        return value
 
 
 class CharField(Field):
@@ -52,32 +50,30 @@ class CharField(Field):
         Field.__init__(self, iscomputed, iskey)
         self.length = length
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if value and not isinstance(value, str):
-            logging.error(self.__typeerror__(value, self.name, 'str'))
+            logging.error(self.__typeerror__(value, 'str', instance))
         if value and len(value) > self.length:
-            logging.error(self.__error__(value, self.name, "Maximum length('" + self.length + ") is exceeded!"))
-        super().__set__(instance, value)
+            logging.error(self.__error__(value, "Maximum length('" + self.length + ") is exceeded!", instance))
+        return value
 
 
 class TextField(Field):
 
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if not isinstance(value, str):
-            logging.error(self.__typeerror__(value, self.name, 'str'))
-        else:
-            super().__set__(instance, value)
+            logging.error(self.__typeerror__(value, 'str', instance))
+        return value
 
 
 class EmailField(Field):
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if not isinstance(value, str):
-            logging.error(self.__typeerror__(value, self.name, 'str'))
+            logging.error(self.__typeerror__(value, 'str', instance))
         elif not re.search("^[^@]+@[^@]+\.[^@]+$", value):
-            logging.error(self.__error__(value, self.name, "is not a valid email!"))
-        else:
-            super().__set__(instance, value)
+            logging.error(self.__error__(value, "is not a valid email!", instance))
+        return value
 
 
 class EnumField(Field):
@@ -86,11 +82,10 @@ class EnumField(Field):
         Field.__init__(self, iscomputed, iskey)
         self.values = values
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if value and value not in self.values:
-            logging.error(self.__error__(value, self.name, " is not a authorized value for enum!"))
-        else:
-            super().__set__(instance, value)
+            logging.error(self.__error__(value, " is not a authorized value for enum!", instance))
+        return value
 
 
 class FloatField(Field):
@@ -98,14 +93,13 @@ class FloatField(Field):
     def __init__(self, iscomputed=False, iskey=False):
         Field.__init__(self, iscomputed, iskey)
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if value:
             if isinstance(value, Decimal):
                 value = float(value)
             elif not isinstance(value, float):
-                logging.error(self.__typeerror__(value, self.name, 'int'))
-        else:
-            super().__set__(instance, value)
+                logging.error(self.__typeerror__(value, 'int', instance))
+        return value
 
 
 class BoolField(Field):
@@ -113,37 +107,34 @@ class BoolField(Field):
     def __init__(self, iscomputed=False, iskey=False):
         Field.__init__(self, iscomputed, iskey)
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if value and not isinstance(value, bool):
-            logging.error(self.__typeerror__(value, self.name, 'bool'))
-        else:
-            super().__set__(instance, value)
+            logging.error(self.__typeerror__(value, 'bool', instance))
+        return value
 
 
 class DateField(Field):
 
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if isinstance(value, str):
-            super().__set__(instance, date.fromisoformat(value))
+            return date.fromisoformat(value)
         elif isinstance(value, datetime):
-            super().__set__(instance, datetime.date(value.year, value.month, value.day))
+            return datetime.date(value.year, value.month, value.day)
         else:
             if value and not isinstance(value, date):
-                logging.error(self.__typeerror__(value, self.name, 'date'))
-            else:
-                super().__set__(instance, value)
+                logging.error(self.__typeerror__(value, 'date', instance))
+        return value
 
 
 class DateTimeField(Field):
 
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if isinstance(value, str):
-            super().__set__(instance, datetime.fromisoformat(value))
+            return datetime.fromisoformat(value)
         else:
             if not isinstance(value, datetime):
-                logging.error(self.__typeerror__(value, self.name, 'datetime'))
-            else:
-                super().__set__(instance, value)
+                logging.error(self.__typeerror__(value, 'datetime', instance))
+            return value
 
 
 class ArrayField(Field):
@@ -153,17 +144,16 @@ class ArrayField(Field):
         self.arraytype = arraytype
         self.length = length
     
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if not isinstance(value, list):
-            logging.error(self.__typeerror__(value, self.name, 'list'))
+            logging.error(self.__typeerror__(value, 'list', instance))
             if not self.arraytype is None:
                 for i in value:
                     if not isinstance(i, int):
                         logging.error(self.__typee(value, self.name, str(self.arraytype)))
         if not self.length is None and len(value) != self.length:
-            logging.error(self.__error__(value, self.name, "Invalid number of elements'" + self.length + "!"))
-        else:
-            super().__set__(instance, value)
+            logging.error(self.__error__(value, "Invalid number of elements'" + self.length + "!", instance))
+            return value
 
 
 class ManyToOneField(Field):
@@ -171,7 +161,7 @@ class ManyToOneField(Field):
     def __init__(self, iscomputed=False, iskey=False, modelname=None):
         Field.__init__(self, iscomputed, iskey)
         if modelname is None:
-            logging.error(self.__error__(None, self.name, "'modelname' attribute must be specified!"))
+            logging.error(self.__error__(None, "'modelname' attribute must be specified!"))
         else:
             self.modelname = modelname
 
@@ -180,17 +170,16 @@ class ListField(Field):
 
     def __init__(self, iscomputed=False, iskey=False, modelname=None, select=None):
         if modelname is None or select is None:
-            logging.error(self.__error__(None, self.name, "'modelname' and 'select' attributes must be specified!"))
+            logging.error(self.__error__(None, "'modelname' and 'select' attributes must be specified!"))
         Field.__init__(self, iscomputed, iskey)
         self.modelname = modelname
         self.select = select
         self.value = []
 
-    def __set__(self, instance, value):
+    def check(self, instance, value):
         if not isinstance(value, list):
-            logging.error(self.__typeerror__(value, self.name, 'list'))
-        else:
-            self.value = value
+            logging.error(self.__typeerror__(value, 'list', instance))
+        return value
 
 
 class ModelObject(object):
@@ -202,6 +191,9 @@ class ModelObject(object):
     def get_model_name(cls):
         return cls.__name__
 
+    def __init__(self):
+        self.haserror = False
+        
     def _as_dict(self):
         __dict = {}
         modelclass = ModelDict().get_model_class(self.get_model_name())
@@ -214,6 +206,12 @@ class ModelObject(object):
         model = ModelDict().get_model_class(self.get_model_name())
         return model.model_str(self)
 
+    def check(self):
+        self.haserror = False
+        modelclass = ModelDict().get_model_class(self.get_model_name())
+        for field in modelclass.get_fields():
+            field.check(self, getattr(self, field.name))
+        return self.haserror
     
 '''
 
@@ -251,7 +249,7 @@ class ModelClass():
             raise ValueError("No field '" + field_name + "' for '" + self.name + "'!'")
 
     def new_instance(self):
-        return eval("modelObject()", { "modelObject": self.klazz})
+        return eval("ModelObject()", { "ModelObject": self.klazz})
 
     def head(self, instance, model_name):
         head = model_name + "("
@@ -306,17 +304,17 @@ class ModelDict(object):
         try:
             return ModelDict.__models[model_name]
         except (KeyError):
-            self.new_instance(model_name)
+            self.__instantiate(model_name)
             return ModelDict.__models[model_name]
 
-    def new_instance(self, name):
+    def __instantiate(self, name):
         """
         Create a class instance from class '{class_name}' from module 'matcho.model.{class_name}'
         """
         try:
             module_path = "matcha.model." + name
             mod = importlib.import_module(module_path)
-            eval("modelObject()", { "modelObject": getattr(mod, name)})
+            eval("ModelObject()", { "ModelObject": getattr(mod, name)})
         except (ImportError, AttributeError):
             raise ImportError(name)
 
@@ -337,20 +335,16 @@ def metamodelclass(cls=None):
     def wrap(cls):
         fields = []
         dictfield = {}
-        for name, value in cls.__dict__.items():
-            if isinstance(value, Field):
-                value.name = name
-                fields.append(value)
-                dictfield[name] = value
+        
+        cls_annotations = cls.__dict__.get('__annotations__', {})
+        for name, field in cls_annotations.items():
+            if isinstance(field,Field):
+                field.name = name
+                fields.append(field)
+                dictfield[name] = field
         ModelClass(cls, cls.__name__, fields, dictfield)
         return cls
 
-    # See if we're being called as @metamodelclass or @metamodelclass().
-    if cls is None:
-        # We're called with parens.
-        return wrap
-
-    # We're called as @dataclass without parens.
     return wrap(cls)
 
 
