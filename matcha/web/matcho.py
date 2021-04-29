@@ -115,8 +115,11 @@ def consultation(login):
     dates_c=[]
     for da in date_connect:
         dates_c.append(da.connect_date)
-    b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
-    last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    if len(dates_c)>0 :
+        b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
+        last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    else:
+        last_connection=0
     ###########
     visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
     visited =DataAccess().find('Visit', conditions=[('visited_id', visitor.id), ('visitor_id', us.id)])
@@ -156,6 +159,7 @@ def consultation(login):
     if request.method=="POST":
         like=request.form.get('like')
         block=request.form.get('block')
+        fake=request.form.get('fake')
         if like:
             like=True
         else:
@@ -164,11 +168,15 @@ def consultation(login):
             block=True
         else:
             block=False
-        #fake=request.form.get('fake')
+        if fake:
+            fake=True
+        else:
+            fake=False
         if like != visit.islike:
             visit.islike = like #modifier le score popularité et envoyer une notification
         if block != visit.isblocked:
             visit.isblocked=block
+        #if fake != visit.fake=fake
         dataAccess.merge(visit)
     return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked)
 
@@ -236,6 +244,11 @@ def recherche():
             longitude=us.longitude
         criteres={}
         criteres['sexe']=request.form.get('sexe')
+        if us.orientation:
+            criteres['orientation']=us.orientation
+        else:
+            criteres['orientation']='Bi'
+        criteres['sexe_chercheur']=us.gender
         criteres['latitude']=latitude
         criteres['longitude']=longitude
         criteres['dist_max']=request.form.get('km')
@@ -245,8 +258,6 @@ def recherche():
         criteres['pop_max']=request.form.get('popmax')
         criteres['interets']=request.form.getlist('interest')
         criteres['id']=us.id
-    ##### Recherche
-        #find_profil(criteres)
         return render_template('resultats.html',candidats=find_profil(criteres))
     return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
 
@@ -282,13 +293,13 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
-        new.latitude = 0
-        new.longitude = 0
+        new.latitude = request.form.get('latitude')
+        new.longitude = request.form.get('longitude')
         new.popularity = 0
         DataAccess().persist(new)
-
         ft_send(lien,'registration')
-        return redirect(url_for('accueil'))
+        session.clear()
+        return redirect(url_for('homepage'))
     else:
         return render_template('registration.html')
 
@@ -336,10 +347,12 @@ def validation(code):
     if us==None:
         rep="ce lien n'est pas valable !"
         return render_template('validation.html', rep=rep)
+    
     us.active=True
     us.confirm=None
-    DataAccess().merge(us)       
-    return redirect(url_for('logout'))        
+    DataAccess().merge(us)  
+    session.clear()     
+    return redirect(url_for('homepage'))        
 
 
 @app.route('/newpassword/<code>', methods=['GET','POST'])

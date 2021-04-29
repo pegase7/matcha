@@ -45,6 +45,9 @@ def ft_send(unique, nature):
     elif nature == 'password':
         message['Subject'] = "Reinitialisation du mot de passe" 
         msg = "Bomjour, merci de suivre ce lien pour réinitialiser votre mot de passe "+ lien
+    elif nature == 'fake':
+        message['Subject'] = "Declaration de faux compte" 
+        msg = "l'utilisateur"+ user + " a indiqué que le compte "+ fake +' est un faux'
     message.attach(MIMEText(msg.encode('utf-8'), 'plain', 'utf-8'))  
     serveur = smtplib.SMTP('mail.infomaniak.com', 587)  ## Connexion au serveur sortant 
     serveur.starttls()    ## Spécification de la sécurisation
@@ -137,6 +140,9 @@ def find_profil(criteres):
         info={}
         info['nom']=user.user_name
         ok=1
+        #Ne pas se selectionner soi même !!!!
+        if session['user']['name']==user.user_name:
+            ok=0
         #Si l'utilisateur a bloqué
         visit = DataAccess().find('Visit', conditions=[('visited_id', user.id), ('visitor_id', criteres['id'])])
         if (visit):
@@ -154,6 +160,17 @@ def find_profil(criteres):
         if ok==1:
             if user.gender!=criteres['sexe']:
                 ok=0
+            else :
+                if user.orientation:
+                    orientation=user.orientation
+                else:
+                    orientation='Bi'
+                if orientation=='Bi':
+                    ok=1
+                elif user.gender==criteres['sexe_chercheur'] and user.orientation=='Hetero':
+                    ok=0
+                elif user.gender!=criteres['sexe_chercheur'] and user.orientation=='Homo':
+                    ok=0
         #Critere Age
         if ok==1:
             if user.birthday:
@@ -227,3 +244,8 @@ def comptage_photo(ph1,ph2,ph3,ph4,ph5):
     if os.path.isfile('.'+ph5):
         nb=nb +1
     return nb
+
+
+def localisation():
+    
+    return initial_locate
