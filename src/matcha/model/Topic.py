@@ -4,5 +4,5 @@ from matcha.orm.reflection import ModelObject, CharField, DateTimeField, dispatc
 @dataclass(init=False)
 @dispatcher
 class Topic(ModelObject):
-    tag: CharField(length=45)
+    tag: CharField(length=45, iskey=True)
     created: DateTimeField(iscomputed=True)

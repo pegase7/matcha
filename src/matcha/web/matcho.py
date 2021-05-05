@@ -11,23 +11,27 @@ from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
 from matcha.model.Connection import Connection
 import logging
+from matcha.model.Visit import Visit
 from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
+from matcha.model.Notification import Notification 
 from matcha.config import FlaskEncoder, MyEncoder
+# import threading
+from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
+app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=6000) # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
 ROOMS = ["lounge", "news", "games", "coding"]
+diut = DisconnectInactiveUsersThread()
 
-# @app.before_request
-# def make_session_permanent():
-#     session.permanent = True
-#     app.permanent_session_lifetime = timedelta(minutes=1)
+
+# diut.lauchThread(10)
 
 
 @app.route('/',methods=['GET', 'POST'])
@@ -46,6 +50,8 @@ def homepage():
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
             return  render_template('home.html', rep = rep)
         session['user']= {'name' : login}
+        session.permanent = True # le cookie aura la duree definie plus haut
+        print("cookie valeur : ", session.get)
         connect=Connection()
         connect.users_id=us.id
         connect.connect_date=datetime.now()
@@ -340,6 +346,7 @@ def logout():
     last_connect=connections[0]
     last_connect.disconnect_date=datetime.now()
     DataAccess().merge(last_connect)
+    #enregistrer deconnexion pour room du chat et autres notifs
     session.clear()
     return redirect(url_for('homepage'))
 
@@ -458,6 +465,8 @@ def add_header(r):
     return r
 
 
+
+
 # ---- Temps réel avec socketio  ------
 
 # Connexions des users
@@ -469,12 +478,19 @@ def login_connect(data):
 # Chat
 @socketio.on('message')
 def message(data):
-    # print(f"\n\n{data}\n\n")
+    print(f"\n\n{data}\n\n")
     msg = Message()
     msg.chat = data['msg']
     msg.room_id = data['room']
     msg.sender_id = data['user_id']
     DataAccess().persist(msg)
+    receiver = DataAccess().find('Users', conditions=('user_name', data['receiver']))
+    notif = Notification()
+    notif.sender_id = data['user_id']
+    notif.receiver_id = receiver.id
+    notif.notif_type = 'Message'
+    notif.read_notif = False
+    DataAccess().persist(notif)
     send({'msg': data['msg'], 'username': data['username'],
     'time_stamp': strftime('%d-%b %I:%M%p', localtime())}, room=data['room'])
     
@@ -486,11 +502,9 @@ def join(data):
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
     print('room = ',data['room'])
-    receiver_id = 0
+    receiver_id = room_data.slave_id
     if room_data.slave_id == user.id:
         receiver_id = room_data.master_id
-    else:
-        receiver_id = room_data.slave_id
     print('receiver_id = ', receiver_id)
     receiver = DataAccess().find('Users', conditions=('id', receiver_id))
     print('receiver = ', receiver.user_name)
@@ -498,10 +512,11 @@ def join(data):
     # print(user.id)
     # print("list msgs = ")
     msgs_json = json.dumps(msgs)
+    #enregistrer la date de connexion a la room pour notifs
     emit('display_old_messages', {
         'username': data['username'],
         'msgs_list': msgs_json,
-        'user_id': user.id,
+        'user_id': user.id, #voir dans template si on peut l'enlever
         'receiver': receiver.user_name,
           },
           room=data['room']
@@ -512,7 +527,8 @@ def join(data):
 def leave(data):
     # print("leave : ",data)
     leave_room(data['room'])
-    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room'])
+    #enregistrer la date de deconnexion pour les notifications
+    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel
     
     
 @socketio.on('like')  # l'evenement 'like'  arrive ici
@@ -551,3 +567,5 @@ def like(data):
 # Lance les serveurs
 if __name__ == '__main__':
     socketio.run(app)
+
+    

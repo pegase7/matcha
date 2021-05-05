@@ -7,8 +7,8 @@ class Visit(ModelObject):
     id: IntField(iskey=True)
     visited_id: ManyToOneField(modelname='Users')
     visitor_id: ManyToOneField(modelname='Users')
-    is_like: BoolField
+    islike: BoolField()
     isblocked: BoolField()
-    visit_number: IntField()
+    visits_number: IntField()
     created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)

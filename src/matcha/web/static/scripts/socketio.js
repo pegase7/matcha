@@ -102,13 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('socket login : ' + data['msg'])
     });
 
+
+
+
     // Send message
     document.querySelector('#send_message').onclick = () => {
 
-        console.log(document.querySelector("#input-area").className);
+        console.log('receiver :' + document.getElementById('chat-receiver-name').innerHTML);
         socket.send({
             'msg': document.querySelector('#user_message').value,
             'username': username,
+            'receiver': document.getElementById('chat-receiver-name').innerHTML,
             'room': room,
             'user_id': document.querySelector("#input-area").className
         });
