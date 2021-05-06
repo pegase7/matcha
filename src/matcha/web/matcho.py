@@ -17,6 +17,7 @@ from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
 from matcha.config import FlaskEncoder, MyEncoder
+from matcha.web.util2 import *
 # import threading
 from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
@@ -27,7 +28,6 @@ app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=6000) # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
-ROOMS = ["lounge", "news", "games", "coding"]
 diut = DisconnectInactiveUsersThread()
 
 
@@ -109,7 +109,10 @@ def accueil():
             info["date"]=visit.last_update.date().isoformat()
             if(visit.isblocked==False):
                 visitors.append(info)
-        return render_template('accueil.html', username=username, rooms=ROOMS,visitors=visitors, pop=us.popularity,matching=matching)
+        notif_list = find_notif_list(us.id)
+        print(notif_list)
+        print(len(notif_list))
+        return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching, notif_list=notif_list, notif_nb=len(notif_list))
     else:
         return redirect(url_for('homepage'))   
 
@@ -521,19 +524,33 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    print('room = ',data['room'])
+    # print('room = ',data['room'])
     receiver_id = room_data.slave_id
+    sender_id = room_data.master_id
     if room_data.slave_id == user.id:
         receiver_id = room_data.master_id
-    print('receiver_id = ', receiver_id)
+        sender_id = room_data.slave_id
+    # print('receiver_id = ', receiver_id)
     receiver = DataAccess().find('Users', conditions=('id', receiver_id))
-    print('receiver = ', receiver.user_name)
+    # print('receiver = ', receiver.user_name)
+    # print('sender_id = ', sender_id)
     # print(data['username'])
     # print(user.id)
     # print("list msgs = ")
     msgs_json = json.dumps(msgs)
-    #enregistrer la date de connexion a la room pour notifs
-    #mettre les notifs 'message' a true (concernant cette room)
+    # mise a jour des notifs 'message' a true (concernant cette room)
+    notif_list = DataAccess().fetch('Notification', conditions=[
+                                                                ('sender_id', receiver_id),
+                                                                ('receiver_id', sender_id),
+                                                                ('notif_type', 'Message'),
+                                                                ('read_notif', False)
+                                                                ])
+    print(notif_list)
+    for notif in notif_list:
+        notif.read_notif = True
+        DataAccess().merge(notif, autocommit=False)
+    DataAccess().commit()
+        
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,

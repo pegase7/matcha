@@ -1,5 +1,9 @@
 {% extends 'base.html' %} {% block title %}Messagerie{% endblock %} {% block content %} {% include 'nav.html' %}
+<!-- Custom SocketIO JS -->
+<script src="{{ url_for('static', filename='scripts/socketio.js')}}"></script>
 
+<!-- Custom Chat JS -->
+<script src="{{ url_for('static', filename='scripts/chat_page.js')}}"></script>
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
