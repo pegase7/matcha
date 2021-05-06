@@ -466,8 +466,9 @@ def add_header(r):
 
 
 
-
-# ---- Temps réel avec socketio  ------
+################################################
+########## Temps réel avec socketio  ###########
+################################################
 
 # Connexions des users
 @socketio.on('connect_user')
@@ -475,26 +476,45 @@ def login_connect(data):
     print('login-connect = ', data['msg'])
 
 
-# Chat
+############# Chat  ###################
+
+#receive and send message
 @socketio.on('message')
 def message(data):
-    print(f"\n\n{data}\n\n")
+    #print(f"\n\n{data}\n\n")
     msg = Message()
     msg.chat = data['msg']
     msg.room_id = data['room']
     msg.sender_id = data['user_id']
-    DataAccess().persist(msg)
     receiver = DataAccess().find('Users', conditions=('user_name', data['receiver']))
     notif = Notification()
     notif.sender_id = data['user_id']
     notif.receiver_id = receiver.id
     notif.notif_type = 'Message'
     notif.read_notif = False
+    DataAccess().persist(msg)
     DataAccess().persist(notif)
-    send({'msg': data['msg'], 'username': data['username'],
-    'time_stamp': strftime('%d-%b %I:%M%p', localtime())}, room=data['room'])
+    send({
+          'msg': data['msg'],
+          'sender': data['sender'],
+          'receiver': data['receiver'],
+          'room': data['room'], 'notif':notif.id,
+          'time_stamp': strftime('%d-%b %I:%M%p', localtime())
+          }, 
+          room=data['room']
+        )
     
     
+#test receiver connection
+@socketio.on('receiver_connect')
+def test_connect(data):
+    if data['test'] == True:
+        notif = DataAccess().find('Notification', conditions=('id', data['notif']))
+        notif.read_notif = True
+        DataAccess().merge(notif)
+        
+        
+#join room
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
@@ -513,16 +533,18 @@ def join(data):
     # print("list msgs = ")
     msgs_json = json.dumps(msgs)
     #enregistrer la date de connexion a la room pour notifs
+    #mettre les notifs 'message' a true (concernant cette room)
     emit('display_old_messages', {
-        'username': data['username'],
-        'msgs_list': msgs_json,
-        'user_id': user.id, #voir dans template si on peut l'enlever
-        'receiver': receiver.user_name,
+           'username': data['username'],
+           'msgs_list': msgs_json,
+           'user_id': user.id, #voir dans template si on peut l'enlever
+           'receiver': receiver.user_name,
           },
-          room=data['room']
-          )
+        room=data['room']
+        )
           
-          
+   
+#leave room       
 @socketio.on('leave')
 def leave(data):
     # print("leave : ",data)

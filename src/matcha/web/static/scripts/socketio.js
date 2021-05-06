@@ -4,35 +4,71 @@ document.addEventListener('DOMContentLoaded', () => {
     // joinRoom("Lounge");
 
     // display incomming message
-    //manque les notifications en cas de nouveau message à une personne non connectée
     socket.on('message', data => {
-        console.log('data.msg_list')
+        console.log(data);
+        const current_user = sessionStorage.getItem("current_user");
         const p = document.createElement('p');
         p.className = "msg_p";
-        const span_username = document.createElement('span');
+        const span_sender = document.createElement('span');
         const span_timestamp = document.createElement('span');
-        span_username.className = "span_username";
+        span_sender.className = "span_sender";
         span_timestamp.className = "span_timestamp";
         const br = document.createElement('br');
 
-        if (data.username) {
+        if (data.sender) {
             // console.log('data.username');
-            if (data.username == sessionStorage.getItem("current_user")) {
+            if (data.sender == current_user) {
                 p.className = "current";
-                data.username = "Moi";
+                data.sender = "Moi";
             }
-            span_username.innerHTML = data.username;
+            span_sender.innerHTML = data.sender;
             span_timestamp.innerHTML = data.time_stamp;
             p.innerHTML = data.msg +
                 br.outerHTML + span_timestamp.outerHTML;
             document.querySelector('#display-message-section').append(p);
             document.getElementById("rigthside-pannel").scrollTop;
+            if (current_user == data.receiver) {
+                socket.emit('receiver_connect', { 'msg': 'receiver connect', 'test': true, 'notif': data.notif })
+                    // } else {
+                    //     socket.emit('receiver_connect', {'msg': 'receiver non-connect', 'test': false})
+            }
 
         } else {
             printSysMsg(data.msg);
         }
     });
 
+    // Send message
+    document.querySelector('#send_message').onclick = () => {
+
+        console.log('receiver :' + document.getElementById('chat-receiver-name').innerHTML);
+        socket.send({
+            'msg': document.querySelector('#user_message').value,
+            'sender': username,
+            'receiver': document.getElementById('chat-receiver-name').innerHTML,
+            'room': room,
+            'user_id': document.querySelector("#input-area").className
+        });
+        // Clear input area
+        document.querySelector('#user_message').value = '';
+    }
+
+    // test receiver connection
+    socket.on('test_receiver', data => {
+        console.log('user = ' + sessionStorage.getItem("current_user"));
+        console.log(data);
+        sender = data.username;
+        current_user = sessionStorage.getItem("current_user");
+        if (sender != current_user) {
+            socket.emit('receiver_ok', {
+                'msg': data.msg,
+                'sender': data.sender,
+                'receiver': data.receiver,
+                'room': data.room,
+                'time_stamp': data.time_stamp,
+            })
+        }
+    });
 
     //display old message
     socket.on('display_old_messages', data => {
@@ -57,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     p.className = "msg_p";
                     const span_username = document.createElement('span');
                     const span_timestamp = document.createElement('span');
-                    span_username.className = "span_username";
+                    span_username.className = "span_sender";
                     span_timestamp.className = "span_timestamp";
                     const br = document.createElement('br');
                     if (data.username) {
@@ -105,20 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // Send message
-    document.querySelector('#send_message').onclick = () => {
-
-        console.log('receiver :' + document.getElementById('chat-receiver-name').innerHTML);
-        socket.send({
-            'msg': document.querySelector('#user_message').value,
-            'username': username,
-            'receiver': document.getElementById('chat-receiver-name').innerHTML,
-            'room': room,
-            'user_id': document.querySelector("#input-area").className
-        });
-        // Clear input area
-        document.querySelector('#user_message').value = '';
-    }
 
     //send like
     const buttons = document.querySelectorAll('.send_like');
