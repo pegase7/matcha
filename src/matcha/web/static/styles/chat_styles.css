@@ -1,11 +1,11 @@
 /* chat.html */
 
 .chat-title {
-    color: green;
+    color: rgb(1, 51, 1);
     font-weight: 700;
     text-align: center;
     margin: 10px 10px;
-    text-shadow: 1px 1px 2px grey;
+    /* text-shadow: 1px 1px 2px grey; */
 }
 
 .chat-section {
@@ -90,4 +90,14 @@
     max-width: 40%;
     word-wrap: break-word;
     margin-left: 10%;
+}
+
+.badge {
+    /* position: absolute; */
+    /* top: 0px; */
+    /* right: -10px; */
+    padding: 5px 10px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
 }

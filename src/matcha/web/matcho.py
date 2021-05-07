@@ -110,8 +110,8 @@ def accueil():
             if(visit.isblocked==False):
                 visitors.append(info)
         notif_list = find_notif_list(us.id)
-        print(notif_list)
-        print(len(notif_list))
+        # print(notif_list)
+        # print(len(notif_list))
         return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching, notif_list=notif_list, notif_nb=len(notif_list))
     else:
         return redirect(url_for('homepage'))   
@@ -442,15 +442,21 @@ def chat():
         user = DataAccess().find('Users', conditions=('user_name', username))
         print(user)
         # msgs = DataAccess()fetch('Message',)
-        # print(f"\n\n{username}\n\n")
+        print(f"\n\n{username}\n\n")
+        print('user_id :', user.id)
         # print(f"\n\n{session}\n\n")
-        liste = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
+        room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
         # print("liste : ", liste)
-        print("\n\n")
+        # print("\n\n")
+        notif_list = find_notif_list(user.id)
+        # print(notif_list)
+
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
-                                rooms=liste)
+                                rooms=room_list,
+                                notif_list=notif_list
+                                )
     else:
         return redirect(url_for('homepage'))  
 

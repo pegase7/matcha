@@ -139,9 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
-
-
     //send like
     const buttons = document.querySelectorAll('.send_like');
     for (const button of buttons) {
@@ -158,12 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.select-room').forEach(p => {
         p.onclick = () => {
             let newRoom = p.value.toString();
+            let node = p;
             // console.log("room = " + newRoom);
             // console.log("username = " + username)
             if (newRoom == room) {
                 msg = `Vous êtes déjà connecté à cette discussion.`;
                 printSysMsg(msg);
             } else {
+                p.removeChild(p.childNodes[3])
                 leaveRoom(room);
                 joinRoom(newRoom);
                 room = newRoom;

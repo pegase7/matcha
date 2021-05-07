@@ -4,6 +4,10 @@
 
 <!-- Custom Chat JS -->
 <script src="{{ url_for('static', filename='scripts/chat_page.js')}}"></script>
+
+<!-- Chat styles -->
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/chat_styles.css') }}">
+
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
@@ -14,9 +18,12 @@
         <nav id="chat-rooms">
             <h4>Discussions</h4>
             <ul>
+
                 {% for room in rooms %} {% if room.slave_id == user_id %}
                 <li class="select-room" value="{{ room.room_id }}">
-                    {{ room.master_id.user_name }}
+                    <span>{{ room.master_id.user_name }}</span> {% set count = namespace(total=0) %} {% for notif in notif_list %} {% if notif.sender_id == room.master_id.id %} {% set count.total = count.total + 1 %} {% endif %} {% endfor %} {% if count.total
+                    > 0 %}
+                    <span class="badge">{{ count.total }}</span> {% endif %}
                     <p class="state-connection">Déconnecté</p>
                 </li>
                 {% endif %} {% endfor %}
