@@ -473,7 +473,16 @@ def add_header(r):
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
 
-
+@app.route("/ajax/")
+def refresh_notif():
+    print("ajax")
+    if "user" in session:
+        username = session['user']['name']
+        user = DataAccess().find('Users', conditions=('user_name', username))
+        notif_list = find_notif_list(user.id)
+        print('len list : ', len(notif_list))
+        return str(len(notif_list))
+    
 
 ################################################
 ########## Temps réel avec socketio  ###########
