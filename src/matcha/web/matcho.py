@@ -19,7 +19,7 @@ from matcha.model.Notification import Notification
 from matcha.config import FlaskEncoder, MyEncoder
 from matcha.web.util2 import *
 # import threading
-from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
+# from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
 
 app = Flask(__name__)
@@ -28,7 +28,7 @@ app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=6000) # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
-diut = DisconnectInactiveUsersThread()
+# diut = DisconnectInactiveUsersThread()
 
 
 # diut.lauchThread(10)
@@ -105,15 +105,11 @@ def accueil():
             if (visit.visitor_id.birthday):
                 info["age"]=calculate_age(visit.visitor_id.birthday)
             else:
-               info["age"]=0
+                info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
             if(visit.isblocked==False):
                 visitors.append(info)
-        notif_list = find_notif_list(us.id)
-        # print(notif_list)
-        # print(len(notif_list))
-        return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching, notif_list=notif_list, notif_nb=len(notif_list))
-    else:
+        return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
         return redirect(url_for('homepage'))   
 
 
@@ -440,22 +436,12 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        print(user)
-        # msgs = DataAccess()fetch('Message',)
-        print(f"\n\n{username}\n\n")
-        print('user_id :', user.id)
-        # print(f"\n\n{session}\n\n")
         room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
-        # print("liste : ", liste)
-        # print("\n\n")
-        notif_list = find_notif_list(user.id)
-        # print(notif_list)
-
+        
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
-                                rooms=room_list,
-                                notif_list=notif_list
+                                rooms=room_list
                                 )
     else:
         return redirect(url_for('homepage'))  
@@ -473,6 +459,8 @@ def add_header(r):
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
 
+
+# mise à jour asynchrone
 @app.route("/ajax/")
 def refresh_notif():
     print("ajax")
@@ -480,8 +468,9 @@ def refresh_notif():
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
         notif_list = find_notif_list(user.id)
-        print('len list : ', len(notif_list))
-        return str(len(notif_list))
+        print('notif list : ', notif_list)
+        json_notif = json.dumps(notif_list)
+        return json_notif
     
 
 ################################################
@@ -571,6 +560,7 @@ def join(data):
            'msgs_list': msgs_json,
            'user_id': user.id, #voir dans template si on peut l'enlever
            'receiver': receiver.user_name,
+           'receiver_id': receiver.id,
           },
         room=data['room']
         )
@@ -579,7 +569,6 @@ def join(data):
 #leave room       
 @socketio.on('leave')
 def leave(data):
-    # print("leave : ",data)
     leave_room(data['room'])
     #enregistrer la date de deconnexion pour les notifications
     send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel

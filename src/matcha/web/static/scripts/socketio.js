@@ -76,6 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('2 ' + data.user_id);
         console.log('3 ' + sessionStorage.getItem("current_user"));
         console.log('4 ' + data.receiver);
+        console.log('5 ' + data.receiver_id);
+
+        // met le nb de message non lu à 0
+        if (document.getElementById("chat-room-receiver-" + data.receiver_id)) {
+            nb_mess = document.getElementById("chat-room-receiver-" + data.receiver_id);
+            nb_mess.innerHTML = 0;
+        }
 
         //envoie la liste des messages à l'utilisateur qui a rejoint la room
         if (sessionStorage.getItem("current_user") == data.username) {
@@ -162,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 msg = `Vous êtes déjà connecté à cette discussion.`;
                 printSysMsg(msg);
             } else {
-                p.removeChild(p.childNodes[3])
+
                 leaveRoom(room);
                 joinRoom(newRoom);
                 room = newRoom;
