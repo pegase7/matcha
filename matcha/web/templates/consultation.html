@@ -94,9 +94,10 @@
     <tr><th>J'aime</th><th>Bloquer</th><th>Faux compte</th><th></th></tr>
   </thead>
   <tbody>
+    {{fake}}
     <tr><td>{% if nb_photo>0 %}<input type="checkbox" name="like" {% if visit.islike==True %}checked="checked"{% endif %}>{% endif %}</td>
     <td><input type="checkbox" name="block" {% if visit.isblocked==True %}checked="checked"{% endif %}></td>
-    <td><input type="checkbox" name="fake" id=""></td>
+    <td><input type="checkbox" name="fake" {% if fake==True %}checked="checked"{% endif %}></td>
     <td><button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Enregistrer</button></td></tr>
     
     {% if liked==True %}<tr><td colspan="4"><strong> M'a liké !!!</strong></td></tr>{% endif %}
@@ -105,12 +106,14 @@
 
 <div id='conteneur'>
   <div id='photo'>
-    <img src={{ph1}} id="i1" alt="" width="200" onclick="affiche(this)"><br><br>
-    <img src={{ph2}} id="i2" alt="" width="100" onclick="affiche(this)"><br><br>
-    <img src={{ph3}} id="i3" alt="" width="100" onclick="affiche(this)"><br><br>
-    <img src={{ph4}} id="i4" alt="" width="100" onclick="affiche(this)"><br><br>
-    <img src={{ph5}} id="i5" alt="" width="100" onclick="affiche(this)"><br><br>
-    </div>
+    {% set count = namespace(value=1) %}
+    {% for photo in photos %}
+      <img src={{photo}}  alt="" 
+      {% if count.value==1 %} width="200" {% else %} width="100" {% endif %}
+      onclick="affiche(this)"><br><br>
+      {% set count.value = count.value + 1 %}
+    {% endfor %}
+  </div>
 
     <div id="myModal" class="modal">
       <span class="close" onclick="ferme()">X</span>
@@ -128,13 +131,13 @@
         Ma présentation :</h3><br>
         {{profil.description}}<br><br>
         <h3>Mes centre d'interets :</h3><br>
-          <div class="colonne"> 
-            <ul>
+          
+            <h3>
               {% for tag in tags %}
-                <li> {{tag}}</li>
+              <span class="badge rounded-pill bg-primary">{{tag}}</span>
               {% endfor %}
-            </ul>
-          </div>
+            </h3>
+          
     </div>
     <div id='carte'>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />

@@ -11,6 +11,7 @@ from matcha.model.Connection import Connection
 from random import *
 from flask import *
 from math import sin, cos, acos, radians
+from matcha.model.Notification import Notification 
 
 class hashit:
     def hashing(self,texte,hash_type):
@@ -34,7 +35,10 @@ def ft_send(unique, nature):
         lien = 'http://127.0.0.1:5000/newpassword/'+unique
     f_time = time.asctime(time.localtime(time.time())).split()
     Fromadd = "matcha@ik.me"
-    Toadd = session['user']['email']   ##  Spécification du destinataire
+    if nature=='fake':
+        Toadd="matcha@ik.me"
+    else:
+        Toadd = session['user']['email']   ##  Spécification du destinataire
     message = MIMEMultipart()    
     message['From'] = Fromadd   
     message['To'] = Toadd 
@@ -47,7 +51,9 @@ def ft_send(unique, nature):
         msg = "Bomjour, merci de suivre ce lien pour réinitialiser votre mot de passe "+ lien
     elif nature == 'fake':
         message['Subject'] = "Declaration de faux compte" 
-        msg = "l'utilisateur"+ user + " a indiqué que le compte "+ fake +' est un faux'
+        user=session['user']['name']
+        fake=unique
+        msg = "l'utilisateur "+ user + " a indiqué que le compte "+ fake +' est un faux'
     message.attach(MIMEText(msg.encode('utf-8'), 'plain', 'utf-8'))  
     serveur = smtplib.SMTP('mail.infomaniak.com', 587)  ## Connexion au serveur sortant 
     serveur.starttls()    ## Spécification de la sécurisation
@@ -249,3 +255,27 @@ def comptage_photo(ph1,ph2,ph3,ph4,ph5):
 def localisation():
     
     return initial_locate
+
+
+def extension_ok(nomfic):
+    # Renvoie True si le fichier possède une extension d'image valide.
+    return '.' in nomfic and nomfic.rsplit('.', 1)[1] in ('jpg', 'jpeg')
+
+
+def listePhoto(person):
+    liste_photo=[]
+    for ph in range(1,6):
+                if os.path.isfile("./static/photo/"+person+str(ph)+".jpg"):
+                    liste_photo.append("/static/photo/"+person+str(ph)+".jpg")
+                else:
+                    liste_photo.append('/static/nophoto.jpg')
+    return liste_photo
+
+
+def notif(sender,receiver,message):
+    notif = Notification()
+    notif.sender_id = sender
+    notif.receiver_id = receiver
+    notif.notif_type = message
+    notif.read_notif = False
+    DataAccess().persist(notif)

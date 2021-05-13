@@ -162,7 +162,7 @@ class DataAccess():
             for record in records:
                 (modelobject, _) = self.populate(record, setjoin[2], 0)
                 objects.append(modelobject)
-        return objects;
+        return objects
 
     def get_model_attr(self, record, field):
         attr = getattr(record, field.name)
@@ -240,7 +240,7 @@ class DataAccess():
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(cmd, parameters)
             if not record is None:
-                updatedrecord = cursor.fetchone()
+                updatedrecord = cursor.fetchone()     
                 i = 0
                 for field in model.get_fields():
                     if field.type.iskey or field.type.iscomputed:

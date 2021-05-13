@@ -12,3 +12,4 @@ class Visit(ModelObject):
   isblocked: BoolField()
   created: DateTimeField(iscomputed=True)
   last_update: DateTimeField(iscomputed=True)
+  isfake: BoolField()
