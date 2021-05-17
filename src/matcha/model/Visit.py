@@ -12,3 +12,4 @@ class Visit(ModelObject):
     visits_number: IntField()
     created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)
+    isfake: BoolField()

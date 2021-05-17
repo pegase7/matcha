@@ -1,6 +1,7 @@
-{% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
+ Skip to content Pull requests Issues Marketplace Explore @WillerLaurent pegase7 / matcha 1 0 0 Code Issues Pull requests Actions Projects Wiki Security Insights matcha/matcha/web/templates/consultation.html Olivier Gasnier gestion erreurs photos+ mail
+faux comptes+ debut bootstrap Latest commit 21f6e0d 4 days ago History 0 contributors 172 lines (155 sloc) 4.78 KB {% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
 <style>
-    #conteneur {
+        #conteneur {
         display: flex;
     }
     
@@ -97,7 +98,6 @@
         color: #bbb;
         text-decoration: none;
         cursor: pointer;
-    }
 </style>
 <h1>Profil de {{profil.user_name}}</h1><br>
 <form method="post">
@@ -113,10 +113,11 @@
             </tr>
         </thead>
         <tbody>
+            {{fake}}
             <tr>
                 <td>{% if nb_photo>0 %}<input type="checkbox" name="like" {% if visit.islike==True %}checked="checked" {% endif %}>{% endif %}</td>
                 <td><input type="checkbox" name="block" {% if visit.isblocked==True %}checked="checked" {% endif %}></td>
-                <td><input type="checkbox" name="fake" id=""></td>
+                <td><input type="checkbox" name="fake" {% if fake==True %}checked="checked" {% endif %}></td>
                 <td><button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Enregistrer</button></td>
             </tr>
 
@@ -130,11 +131,8 @@
 
 <div id='conteneur'>
     <div id='photo'>
-        <img src={{ph1}} id="i1" alt="" width="200" onclick="affiche(this)"><br><br>
-        <img src={{ph2}} id="i2" alt="" width="100" onclick="affiche(this)"><br><br>
-        <img src={{ph3}} id="i3" alt="" width="100" onclick="affiche(this)"><br><br>
-        <img src={{ph4}} id="i4" alt="" width="100" onclick="affiche(this)"><br><br>
-        <img src={{ph5}} id="i5" alt="" width="100" onclick="affiche(this)"><br><br>
+        {% set count = namespace(value=1) %} {% for photo in photos %}
+        <img src={{photo}} alt="" {% if count.value==1 %} width="200" {% else %} width="100" {% endif %} onclick="affiche(this)"><br><br> {% set count.value = count.value + 1 %} {% endfor %}
     </div>
 
     <div id="myModal" class="modal">
@@ -148,17 +146,15 @@
         <h2> Popularité : {{profil.popularity}}</h2>
         <h3>Dernière connection le : {{last_connection}}</h3>
         <h3>Je suis {%if profil.gender=='Male' %}un homme{% else %}{%if profil.gender=='Female' %}une femme {% endif %}{% endif %} {% if profil.orientation==None %}Bi {% else %} {{profil.orientation}} {% endif %}<br> Naissance {{naissance}} <br><br> Ma présentation
-            :
-        </h3><br> {{profil.description}}
+            :</h3><br> {{profil.description}}
         <br><br>
         <h3>Mes centre d'interets :</h3><br>
-        <div class="colonne">
-            <ul>
-                {% for tag in tags %}
-                <li> {{tag}}</li>
-                {% endfor %}
-            </ul>
-        </div>
+
+        <h3>
+            {% for tag in tags %}
+            <span class="badge rounded-pill bg-primary">{{tag}}</span> {% endfor %}
+        </h3>
+
     </div>
     <div id='carte'>
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
@@ -177,7 +173,7 @@
                 {
                     profil.longitude
                 }
-            }], 14);
+            }], 10);
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(carte);
@@ -205,4 +201,4 @@
         </script>
     </div>
 </div>
-{% endblock %}
+{% endblock %} © 2021 GitHub, Inc. Terms Privacy Security Status Docs Contact GitHub Pricing API Training Blog About Loading complete

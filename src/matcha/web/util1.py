@@ -11,6 +11,7 @@ from matcha.model.Connection import Connection
 from random import *
 from flask import *
 from math import sin, cos, acos, radians
+from matcha.model.Notification import Notification
 
 class hashit:
     def hashing(self,texte,hash_type):
@@ -227,3 +228,27 @@ def comptage_photo(ph1,ph2,ph3,ph4,ph5):
     if os.path.isfile('.'+ph5):
         nb=nb +1
     return nb
+
+
+def extension_ok(nomfic):
+    # Renvoie True si le fichier possède une extension d'image valide.
+    return '.' in nomfic and nomfic.rsplit('.', 1)[1] in ('jpg', 'jpeg')
+
+
+def listePhoto(person):
+    liste_photo=[]
+    for ph in range(1,6):
+                if os.path.isfile("./static/photo/"+person+str(ph)+".jpg"):
+                    liste_photo.append("/static/photo/"+person+str(ph)+".jpg")
+                else:
+                    liste_photo.append('/static/nophoto.jpg')
+    return liste_photo
+
+
+def notif(sender,receiver,message):
+    notif = Notification()
+    notif.sender_id = sender
+    notif.receiver_id = receiver
+    notif.notif_type = message
+    notif.read_notif = False
+    DataAccess().persist(notif)

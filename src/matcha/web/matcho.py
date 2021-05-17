@@ -68,22 +68,25 @@ def homepage():
 def photo():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    ph1 = "/static/photo/" + session['user']['name'] + "1.jpg"
-    ph2 = "/static/photo/" + session['user']['name'] + "2.jpg"
-    ph3 = "/static/photo/" + session['user']['name'] + "3.jpg"
-    ph4 = "/static/photo/" + session['user']['name'] + "4.jpg"
-    ph5 = "/static/photo/" + session['user']['name'] + "5.jpg"
-    if request.method == "POST":
+    if request.method=="POST":
+        path = 'static/photo'
         f = request.files['maphoto']
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
-        if request.form.get('bou') == 'raz':
-            os.remove('static/photo/' + photo_name)
-            return render_template('photo.html', ph1=ph1, ph2=ph2, ph3=ph3, ph4=ph4, ph5=ph5)
-        path = 'static/photo'
-        f.save(os.path.join(path, photo_name))     
-    return render_template('photo.html', ph1=ph1, ph2=ph2, ph3=ph3, ph4=ph4, ph5=ph5)
-    
+        if request.form.get('raz')!=None:
+            os.remove('static/photo/'+photo_name)
+            liste_photo=listePhoto(session['user']['name'])
+            return render_template('photo.html',photos=liste_photo)
+        if f:# verification de la présence d'un fichier
+            if extension_ok(f.filename): # on vérifie que son extension est valide 
+                f.save(os.path.join(path, photo_name))
+            else:
+                flash('Seuls les fichier JPG ou JPEG sont autorisés !')
+        else:
+             flash('Aucun fichier choisi !')
+    liste_photo=listePhoto(session['user']['name'])
+    return render_template('photo.html',photos=liste_photo)
+
     
 @app.route('/accueil/')
 def accueil():
@@ -96,6 +99,7 @@ def accueil():
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
             matching=False
         for visit in visits:
+            vi = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id.id), ('visitor_id', us.id)])
             info={}
             info["pseudo"]=visit.visitor_id.user_name
             info["sex"]=visit.visitor_id.gender
@@ -107,9 +111,10 @@ def accueil():
             else:
                 info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
-            if(visit.isblocked==False):
+            if(visit.isblocked==False and vi.isfake==False):
                 visitors.append(info)
         return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+    else:
         return redirect(url_for('homepage'))   
 
 
@@ -126,17 +131,20 @@ def consultation(login):
     dates_c=[]
     for da in date_connect:
         dates_c.append(da.connect_date)
-    b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
-    last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
-    ###########
+    if len(dates_c)>0 :
+        b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
+        last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    else:
+        last_connection=0
     visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
     visited =DataAccess().find('Visit', conditions=[('visited_id', visitor.id), ('visitor_id', us.id)])
-    liked=False
+    liked=fake=False
     if visited:
         liked=visited.islike
     if visit:
         visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
+        fake=visit.isfake
     else:
         visit = Visit()
         visit.visited_id = us.id
@@ -144,8 +152,11 @@ def consultation(login):
         visit.visits_number = 1
         visit.islike=False
         visit.isblocked=False
+        visit.isfake=False
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
+    ############## Notification de la visite ###################
+    notif(visitor.id,us.id,'Visit')
     #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
     us.popularity=len(visits)
     DataAccess().merge(us)
@@ -154,12 +165,8 @@ def consultation(login):
    
     for t in tag:
         tags.append(t.tag)
-    ph1="/static/photo/"+us.user_name+"1.jpg"
-    ph2="/static/photo/"+us.user_name+"2.jpg"
-    ph3="/static/photo/"+us.user_name+"3.jpg"
-    ph4="/static/photo/"+us.user_name+"4.jpg"
-    ph5="/static/photo/"+us.user_name+"5.jpg"
-    nb_photo=comptage_photo(ph1,ph2,ph3,ph4,ph5)
+    liste_photo=listePhoto(us.user_name)
+    nb_photo = 5 - liste_photo.count('/static/nophoto.jpg')
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
@@ -167,6 +174,7 @@ def consultation(login):
     if request.method=="POST":
         like=request.form.get('like')
         block=request.form.get('block')
+        fake=request.form.get('fake')
         if like:
             like=True
         else:
@@ -175,26 +183,28 @@ def consultation(login):
             block=True
         else:
             block=False
-        #fake=request.form.get('fake')
+        if fake:
+            fake=True
+        else:
+            fake=False
         if like != visit.islike:
+            if like==False:
+                notif(visitor.id,us.id,'Dislike')
+            else:
+                notif(visitor.id,us.id,'Like')
             visit.islike = like #modifier le score popularité et envoyer une notification
         if block != visit.isblocked:
             visit.isblocked=block
+        if fake != visit.isfake:
+            visit.isfake=fake
+            if fake==True:
+                ft_send(login,'fake')
         dataAccess.merge(visit)
-    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked)
-
+    return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
 
 @app.route('/test/')
 def test():
     return render_template('test.html')
-
-
-@app.route('/test2/', methods=['GET', 'POST'])
-def test2():
-    if request.method == "POST":
-        a = request.form.get('bou')
-        return a
-    return render_template('test2.html')
 
 
 @app.route('/profil/')
@@ -202,7 +212,10 @@ def profil():
     if "user" not in session:
         return redirect(url_for('homepage')) 
     user = session['user']['name']
-    ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    if os.path.isfile("./static/photo/"+session['user']['name']+"1.jpg"):
+        ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    else:
+        ph1='/static/nophoto.jpg'  
     us = DataAccess().find('Users', conditions=('user_name', user))
     tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))    
     tags=[]
@@ -255,6 +268,10 @@ def recherche():
             longitude=us.longitude
         criteres={}
         criteres['sexe']=request.form.get('sexe')
+        if us.orientation:
+            criteres['orientation']=us.orientation
+        else:
+            criteres['orientation']='Bi'
         criteres['latitude']=latitude
         criteres['longitude']=longitude
         criteres['dist_max']=request.form.get('km')
@@ -264,8 +281,6 @@ def recherche():
         criteres['pop_max']=request.form.get('popmax')
         criteres['interets']=request.form.getlist('interest')
         criteres['id']=us.id
-    ##### Recherche
-        #find_profil(criteres)
         return render_template('resultats.html',candidats=find_profil(criteres))
     return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
 
@@ -301,13 +316,12 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
-        new.latitude = 0
-        new.longitude = 0
+        new.latitude = request.form.get('latitude')
+        new.longitude = request.form.get('longitude')
         new.popularity = 0
         DataAccess().persist(new)
-
         ft_send(lien,'registration')
-        return redirect(url_for('accueil'))
+        return redirect(url_for('homepage'))
     else:
         return render_template('registration.html')
 
@@ -329,6 +343,8 @@ def forgot():
             return render_template('forgot_password.html', rep=rep)
         else:
             lien = lien_unique()
+            mail=us.email
+            session['user']= {'name' : user, 'email' : mail}
             nature = 'password'
             us.confirm = lien
             DataAccess().merge(us)  
@@ -356,10 +372,12 @@ def validation(code):
     if us == None:
         rep = "ce lien n'est pas valable !"
         return render_template('validation.html', rep=rep)
+    
     us.active = True
     us.confirm = None
-    DataAccess().merge(us)       
-    return redirect(url_for('logout'))        
+    DataAccess().merge(us)
+    session.clear()     
+    return redirect(url_for('homepage'))        
 
 
 @app.route('/newpassword/<code>', methods=['GET', 'POST'])
@@ -398,7 +416,6 @@ def profilmodif():
         topics.append(topic.tag)
     for t in tag:
         tags.append(t.tag)
-    ph1="/static/photo/"+session['user']['name']+"1.jpg"
     naissance=(us.birthday)
     latitude=us.latitude
     if latitude == None:
