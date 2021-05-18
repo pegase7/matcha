@@ -3,7 +3,7 @@ from matcha.orm.reflection import ModelObject, metamodelclass, IntField, DateTim
 @dispatcher
 @metamodelclass
 class Room(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     users_ids: ArrayField(arraytype=int, length=2)
     active: BoolField()
     created: DateTimeField(iscomputed=True)

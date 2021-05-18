@@ -73,6 +73,7 @@ def complete_users(users,fake, coordsize, usernames):
     users.birthday = fake.date_between(start_date='-75y', end_date='-18y')
     users.description = None
     users.confirm = None
+    users.popularity = None
 
 def populate():    
     userslist = []
@@ -85,11 +86,13 @@ def populate():
     '''
     for _ in range(1000):
         female = Users()
+        female.is_recommendable = True
         female.gender = 'Female'
         female.first_name = fake.first_name_female()
         complete_users(female, fake, coordsize, usernames)
         userslist.append(female)
         male = Users()
+        male.is_recommendable = True
         male.gender = 'Male'
         male.first_name = fake.first_name_male()
         complete_users(male, fake, coordsize, usernames)

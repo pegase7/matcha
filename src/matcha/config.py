@@ -2,31 +2,16 @@ import json
 from pathlib import Path
 import logging
 from logging import FileHandler
-from datetime import datetime, date
-import decimal
-from matcha.orm.reflection import ModelObject
 
-'''
-Encoder used when deserializing for communication with JavaScript 
-'''
-
-
-class FlaskEncoder(json.JSONEncoder):
-
-    def default(self, o):
-        if isinstance(o, ModelObject):
-            return o.__dict__
-        if isinstance(o, datetime):
-            return o.isoformat()
-        if isinstance(o, date):
-            return str(o)
-        if isinstance(o, decimal.Decimal):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
+print("Import Config")
 
 
 class Config():
     __instance = None
+    ''' Default values '''
+    RAISE_ERROR = False
+    LOGGING_INFO = False
+    LOGGING_ERROR = True
     """
     Check for singleton
     """
@@ -54,11 +39,25 @@ class Config():
                 if 'logging' in self.config:
                     self.configLogging()
             Config.__instance = self
+            ormoptions = Config().config['orm']
+            if ormoptions:
+                if ormoptions['raise_error']:
+                    Config.RAISE_ERROR = True if ormoptions['raise_error'] == True else False
+                else:
+                    Config.RAISE_ERROR = False
+                if ormoptions['logging_info']:
+                    Config.LOGGING_INFO = True if ormoptions['logging_info'] == True else False
+                else:
+                    Config.LOGGING_INFO = False
+                if not ormoptions['logging_error'] is None: 
+                    Config.LOGGING_ERROR = False if ormoptions['logging_error'] == False else True
+                else:
+                    Config.LOGGING_ERROR = True
             
     def configLogging(self):
         jsonlogging = self.config['logging']
         logginglevel = jsonlogging['level'] if 'level' in jsonlogging.keys() else 20
-        loggingformat = jsonlogging['format'] if 'format' in jsonlogging.keys() else '%(asctime)s,%(msecs)d %(levelname)-8s [%(module)s:%(lineno)d] %(message)s'
+        loggingformat = jsonlogging['format'] if 'format' in jsonlogging.keys() else '%(asctime)-19s,%(msecs)-4d %(levelname)-8s [%(module)-15s:%(lineno)-3d] %(message)s'
         loggingdatefmt = jsonlogging['dateFormat'] if 'dateFormat' in jsonlogging.keys() else '%Y-%m-%d:%H:%M:%S'
         
         logging.basicConfig(format=loggingformat, datefmt=loggingdatefmt, level=logginglevel)

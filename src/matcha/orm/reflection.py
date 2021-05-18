@@ -3,7 +3,7 @@ from decimal import Decimal
 import re
 import importlib
 import logging
-
+from matcha.config import Config
 
 '''
 
@@ -21,14 +21,25 @@ class Field:
     def check(self, instance, value):
         return value
     
-    def __error__(self, value, message, instance=None):
+    def __msgerror__(self, value, message, instance=None):
         if not instance is None:
             instance.haserror=True
         return "value '" + str(value) + "' for field '" + self.name + "' " + message
 
-    def __typeerror__(self, value, _type, instance=None):
-        return self.__error__(value, self.name, "bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!", instance)
-
+    def __msgtypeerror__(self, value, _type, instance=None):
+        return self.__msgerror__(value, self.name, "bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!", instance)
+    
+    def __raise_error__(self, error, message):
+        if Config.LOGGING_INFO:
+            logging.info(message)
+        if Config.LOGGING_ERROR:
+            logging.error(message)
+        if Config.RAISE_ERROR:
+            if error:
+                raise error
+            else:
+                raise Exception(message)
+ 
 
 class IntField(Field):
 
@@ -36,11 +47,11 @@ class IntField(Field):
         Field.__init__(self, iscomputed, iskey)
     
     def check(self, instance, value):
-        if value:
+        if not value is None: #Don't forget if value==0, return false
             if isinstance(value, Decimal):
                 value = int(value)
             elif not isinstance(value, int):
-                raise TypeError(instance, self.name, int, value)
+                self.__raise_error__( TypeError(instance, self.name, int, value), "Type Error on field '" + self.name + "' for value:" + value)
         return value
 
 
@@ -52,17 +63,17 @@ class CharField(Field):
     
     def check(self, instance, value):
         if value and not isinstance(value, str):
-            logging.error(self.__typeerror__(value, 'str', instance))
-        if value and len(value) > self.length:
-            logging.error(self.__error__(value, "Maximum length('" + self.length + ") is exceeded!", instance))
+            logging.error(self.__msgtypeerror__(value, 'str', instance))
+        if value and self.length and len(value) > self.length:
+            logging.error(self.__msgerror__(value, "Maximum length('" + self.length + ") is exceeded!", instance))
         return value
 
 
 class TextField(Field):
 
     def check(self, instance, value):
-        if not isinstance(value, str):
-            logging.error(self.__typeerror__(value, 'str', instance))
+        if value and not isinstance(value, str):
+            logging.error(self.__msgtypeerror__(value, 'str', instance))
         return value
 
 
@@ -70,9 +81,9 @@ class EmailField(Field):
     
     def check(self, instance, value):
         if not isinstance(value, str):
-            logging.error(self.__typeerror__(value, 'str', instance))
+            logging.error(self.__msgtypeerror__(value, 'str', instance))
         elif not re.search("^[^@]+@[^@]+\.[^@]+$", value):
-            logging.error(self.__error__(value, "is not a valid email!", instance))
+            logging.error(self.__msgerror__(value, "is not a valid email!", instance))
         return value
 
 
@@ -84,7 +95,7 @@ class EnumField(Field):
     
     def check(self, instance, value):
         if value and value not in self.values:
-            logging.error(self.__error__(value, " is not a authorized value for enum!", instance))
+            logging.error(self.__msgerror__(value, " is not a authorized value for enum!", instance))
         return value
 
 
@@ -94,11 +105,11 @@ class FloatField(Field):
         Field.__init__(self, iscomputed, iskey)
     
     def check(self, instance, value):
-        if value:
+        if not value is None: #Don't forget if value==0, return false
             if isinstance(value, Decimal):
                 value = float(value)
             elif not isinstance(value, float):
-                logging.error(self.__typeerror__(value, 'int', instance))
+                logging.error(self.__msgtypeerror__(value, 'int', instance))
         return value
 
 
@@ -109,7 +120,7 @@ class BoolField(Field):
     
     def check(self, instance, value):
         if value and not isinstance(value, bool):
-            logging.error(self.__typeerror__(value, 'bool', instance))
+            logging.error(self.__msgtypeerror__(value, 'bool', instance))
         return value
 
 
@@ -122,7 +133,7 @@ class DateField(Field):
             return datetime.date(value.year, value.month, value.day)
         else:
             if value and not isinstance(value, date):
-                logging.error(self.__typeerror__(value, 'date', instance))
+                logging.error(self.__msgtypeerror__(value, 'date', instance))
         return value
 
 
@@ -132,8 +143,8 @@ class DateTimeField(Field):
         if isinstance(value, str):
             return datetime.fromisoformat(value)
         else:
-            if not isinstance(value, datetime):
-                logging.error(self.__typeerror__(value, 'datetime', instance))
+            if value and not isinstance(value, datetime):
+                logging.error(self.__msgtypeerror__(value, 'datetime', instance))
             return value
 
 
@@ -146,14 +157,14 @@ class ArrayField(Field):
     
     def check(self, instance, value):
         if not isinstance(value, list):
-            logging.error(self.__typeerror__(value, 'list', instance))
+            logging.error(self.__msgtypeerror__(value, 'list', instance))
             if not self.arraytype is None:
                 for i in value:
                     if not isinstance(i, int):
                         logging.error(self.__typee(value, self.name, str(self.arraytype)))
         if not self.length is None and len(value) != self.length:
-            logging.error(self.__error__(value, "Invalid number of elements'" + self.length + "!", instance))
-            return value
+            logging.error(self.__msgerror__(value, "Invalid number of elements'" + self.length + "!", instance))
+        return value
 
 
 class ManyToOneField(Field):
@@ -161,7 +172,7 @@ class ManyToOneField(Field):
     def __init__(self, iscomputed=False, iskey=False, modelname=None):
         Field.__init__(self, iscomputed, iskey)
         if modelname is None:
-            logging.error(self.__error__(None, "'modelname' attribute must be specified!"))
+            logging.error(self.__msgerror__(None, "'modelname' attribute must be specified!"))
         else:
             self.modelname = modelname
 
@@ -170,7 +181,7 @@ class ListField(Field):
 
     def __init__(self, iscomputed=False, iskey=False, modelname=None, select=None):
         if modelname is None or select is None:
-            logging.error(self.__error__(None, "'modelname' and 'select' attributes must be specified!"))
+            logging.error(self.__msgerror__(None, "'modelname' and 'select' attributes must be specified!"))
         Field.__init__(self, iscomputed, iskey)
         self.modelname = modelname
         self.select = select
@@ -178,7 +189,7 @@ class ListField(Field):
 
     def check(self, instance, value):
         if not isinstance(value, list):
-            logging.error(self.__typeerror__(value, 'list', instance))
+            logging.error(self.__msgtypeerror__(value, 'list', instance))
         return value
 
 
@@ -210,7 +221,8 @@ class ModelObject(object):
         self.haserror = False
         modelclass = ModelDict().get_model_class(self.get_model_name())
         for field in modelclass.get_fields():
-            field.check(self, getattr(self, field.name))
+            if not isinstance(field, ListField):
+                field.check(self, getattr(self, field.name))
         return self.haserror
     
 '''
@@ -349,7 +361,7 @@ def metamodelclass(cls=None):
 
 
 '''
-class Dispatcher is a decorator use on Model Instance in ordder to assume serialization and desrialization
+class Dispatcher is a decorator use on Model Instance in order to assume serialization and deserialization
 '''   
 class _Dispatcher:
 
@@ -368,9 +380,13 @@ class _Dispatcher:
             if modelclass:
                 for field in modelclass.get_fields():
                     if isinstance(field, DateTimeField):
-                        d[field.name] = datetime.fromisoformat(d[field.name])
+                        dt = d[field.name]
+                        if dt:
+                            d[field.name] = datetime.fromisoformat(dt)
                     elif isinstance(field, DateField):
-                        d[field.name] = date.fromisoformat(d[field.name])
+                        dt = d[field.name]
+                        if dt:
+                            d[field.name] = date.fromisoformat(dt)
             obj = self._classes[classname]()
             for name, value in d.items():
                 setattr(obj, name, value)

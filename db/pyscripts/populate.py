@@ -10,15 +10,14 @@ if __name__ == "__main__":
     try:
         populateconfig = Config(configpath='resources/configuration/configPopulate.json').config['populate']
         data_access = DataAccess()
-        psqldir = populateconfig['psqldir']
         data_access.executescript('../sql/1_drop.sql')
         data_access.executescript('../sql/2_create_ddl.sql')
-        if populateconfig['test_data'] == 'faker':
+        if populateconfig['test_data'] != 'faker' or populateconfig['test_data'] == 'both':
+            data_access.executescript('../sql/3_populate.sql')
+        if populateconfig['test_data'] == 'faker' or populateconfig['test_data'] == 'both':
             insert_users.populate()
             men_topic_dict, women_topic_dict = insert_topic.populate()
             insert_users_topic.populate(men_topic_dict, women_topic_dict)
-        else:
-            data_access.executescript('../sql/3_populate.sql')
         data_access.executescript('../sql/4_constraint.sql')
         logging.info('END POPULATE')
     except (Exception) as e:

@@ -1,0 +1,27 @@
+{
+	"postgresql":{
+		"host":"localhost",
+		"database":"matchadb",
+		"user":"matchaadmin",
+		"password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
+		"logginConnection":true
+    },
+	"logging":{
+        "level":10,
+        "dateFormat":"%Y-%m-%d:%H:%M:%S", 
+        "loggers": [
+            { "file_error":"resources/traces/populate_error.log" }
+        ]
+    },
+    "populate":{
+    	"test_data":"both__",
+        "#test_data":"faker",
+    	"threshold":8,
+    	"nb_recommendations":8
+    },
+    "orm":{
+        "raise_error":false,
+        "logging_info":false,
+        "logging_error":true
+    }
+}

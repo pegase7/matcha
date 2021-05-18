@@ -4,12 +4,12 @@ import logging
 from matcha.orm.reflection import ListField, ModelDict, ModelObject
 
 
-"""
-Append member to value whith prefix, returning value
-    if first equal true append firstprefix otherwise otherprefix, then concatenate member
-    return False (for first), concatenated strings   
-"""
 def appendif(first, value, member, firstprefix, otherprefix):
+    """
+    Append member to value whith prefix, returning value
+        if first equal true append firstprefix otherwise otherprefix, then concatenate member
+        return False (for first), concatenated strings   
+    """
     if first:
         return False, ('' if value is None else value) + firstprefix + member
     else:
@@ -27,10 +27,10 @@ class Query():
         self.whereaddon = whereaddon
         self.orderby = orderby
     
-    """
-    get formatted condition from raw condition
-    """
     def get_condition(self, condition):
+        """
+        get formatted condition from raw condition
+        """
         if not type(condition) is tuple:
             condition = ((condition,))
         size = len(condition)
@@ -43,10 +43,10 @@ class Query():
                 raise ValueError("Invalid condition:" + condition)
         return condition
     
-    """
-    Build where clause from conditions
-    """
     def build_where(self, conditions):
+        """
+        Build where clause from conditions
+        """
         if conditions is None:
             return None
         if not type(conditions) is list:
@@ -61,11 +61,11 @@ class Query():
             first, where = appendif(first, where, member, " where ", " and ")
         return where, parameters
     
-    """
-    Build query
-        - return query string and tuple of parameters
-    """
     def build_query(self):
+        """
+        Build query
+            - return query string and tuple of parameters
+        """
         model_name  = self.model.name
         self.suffix = model_name[0]
         query = "select "
@@ -75,9 +75,8 @@ class Query():
         for field in model.get_fields():
             if not isinstance(field, ListField):
                 first, query = appendif(first, query, self.suffix + '.' + field.name, ' ', ', ')
-        """
-        leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
-        """
+        
+        # leftjoin--> 0:fieldName, 1:suffix, 2:join model, 3:ManyToOne field 
         for leftjoin in self.leftjoins:
             field = leftjoin[3]          
             from_clause += " left outer join " + field.modelname + ' ' + leftjoin[1]
@@ -88,14 +87,10 @@ class Query():
                         from_clause += " on " +self.suffix + '.' + leftjoin[0] + ' = ' + leftjoin[1] + '.' + field.name
         query += from_clause
 
-        '''
-        Add conditions
-        '''
+        # Add conditions
         where_clause, parameters = self.build_where(self.conditions)
 
-        '''
-        Add where addon
-        '''
+        # Add where addon
         if not self.whereaddon is None:
             if isinstance(self.whereaddon, str):
                 self.whereaddon = (self.whereaddon, [])
@@ -113,15 +108,12 @@ class Query():
         '''
         if not self.orderby is None:
             query += ' order by ' + self.orderby
-        logging.debug("query:" + query)
         return query, parameters
 
-"""
-    Class DataAccess
-    ----------------
-"""
 class DataAccess():
     """
+        Class DataAccess
+        ----------------
     Singleton DataAccess class provides:
         - populate:     ->    Populate model object from record of result set
         - fetch:        ->    fetch model objects from database with jointures according to conditions and order by clause
@@ -146,12 +138,16 @@ class DataAccess():
         """
         if DataAccess.__instance is None:
             postgresql = Config().config['postgresql']
+            import base64
+            cryptedpassword = postgresql['password']
+            totalpassword = str(base64.b64decode(bytearray(cryptedpassword, "utf8")), "utf8")
+            password = totalpassword[:int((len(totalpassword) - 6) / 2)]
             if 'LoggingConnection' in postgresql:
                 from psycopg2.extras import LoggingConnection
-                DataAccess.__connection = p.connect(connection_factory=LoggingConnection, host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+                DataAccess.__connection = p.connect(connection_factory=LoggingConnection, host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=password)
                 DataAccess.__connection.initialize(logging.getLogger())
             else:
-                DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=postgresql['password'])
+                DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=password)
 
             DataAccess.__instance = object.__new__(cls)
         return DataAccess.__instance
@@ -181,7 +177,6 @@ class DataAccess():
         setjoin--> 0:fieldName, 1:suffix, 2:join model, 3:Set field 
         """
         objects = []
-        logging.debug("Excecute:" + setjoin[3].select)
         with DataAccess.__connection.cursor() as cursor:            
             cursor.execute(setjoin[3].select, (_id,))
             records = cursor.fetchall()
@@ -204,7 +199,6 @@ class DataAccess():
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby):
         query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby).build_query()
         with DataAccess.__connection.cursor() as cursor:
-            print('Query:', query)
             cursor.execute(query, parameters)
             records = cursor.fetchall()
             return records
@@ -267,19 +261,21 @@ class DataAccess():
         return objects[0]
         
     def execute(self, cmd, parameters=None, model=None, record=None, autocommit=True):
-        logging.debug("Excecute:" + cmd)
         with DataAccess.__connection.cursor() as cursor:
-            cursor.execute(cmd, parameters)
+            cursor.execute(cmd, parameters)   
             if not record is None:
                 updatedrecord = cursor.fetchone()
                 i = 0
                 for field in model.get_fields():
-                    if field.iskey or field.iscomputed:
+                    if field.iscomputed:
                         setattr(record,field.name,updatedrecord[i])
                     i += 1
                 returnvalue = record
             else:
-                returnvalue = None
+                if cmd.startswith('select '):
+                    return cursor.fetchall()
+                else:
+                    return None
             if autocommit:
                 self.commit()
             return returnvalue
@@ -288,14 +284,14 @@ class DataAccess():
         """
         Execute sql script contained in file 'filepath'.
         """
-        logging.debug("Excecute script:" + filepath)
+        logging.info("Excecute script:" + filepath)
         with DataAccess.__connection.cursor() as cursor:
             script = open(filepath,'r').read()
             cursor.execute(script)
         
     def merge(self, record, autocommit=True):
+        record.check()
         model, model_name = self.get_model_class(record)
-        print('Model:', type(model))
         model.pre_merge(record)
         cmd = "update " + model_name + " set"
         addon = ' '
@@ -320,7 +316,7 @@ class DataAccess():
         addon = '('
         parameters = tuple()
         for field in model.get_fields():
-            if not field.iskey and not field.iscomputed and not isinstance(field, ListField):
+            if not field.iscomputed and not isinstance(field, ListField):
                 columns += addon + field.name
                 values += addon + '%s'
                 parameters += (self.__get_model_attr(record,field),)
@@ -344,7 +340,6 @@ class DataAccess():
                 cmd += (addon +  '%s')
                 addon = ', '
             cmd += ')'
-            logging.debug("procedure: " + cmd)
             cursor.execute(cmd, parameters)
             if autocommit:
                 self.commit()

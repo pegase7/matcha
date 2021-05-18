@@ -1,7 +1,9 @@
-
 <nav class="navbar navbar-expand-sm bg-light">
+    <!-- Refresh page -->
+    <script src="{{ url_for('static', filename='scripts/refresh_page.js')}}"></script>
+
     <ul class="navbar-nav">
-       
+
         <li class="nav-item">
             <a class="nav-link"> {{session['user']['name']}}</a>
         </li>
@@ -9,7 +11,7 @@
             <a href="{{ url_for('accueil')}}" class="nav-link">Accueil</a>
         </li>
         <li class="nav-item">
-            <a href="{{ url_for('photo')}}" class="nav-link">Mes photos</a>
+            <a href="{{ url_for('photo')}}" class="nav-link" id="MesPhotos">Mes photos</a>
         </li>
         <li class="nav-item">
             <a href="{{ url_for('profil')}}" class="nav-link">Mon profil</a>
@@ -17,9 +19,17 @@
         <li class="nav-item">
             <a href="{{ url_for('recherche')}}" class="nav-link">Recherche</a>
         </li>
-       
+        <li class="nav-item">
+            <a href="{{ url_for('chat')}}" class="nav-link">Messages</a>
+        </li>
+        <li class="nav-item">
+            <span id="nb_messages" class="badge">{{ notif_nb }}</span>
+        </li>
         <li class="nav-item">
             <a href="{{ url_for('logout')}}" class="nav-link">Deconnexion</a>
         </li>
     </ul>
+    <!-- <script src="connect_users.js">
+        sessionStorage.setItem("current_user", "{{session['user']['name']}}");
+    </script> -->
 </nav>

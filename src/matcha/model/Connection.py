@@ -3,7 +3,7 @@ from matcha.orm.reflection import metamodelclass, ModelObject, CharField, IntFie
 @dispatcher
 @metamodelclass
 class Connection(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     users_id: ManyToOneField(modelname='Users')
     ip: CharField()
     connect_date: DateTimeField()

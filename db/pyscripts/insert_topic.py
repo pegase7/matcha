@@ -18,7 +18,6 @@ def populate():
             topics.append(topic)
             topic_dict[topic] = (man, both - man)
     dataAccess = DataAccess()
-    dataAccess.execute('truncate table TOPIC cascade')
     for tag in topics:
         topic = Topic()
         topic.tag = tag

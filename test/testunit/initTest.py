@@ -9,8 +9,11 @@ class InitTestCase(unittest.TestCase):
         data_access = None
         config = None
         try:
-            config = Config()
-            logging.info('Test init database')
+            config = Config(configpath='resources/configuration/configTest.json')
+            ''' logging must be used after config initialization '''
+            logging.info('   +-----------------------------+')
+            logging.info('   | Test init config & database |')
+            logging.info('   +-----------------------------+')
             data_access = DataAccess()
         except:
             self._outcome.result.shouldStop = True # Stop suite test
