@@ -52,11 +52,10 @@
 <br><br><br>
 
 <div class="row">
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph1}} alt="" width="200" onclick="affiche(this)"><br> Photo 1 (profil)</div>
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph2}} alt="" width="200" onclick="affiche(this)"><br>Photo 2</div>
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph3}} alt="" width="200" onclick="affiche(this)"><br>Photo 3</div>
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph4}} alt="" width="200" onclick="affiche(this)"><br>Photo 4</div>
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{ph5}} alt="" width="200" onclick="affiche(this)"><br>Photo 5</div>
+    {% set count = namespace(value=1) %} {% for photo in photos %}
+    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{photo}} alt="" width="200" onclick="affiche(this)"><br> Photo {{count.value}} {% if count.value ==1 %}(profil){% endif %}
+    </div>
+    {% set count.value = count.value + 1 %} {% endfor %}
 </div>
 
 <div id="myModal" class="modal">

@@ -94,12 +94,13 @@ def accueil():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+
+        # print("visits", visits)
         visitors=[]
         matching=True
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
             matching=False
         for visit in visits:
-            vi = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id.id), ('visitor_id', us.id)])
             info={}
             info["pseudo"]=visit.visitor_id.user_name
             info["sex"]=visit.visitor_id.gender
@@ -111,7 +112,10 @@ def accueil():
             else:
                 info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
-            if(visit.isblocked==False and vi.isfake==False):
+            print("visit.isblocked", visit.isblocked)
+            print("vi.isfake", str(visit.isfake))
+
+            if(visit.isblocked==False and visit.isfake==False):
                 visitors.append(info)
         return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
@@ -200,7 +204,23 @@ def consultation(login):
             if fake==True:
                 ft_send(login,'fake')
         dataAccess.merge(visit)
+        
+        ##### creation de la room  ######
+        
+        if visit.islike == True:
+            visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+
+            if visited.islike == True and visited.isblocked == False and visited.isfake == False:
+                room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
+                if room == None:
+                    new_room = Room()
+                    new_room.users_ids = [visited.visited_id, visited.visitor_id]
+                    new_room.active  = True
+                    DataAccess().persist(new_room)
+        #################################
+        
     return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
+
 
 @app.route('/test/')
 def test():
@@ -272,6 +292,7 @@ def recherche():
             criteres['orientation']=us.orientation
         else:
             criteres['orientation']='Bi'
+        criteres['sexe_chercheur']=us.gender
         criteres['latitude']=latitude
         criteres['longitude']=longitude
         criteres['dist_max']=request.form.get('km')
@@ -477,7 +498,7 @@ def add_header(r):
     return r
 
 
-# mise à jour asynchrone
+###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
     print("ajax")

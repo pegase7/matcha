@@ -1,5 +1,4 @@
- Skip to content Pull requests Issues Marketplace Explore @WillerLaurent pegase7 / matcha 1 0 0 Code Issues Pull requests Actions Projects Wiki Security Insights matcha/matcha/web/templates/consultation.html Olivier Gasnier gestion erreurs photos+ mail
-faux comptes+ debut bootstrap Latest commit 21f6e0d 4 days ago History 0 contributors 172 lines (155 sloc) 4.78 KB {% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
+ {% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
 <style>
         #conteneur {
         display: flex;
@@ -146,7 +145,8 @@ faux comptes+ debut bootstrap Latest commit 21f6e0d 4 days ago History 0 contrib
         <h2> Popularité : {{profil.popularity}}</h2>
         <h3>Dernière connection le : {{last_connection}}</h3>
         <h3>Je suis {%if profil.gender=='Male' %}un homme{% else %}{%if profil.gender=='Female' %}une femme {% endif %}{% endif %} {% if profil.orientation==None %}Bi {% else %} {{profil.orientation}} {% endif %}<br> Naissance {{naissance}} <br><br> Ma présentation
-            :</h3><br> {{profil.description}}
+            :
+        </h3><br> {{profil.description}}
         <br><br>
         <h3>Mes centre d'interets :</h3><br>
 
@@ -201,4 +201,4 @@ faux comptes+ debut bootstrap Latest commit 21f6e0d 4 days ago History 0 contrib
         </script>
     </div>
 </div>
-{% endblock %} © 2021 GitHub, Inc. Terms Privacy Security Status Docs Contact GitHub Pricing API Training Blog About Loading complete
+{% endblock %}
