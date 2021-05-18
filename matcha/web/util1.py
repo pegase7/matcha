@@ -23,7 +23,7 @@ class hashit:
 
 def hash_pwd(pwd,login):
     Hash=hashit()
-    pwd=pwd+login[:2] #salage avec le 2 premieres lettres du login
+    pwd=pwd+login[:2] #salage avec les 2 premieres lettres du login
     result_hash=Hash.hashing(pwd,'SHA1')
     return result_hash
 
@@ -126,7 +126,6 @@ def verif_identity(nom,prenom):
     return message
 
 
-
 def distanceGPS(latA, longA, latB, longB):
     """Retourne la distance en km entre les 2 points A et B connus grâce à
        leurs coordonnées GPS.
@@ -225,6 +224,7 @@ def find_profil(criteres):
            # profil_found = sorted(profil_found, key=lambda k: k['age'])
     return profil_found
 
+
 def calculate_age(born):
     today = date.today()
     try: 
@@ -252,11 +252,6 @@ def comptage_photo(ph1,ph2,ph3,ph4,ph5):
     return nb
 
 
-def localisation():
-    
-    return initial_locate
-
-
 def extension_ok(nomfic):
     # Renvoie True si le fichier possède une extension d'image valide.
     return '.' in nomfic and nomfic.rsplit('.', 1)[1] in ('jpg', 'jpeg')
@@ -279,3 +274,18 @@ def notif(sender,receiver,message):
     notif.notif_type = message
     notif.read_notif = False
     DataAccess().persist(notif)
+
+
+def calculPopularite(person):
+    visits=DataAccess().fetch('Visit', conditions=('visited_id',person))
+    nbVisit=nbLike=nbBlock=0
+    for visit in visits:
+        nbVisit+=1
+        if visit.islike:
+            nbLike+=1
+        if visit.isblocked:
+            nbBlock+=1
+    pop=int((nbLike/nbVisit)*100-(nbBlock/nbVisit)*100)
+    if pop<0:
+        pop=0
+    return pop

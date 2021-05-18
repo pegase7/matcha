@@ -1,3 +1,4 @@
+from matcha.web.util1 import *
 from flask import *
 from PIL import Image  
 import os
@@ -6,7 +7,6 @@ from datetime import datetime,timedelta
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from time import localtime, strftime
-from util1 import *
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
 from matcha.model.Visit import Visit
@@ -16,7 +16,6 @@ from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
-#from matcha.config import FlaskEncoder, MyEncoder
 from matcha.web.util2 import *
 # import threading
 #from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
@@ -87,12 +86,13 @@ def accueil():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
         visitors=[]
         matching=True
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
             matching=False
         for visit in visits:
-            vi = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id.id), ('visitor_id', us.id)])
+            #vi = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id.id), ('visitor_id', us.id)])
             info={}
             info["pseudo"]=visit.visitor_id.user_name
             info["sex"]=visit.visitor_id.gender
@@ -104,7 +104,7 @@ def accueil():
             else:
                info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
-            if(visit.isblocked==False and vi.isfake==False):
+            if(visit.isblocked==False and visit.isfake==False):
                 visitors.append(info)
         return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
@@ -150,8 +150,7 @@ def consultation(login):
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
     ############## Notification de la visite ###################
     notif(visitor.id,us.id,'Visit')
-    #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
-    us.popularity=len(visits)
+    us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
     ###########
     tags=[]
@@ -194,11 +193,6 @@ def consultation(login):
                 ft_send(login,'fake')
         dataAccess.merge(visit)
     return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
-
-
-@app.route('/test/')
-def test():
-   return render_template('test.html')
 
 
 @app.route('/profil/')
@@ -251,6 +245,8 @@ def recherche():
             sex_to_find="Female"
         else:
             sex_to_find="Male"
+    latitude=us.latitude
+    longitude=us.longitude
     ##### Criteres de recherches
     if request.method=="POST":
         coordonnee=request.form.get('longlat')
@@ -277,7 +273,7 @@ def recherche():
         criteres['interets']=request.form.getlist('interest')
         criteres['id']=us.id
         return render_template('resultats.html',candidats=find_profil(criteres))
-    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
+    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find, latitude=latitude,longitude=longitude)
 
 
 @app.route('/registration/',methods=['GET', 'POST'])

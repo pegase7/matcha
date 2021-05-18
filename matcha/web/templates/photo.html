@@ -47,11 +47,11 @@ img{
 <br>
 <h1>Mes photos</h1>
 <br><br><br>
-
+<div class="container-fluid">
 <div class="row">
   {% set count = namespace(value=1) %}
 {% for photo in photos %}
-    <div class="col-12 col-sm-4 col-md-3 col-lg"><img src={{photo}} alt="" width="200" onclick="affiche(this)"><br> Photo {{count.value}} 
+    <div class="col-xl col-sm-12 col-md-6 col-lg-3"><img src={{photo}} alt="" width="248" onclick="affiche(this)"><br> Photo {{count.value}} 
     {% if count.value ==1 %}(profil){% endif %}
     </div>
     {% set count.value = count.value + 1 %}
@@ -88,7 +88,7 @@ img{
     <button type="submit" class="btn btn-primary btn-lg mb-2" name='raz'>effacer la photo</button>
     
 </form>
-
+</div>
 
 <script>
     function refresh(){

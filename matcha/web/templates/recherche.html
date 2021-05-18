@@ -37,16 +37,16 @@
     }
     .contenu {
     min-width: 600px;
-    height: 400px;
+    height: 600px;
     }
 
     .checkbox_box{
-        width: 600px;
+        /* width: 600px; */
     column-width: 120px;
     /* flex-grow: 2; */
     height: 500px;
     
-    /* overflow:scroll; */
+     /* overflow:scroll; */
     }
     #map {
         /* height: 500px; */
@@ -57,36 +57,34 @@
 <h1>Je recherche... </h1>
 <br><br>
 <div class="conteneur">
-<div class="contenu">
-<form method="post" >
-  <div>
-    <input type="radio" id="Male" name="sexe" value="Male" {% if sex_to_find=='Male' %} checked {% endif %}>
-    <label for="Male">un homme</label>
-    <input type="radio" id="Female" name="sexe" value="Female" {% if sex_to_find=='Female' %} checked {% endif %}>
-    <label for="Female">une femme</label>
-  </div><br>
-  <table>
-    <tr><td>Age compris entre </td><td><input type="number" name="agemin" min="18" max="110" size =8/> et  <input type="number" name="agemax" min="18" max="110" size =8 /></td></tr>
-    <tr><td>Popularite  entre </td><td><input type="number" name="popmin" min="0" max="100" /> et  <input type="number" name="popmax" min="0" max="100" /></td></tr> 
-  </table>  
-    <p>Localisation <input type="hidden" name="longlat" id="coor" visible =false> dans un rayon de <input type="number" name='km' value =20 min="0" max="20000" >kms autour de votre position, <br> ou bien autour de la ville choisie sur la carte</p>
-<br>
-<strong>Centres d'interets :</strong><br><br>
+  <div class="contenu">
+    <form method="post" >
+      <div>
+        <input type="radio" id="Male" name="sexe" value="Male" {% if sex_to_find=='Male' %} checked {% endif %}>
+        <label for="Male">un homme</label>
+        <input type="radio" id="Female" name="sexe" value="Female" {% if sex_to_find=='Female' %} checked {% endif %}>
+        <label for="Female">une femme</label>
+      </div><br>
+      <table>
+        <tr><td>Age compris entre </td><td><input type="number" name="agemin" min="18" max="110" size =8/> et  <input type="number" name="agemax" min="18" max="110" size =8 /></td></tr>
+        <tr><td>Popularite  entre </td><td><input type="number" name="popmin" min="0" max="100" /> et  <input type="number" name="popmax" min="0" max="100" /></td></tr> 
+      </table>  
+        <p>Localisation <input type="hidden" name="longlat" id="coor" visible =false> dans un rayon de <input type="number" name='km' value =20 min="0" max="20000" >kms autour de votre position, <br> ou bien autour de la ville choisie sur la carte</p>
+    <br><strong>Centres d'interets :</strong><br><br>
+      <div class="checkbox_box">
+          <fieldset>
+          {% for topic in topics %}
+            <input type="checkbox" id={{topic}} name="interest" value={{topic}} /><label for={{topic}}>{{topic}}</label><br>
+          {% endfor %}
+        </fieldset>
+      </div>
+    <button type="submit" class="btn btn-primary btn-lg mb-2" >Chercher</button>
+    </form>
+  </div><div id="map" class="contenu">
 
-<div class="checkbox_box">
-    <fieldset>
-    {% for topic in topics %}
-      <input type="checkbox" id={{topic}} name="interest" value={{topic}} /><label for={{topic}}>{{topic}}</label><br>
-    {% endfor %}
-  </div>
-
-</fieldset>
-<button type="submit" class="btn btn-primary btn-lg mb-2" >Chercher</button>
-</form></div>
-<div id="map" class="contenu"></div>
 </div>
     <script>
-      var map = L.map("map").setView([46.10, 3.6764], 7);
+      var map = L.map("map").setView([{{latitude}},{{longitude}}], 9);
       var tiles = L.esri.basemapLayer("Streets").addTo(map);
 
       // create the geocoding control and add it to the map
