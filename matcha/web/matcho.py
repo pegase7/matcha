@@ -192,6 +192,19 @@ def consultation(login):
             if fake==True:
                 ft_send(login,'fake')
         dataAccess.merge(visit)
+        ##### creation de la room  ######
+        
+        if visit.islike == True:
+            visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+
+            if visited.islike == True and visited.isblocked == False and visited.isfake == False:
+                room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
+                if room == None:
+                    new_room = Room()
+                    new_room.users_ids = [visited.visited_id, visited.visitor_id]
+                    new_room.active  = True
+                    DataAccess().persist(new_room)
+        #################################
     return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
 
 
@@ -442,22 +455,12 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        print(user)
-        # msgs = DataAccess()fetch('Message',)
-        print(f"\n\n{username}\n\n")
-        print('user_id :', user.id)
-        # print(f"\n\n{session}\n\n")
         room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
-        # print("liste : ", liste)
-        # print("\n\n")
-        notif_list = find_notif_list(user.id)
-        # print(notif_list)
-
+        
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
-                                rooms=room_list,
-                                notif_list=notif_list
+                                rooms=room_list
                                 )
     else:
         return redirect(url_for('homepage'))  
@@ -474,7 +477,7 @@ def add_header(r):
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
 
-
+###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
     print("ajax")
@@ -482,8 +485,9 @@ def refresh_notif():
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
         notif_list = find_notif_list(user.id)
-        print('len list : ', len(notif_list))
-        return str(len(notif_list))
+        print('notif list : ', notif_list)
+        json_notif = json.dumps(notif_list)
+        return json_notif
 
 
 
@@ -574,6 +578,7 @@ def join(data):
            'msgs_list': msgs_json,
            'user_id': user.id, #voir dans template si on peut l'enlever
            'receiver': receiver.user_name,
+           'receiver_id': receiver.id,
           },
         room=data['room']
         )
@@ -582,7 +587,6 @@ def join(data):
 #leave room       
 @socketio.on('leave')
 def leave(data):
-    # print("leave : ",data)
     leave_room(data['room'])
     #enregistrer la date de deconnexion pour les notifications
     send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel

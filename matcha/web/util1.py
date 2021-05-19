@@ -213,15 +213,18 @@ def find_profil(criteres):
             else:
                 pop=0
             if criteres['pop_min']=="" and criteres['pop_max']=="":
-                info['popularity']=user.popularity
                 ok=1
             else:
                 if pop<int(criteres['pop_min']) or pop >int(criteres['pop_max']):
                     ok=0
+            info['popularity']=user.popularity
         #Selection du user
         if ok==1:
             profil_found.append(info)
            # profil_found = sorted(profil_found, key=lambda k: k['age'])
+        print("#############################################################")
+        print(profil_found)
+        print("#############################################################")
     return profil_found
 
 

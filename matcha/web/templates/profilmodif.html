@@ -105,7 +105,7 @@
     <div id="macarte" style="width:80%; height:100%"></div>
   
     <script>
-      var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 10);
+      var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 11);
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(carte);

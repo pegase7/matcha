@@ -37,6 +37,7 @@
 <h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
 <h3> Popularité : {{pop}} </h3><br>
 <br>
+{%if visitors %}
 <h3>Qui a consulté mon profil ?</h3>
 <table>
     <thead>
@@ -50,6 +51,7 @@
             <th>A liké</th>
         </tr>
     </thead>
+
     <tbody>
 
         {% for visitor in visitors %}
@@ -66,7 +68,7 @@
 
     </tbody>
 </table>
-
+{% endif %}
 <br><br>
 <div>
     <script>

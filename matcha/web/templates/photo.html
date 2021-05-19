@@ -51,7 +51,7 @@ img{
 <div class="row">
   {% set count = namespace(value=1) %}
 {% for photo in photos %}
-    <div class="col-xl col-sm-12 col-md-6 col-lg-3"><img src={{photo}} alt="" width="248" onclick="affiche(this)"><br> Photo {{count.value}} 
+    <div class="col-xl col-sm-12 col-md-6 col-lg-3"><img src={{photo}} alt="" width="248"  class="rounded img-fluid" onclick="affiche(this)"><br> Photo {{count.value}} 
     {% if count.value ==1 %}(profil){% endif %}
     </div>
     {% set count.value = count.value + 1 %}
