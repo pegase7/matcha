@@ -27,6 +27,9 @@ app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=6000) # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
+# SESSION_COOKIE_SECURE=True,
+# SESSION_COOKIE_HTTPONLY=True,
+# SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
 # diut = DisconnectInactiveUsersThread()
 
@@ -218,7 +221,8 @@ def consultation(login):
                     new_room.active  = True
                     DataAccess().persist(new_room)
         #################################
-        
+        ###### mettre room active == false si like == false || block == true || fake == true #############
+
     return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
 
 
@@ -609,42 +613,9 @@ def join(data):
 def leave(data):
     leave_room(data['room'])
     #enregistrer la date de deconnexion pour les notifications
-    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel
+    send({""}, room=data['room']) #msg optionnel
     
     
-@socketio.on('like')  # l'evenement 'like'  arrive ici
-def like(data):
-    # find users id
-    user1 = DataAccess().find('Users', conditions=('user_name', data['user1']))
-    user2 = DataAccess().find('Users', conditions=('user_name', data['user2']))
-    print(f"\n\n{user1.id}\n\n") 
-    print(f"\n\n{user2.id}\n\n")
-    print(f"\n\n{data}\n\n")
-    
-    # search if room already exists
-    # users_room = DataAccess().find('Users_room', conditions=[('master_id', user1.id),('slave_id', user2.id)], joins=[('room_id')])
-    # print("users_room : ", users_room.room_id, users_room.master_id, users_room.slave_id )
-    
-    # create new room
-    # newroom = Room()
-    # newroom.users_ids = [user1.id, user2.id]
-    # newroom.active = False
-    # DataAccess().persist(newroom)
-    # print("newroom_id : ",newroom.id)
-    
-    # join the newroom
-    # user1.join_room(newroom)
-    # user2.join_room(newroom)
-    # emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
-    
-# @ socketio.on('create')
-# def create(data):
-# username = data['username']
-# room = data['room_name']
-# join_room(data[room])
-# send(username + ' has left the room.', room=room)
-
-
 # Lance les serveurs
 if __name__ == '__main__':
     socketio.run(app)

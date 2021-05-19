@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById("chat-room-receiver-" + data.receiver_id)) {
             nb_mess = document.getElementById("chat-room-receiver-" + data.receiver_id);
             nb_mess.innerHTML = 0;
+            nb_mess.style.display = 'none';
+            // nb_mess
         }
 
         //envoie la liste des messages à l'utilisateur qui a rejoint la room
@@ -121,42 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // display like, recupere l'evenement 'afterlike' envoye du server
-    socket.on('afterlike', data => {
-        const username = data['username'];
-        console.log(data['username']);
-        console.log('toto');
-        console.log(sessionStorage.getItem("current_user"))
-        if (sessionStorage.getItem("current_user") != username) {
-            const p = document.createElement('p');
-            const btn = document.createElement('button');
-            const btn_text = document.createTextNode("Repondre au like");
-            btn.appendChild(btn_text);
-            // btn.value = 'like_response';
-            p.innerHTML = username + " vous a envoye un like";
-            document.querySelector('#display-like-section').append(p);
-            document.querySelector('#display-like-section').append(btn); //remplacer le btn like par ce nouveau btn
-        }
-    });
-    //voir comment recuperer l'evenement 'like' envoyé par le serveur
-
-
     socket.on('login', data => {
         console.log('socket login : ' + data['msg'])
     });
-
-
-    //send like
-    const buttons = document.querySelectorAll('.send_like');
-    for (const button of buttons) {
-        button.onclick = () => {
-            console.log('send like');
-            console.log(button.value);
-            console.log(username);
-            socket.emit('like', { 'user1': username, 'user2': button.value })
-        }
-    }
-
 
     // Room selection
     document.querySelectorAll('.select-room').forEach(p => {
@@ -176,12 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
-
-    // Send like
-    function sendLike(room) {
-        ///socket.emit('like', { 'username': username, 'room': room })
-    }
 
     // Leave room
     function leaveRoom(room) {
@@ -206,10 +169,4 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#display-message-section').append(p);
     }
 
-    //Print like message
-    function printLikeMsg(msg) {
-        const p = document.createElement('p');
-        p.innerHTML = msg;
-        document.querySelector("#display-like-section").append(p);
-    }
 })

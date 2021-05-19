@@ -22,7 +22,7 @@
                 {% for room in rooms %} {% if room.slave_id == user_id %}
                 <li class="select-room" value="{{ room.room_id }}">
                     <span>{{ room.master_id.user_name }}</span>
-                    <span id="chat-room-receiver-{{ room.master_id.id }}" class="badge"></span>
+                    <span id="chat-room-receiver-{{ room.master_id.id }}" class="badge badge-pill badge-warning count-notif"></span>
                     <p class="state-connection">Déconnecté</p>
                 </li>
                 {% endif %} {% endfor %}

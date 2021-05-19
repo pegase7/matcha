@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm bg-light">
+<nav class="navbar navbar-expand-md bg-light">
     <!-- Refresh page -->
     <script src="{{ url_for('static', filename='scripts/refresh_page.js')}}"></script>
 
@@ -20,10 +20,16 @@
             <a href="{{ url_for('recherche')}}" class="nav-link">Recherche</a>
         </li>
         <li class="nav-item">
-            <a href="{{ url_for('chat')}}" class="nav-link">Messages</a>
+            <a href="{{ url_for('chat')}}" class="nav-link">Messages
+            <span id="nb_messages" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
-            <span id="nb_messages" class="badge"></span>
+            <a href="" class="nav-link">Likes  
+            <span id="nb_likes" class="badge badge-pill badge-warning count-notif"></span></a>
+        </li>
+        <li class="nav-item">
+            <a href="" class="nav-link">Visites
+                    <span id="nb_visites" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
             <a href="{{ url_for('logout')}}" class="nav-link">Deconnexion</a>

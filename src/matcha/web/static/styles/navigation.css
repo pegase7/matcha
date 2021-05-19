@@ -1,11 +1,30 @@
-.nav-item .badge {
+/* .nav-item .badge {
     /* position: absolute; */
-    top: -10px;
-    right: -10px;
+
+
+/* top: -10px; */
+
+
+/* right: -10px;
     padding: 5px 10px;
     border-radius: 50%;
     background-color: red;
-    color: white;
+    color: white; */
+
+
+/* } */
+
+.count-notif {
+    vertical-align: middle;
+    margin-left: -15px;
+    margin-top: -20px;
+    font-size: 13px;
+    padding: 15px 10px;
+    background-color: red;
+}
+
+.badge-warning {
+    padding: 3px;
 }
 
 
