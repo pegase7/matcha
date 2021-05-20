@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, ManyToOneField, dispatcher
+from matcha.orm.reflection import metamodelclass, ModelObject, ManyToOneField, dispatcher
 
-@dataclass(init=False)
+@metamodelclass
 @dispatcher
 class Users_room(ModelObject):
     room_id: ManyToOneField(modelname='Room', iskey=True)

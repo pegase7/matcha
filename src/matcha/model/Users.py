@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, CharField, IntField, DateField, DateTimeField, EmailField, BoolField, EnumField, TextField, ListField, FloatField, dispatcher
+from matcha.orm.reflection import metamodelclass, ModelObject, CharField, IntField, DateField, DateTimeField, EmailField, BoolField, EnumField, TextField, ListField, FloatField, dispatcher
 
-@dataclass(init=False)
+@metamodelclass
 @dispatcher
 class Users(ModelObject):
     id: IntField(iskey=True)

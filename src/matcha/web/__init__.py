@@ -10,7 +10,6 @@ from datetime import datetime
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from time import localtime, strftime
-from matcha.web.hashage import *
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
 from matcha.model.Connection import Connection
@@ -18,7 +17,6 @@ import logging
 from pickle import NONE
 from matcha.model.Room import Room
 from matcha.model.Message import Message
-from matcha.config import FlaskEncoder, MyEncoder
 from flask import render_template
 # from routes import *
 # from matcha.web import routes

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, DateTimeField, IntField, ManyToOneField, EnumField, BoolField, dispatcher
+from matcha.orm.reflection import metamodelclass, ModelObject, DateTimeField, IntField, ManyToOneField, EnumField, BoolField, dispatcher
 
-@dataclass(init=False)
+@metamodelclass
 @dispatcher
 class Notification(ModelObject):
 	id: IntField(iskey=True)

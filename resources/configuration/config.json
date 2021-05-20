@@ -3,6 +3,19 @@
         "host": "localhost",
         "database": "matchadb",
         "user": "lwiller",
-        "password": "lwiller"
+        "password": "bHdpbGxlcnNhbGFnZWx3aWxsZXI=",
+        "logginConnection": true
+    },
+   "logging":{
+        "level":10,
+        "dateFormat":"%Y-%m-%d:%H:%M:%S", 
+        "loggers": [
+            { "file_error":"resources/traces/standard_error.log" }
+        ]
+    },
+    "orm":{
+        "raise_error":false,
+        "logging_info":false,
+        "logging_error":true
     }
 }

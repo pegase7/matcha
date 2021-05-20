@@ -15,8 +15,8 @@ from matcha.model.Visit import Visit
 from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
-from matcha.model.Notification import Notification 
-from matcha.config import FlaskEncoder, MyEncoder
+from matcha.model.Notification import Notification
+from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
 # import threading
 # from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
@@ -509,9 +509,10 @@ def refresh_notif():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        notif_list = find_notif_list(user.id)
+        notif_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), ('read_notif', False)],
+                                                        joins=[('sender_id','US')])
         print('notif list : ', notif_list)
-        json_notif = json.dumps(notif_list)
+        json_notif = json.dumps(notif_list, default=dispatcher.encoder_default)
         return json_notif
     
 
