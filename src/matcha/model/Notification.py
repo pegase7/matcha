@@ -4,7 +4,7 @@ from matcha.orm.reflection import metamodelclass, ModelObject, DateTimeField, In
 @metamodelclass
 @dispatcher
 class Notification(ModelObject):
-	id: IntField(iskey=True)
+	id: IntField(iskey=True,  iscomputed=True)
 	sender_id: ManyToOneField(modelname='Users')
 	receiver_id: ManyToOneField(modelname='Users')
 	notif_type: EnumField(values=['Like', 'Visit', 'Message', 'Like_too', 'Dislike'])

@@ -19,6 +19,20 @@ alter type mpaa_orientation owner to MATCHAADMIN;
 
 
 ---
+--- type mpaa_notif_type
+---
+create type mpaa_notif_type as enum (
+    'Like',
+    'Visit',
+    'Message',
+    'Like_too',
+    'Dislike'
+    );
+alter type mpaa_notif_type owner to MATCHAADMIN;
+
+
+
+---
 --- sequence USERS_ID_SEQ
 ---
 create sequence USERS_ID_SEQ increment by 1 cache 1;
@@ -28,41 +42,52 @@ alter table USERS_ID_SEQ owner to MATCHAADMIN;
 --- table USERS
 ---
 create table USERS (
-    id			integer DEFAULT nextval('USERS_ID_SEQ'::regclass) NOT NULL,
-    first_name	character varying(45) NOT NULL,
-    last_name	character varying(45) NOT NULL,
-    user_name	character varying(45) NOT NULL,
-    password	character varying(45) NOT NULL,
-    description text,
-    email		character varying(45),
-    active		boolean DEFAULT False NOT NULL,
-    confirm		character varying(20),
-    gender		mpaa_gender DEFAULT 'Female'::mpaa_gender,
-    orientation	mpaa_orientation  DEFAULT 'Hetero'::mpaa_orientation,
-    birthday	date,
-    latitude	numeric(8,5),
-    longitude 	numeric(8,5),
-    popularity	numeric(3),
-    created		timestamp without time zone DEFAULT now() NOT NULL,
-    last_update timestamp without time zone DEFAULT now() NOT NULL
+    id                  integer DEFAULT nextval('USERS_ID_SEQ'::regclass) NOT NULL,
+    first_name          character varying(45) NOT NULL,
+    last_name           character varying(45) NOT NULL,
+    user_name           character varying(45) NOT NULL,
+    password            character varying(45) NOT NULL,
+    description         text,
+    email               character varying(45),
+    active		        boolean DEFAULT False NOT NULL,
+    is_recommendable    boolean DEFAULT False NOT NULL,
+    confirm             character varying(20),
+    gender              mpaa_gender,
+    orientation         mpaa_orientation,
+    birthday            date,
+    latitude            numeric(8,5),
+    longitude           numeric(8,5),
+    popularity          numeric(3) DEFAULT -1 NOT NULL,
+    created             timestamp without time zone DEFAULT now() NOT NULL,
+    last_update         timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS owner to MATCHAADMIN;
 
-create table USERS_RECOMMANDATION (
+
+
+---
+--- sequence USERS_RECOMMENDATION_ID_SEQ
+---
+create sequence USERS_RECOMMENDATION_ID_SEQ increment by 1 cache 1;
+alter table USERS_RECOMMENDATION_ID_SEQ owner to MATCHAADMIN;
+
+---
+--- table USERS_RECOMMENDATION
+---
+create table USERS_RECOMMENDATION (
+    id              integer DEFAULT nextval('USERS_RECOMMENDATION_ID_SEQ'::regclass) NOT NULL,
     sender_id		integer NOT NULL,
     receiver_id		integer NOT NULL,
-    islike			boolean,
-    isblocked		boolean,
     age_diff		numeric(4,2),
     distance		numeric(9,2),
     dist_ratio		numeric(2),
     topics_ratio	numeric(9,2),
-    nb_consult		numeric(9),
-    created			timestamp without time zone DEFAULT now() NOT NULL,
-    last_consult 	timestamp without time zone DEFAULT now() NOT NULL,    
+    last_consult 	timestamp,    
+    is_rejected     boolean DEFAULT False NOT NULL,
+    created         timestamp without time zone DEFAULT now() NOT NULL,
     last_update 	timestamp without time zone DEFAULT now() NOT NULL
 );
-alter table USERS_RECOMMANDATION owner to MATCHAADMIN;
+alter table USERS_RECOMMENDATION owner to MATCHAADMIN;
 
 
 
@@ -83,7 +108,6 @@ create table ROOM (
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table ROOM owner to MATCHAADMIN;
-
 
 
 
@@ -120,8 +144,6 @@ create table MESSAGE (
     created		timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table MESSAGE owner to MATCHAADMIN;
-
-
   
 
 
@@ -135,6 +157,7 @@ create table TOPIC(
 alter table TOPIC owner to MATCHAADMIN;
 
 
+
 ---
 --- table USERS_TOPIC
 ---
@@ -143,6 +166,7 @@ create table USERS_TOPIC(
     tag			character varying(45) NOT NULL
 );
 alter table USERS_TOPIC owner to MATCHAADMIN;
+
 
 
 ---
@@ -158,11 +182,37 @@ create table VISIT (
     id				integer DEFAULT nextval('VISIT_ID_SEQ'::regclass) NOT NULL,
     visited_id		integer not null,
     visitor_id		integer not null,
-    visit_number	int,
+    visits_number	int,
+    islike          boolean DEFAULT FALSE,
+    isblocked       boolean DEFAULT FALSE,
+    isfake          boolean DEFAULT FALSE,
     created		timestamp without time zone DEFAULT now() NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table VISIT owner to MATCHAADMIN;
+
+
+
+---
+--- sequence NOTIFICATION_ID_SEQ
+---
+create sequence NOTIFICATION_ID_SEQ increment by 1 cache 1;
+alter table NOTIFICATION_ID_SEQ owner to MATCHAADMIN;
+
+---
+--- table NOTIFICATION
+---
+create table NOTIFICATION (
+    id          integer DEFAULT nextval('NOTIFICATION_ID_SEQ'::regclass) NOT NULL,
+    sender_id   integer NOT NULL,
+    receiver_id integer NOT NULL,
+    notif_type  mpaa_notif_type  NOT NULL,
+    read_notif  boolean DEFAULT False NOT NULL,
+    created     timestamp without time zone DEFAULT now() NOT NULL
+);
+alter table NOTIFICATION owner to MATCHAADMIN;
+
+
 
 ---
 --- sequence CONNECTION_ID_SEQ
@@ -181,6 +231,11 @@ create table CONNECTION (
     disconnect_date	timestamp without time zone
 );
 alter table CONNECTION owner to MATCHAADMIN;
+
+
+
+
+
 
 ---
 --- Create Trigger on ROOM to automatically insert/delete rows in USERS_ROOM when inserting/deleting rows
@@ -224,3 +279,5 @@ create or replace procedure INSERT_TOPICS(usersid int, topic_array  text[]) AS $
 	end;
     $$ language plpgsql;
 alter procedure INSERT_TOPICS owner to MATCHAADMIN;
+
+commit;

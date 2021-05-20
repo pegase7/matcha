@@ -4,7 +4,7 @@ from matcha.orm.reflection import metamodelclass, ModelObject, ManyToOneField, I
 @metamodelclass
 @dispatcher
 class Message(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     room_id: ManyToOneField(modelname='Room')
     sender_id: ManyToOneField(modelname='Users')
     chat: TextField()

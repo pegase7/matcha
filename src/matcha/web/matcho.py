@@ -584,7 +584,7 @@ def join(data):
     # print(data['username'])
     # print(user.id)
     # print("list msgs = ")
-    msgs_json = json.dumps(msgs)
+    msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
     # mise a jour des notifs 'message' a true (concernant cette room)
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
@@ -613,8 +613,10 @@ def join(data):
 @socketio.on('leave')
 def leave(data):
     leave_room(data['room'])
+    msg = ""
+    msg_json = json.dumps(msg, default=dispatcher.encoder_default)
     #enregistrer la date de deconnexion pour les notifications
-    send({""}, room=data['room']) #msg optionnel
+    send({msg_json}, room=data['room']) #msg optionnel
     
     
 # Lance les serveurs

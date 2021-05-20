@@ -4,7 +4,7 @@ from matcha.orm.reflection import metamodelclass, ModelObject, CharField, IntFie
 @metamodelclass
 @dispatcher
 class Users(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     first_name: CharField(length=45)
     last_name: CharField(length=45)
     user_name: CharField(length=45)
