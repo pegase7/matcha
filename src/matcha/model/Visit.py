@@ -4,7 +4,7 @@ from matcha.orm.reflection import metamodelclass, ModelObject, IntField, DateTim
 @metamodelclass
 @dispatcher
 class Visit(ModelObject):
-    id: IntField(iskey=True, scomputed=True)
+    id: IntField(iskey=True, iscomputed=True)
     visited_id: ManyToOneField(modelname='Users')
     visitor_id: ManyToOneField(modelname='Users')
     islike: BoolField()
