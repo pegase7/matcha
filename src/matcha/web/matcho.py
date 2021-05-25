@@ -478,8 +478,10 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
-        
+        room_list = DataAccess().fetch('Users_room', 
+                                       conditions=[('R.active', True), ('U.slave_id', user.id)], 
+                                       joins=[('master_id', 'US'), ('room_id', 'R')])
+        print('room_list', *room_list)
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
@@ -511,7 +513,7 @@ def refresh_notif():
         user = DataAccess().find('Users', conditions=('user_name', username))
         notif_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), ('read_notif', False)],
                                                         joins=[('sender_id','US')])
-        print('notif list : ', notif_list)
+        # print('notif list : ', *notif_list)
         json_notif = json.dumps(notif_list, default=dispatcher.encoder_default)
         return json_notif
     
