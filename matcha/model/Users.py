@@ -1,10 +1,10 @@
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, CharField, IntField, DateField, DateTimeField, EmailField, BoolField, EnumField, TextField, ListField, FloatField, dispatcher
+# from dataclasses import dataclass
+from matcha.orm.reflection import metamodelclass, ModelObject, CharField, IntField, DateField, DateTimeField, EmailField, BoolField, EnumField, TextField, ListField, FloatField, dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Users(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     first_name: CharField(length=45)
     last_name: CharField(length=45)
     user_name: CharField(length=45)
@@ -12,6 +12,7 @@ class Users(ModelObject):
     description: TextField()
     email: EmailField()
     active: BoolField()
+    is_recommendable: BoolField()
     confirm: CharField(length=20)
     gender: EnumField(values=['Male', 'Female'])
     orientation: EnumField(values=['Hetero', 'Homo', 'Bi'])
@@ -27,8 +28,4 @@ class Users(ModelObject):
     asvisiteds: ListField(modelname='Visit', select='select V.* from VISIT as V where visited_id = %s order by v.last_update')
     asvisitors: ListField(modelname='Visit', select='select V.* from VISIT as V where visitor_id = %s order by v.last_update')
     messages: ListField(modelname='Message', select='select M.* from MESSAGE as M where sender_id = %s order by M.created')
-# 
-#     def __init__(self):
-#         self.connections = []
-#         self.topics = []
-#         self.rooms = []
+    

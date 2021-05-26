@@ -1,9 +1,8 @@
 
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, ManyToOneField, dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, ManyToOneField, dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Users_topic(ModelObject):
-    users_id: ManyToOneField(modelname='Users')
-    tag: ManyToOneField(modelname='Tag')
+    users_id: ManyToOneField(modelname='Users', iskey=True)
+    tag: ManyToOneField(modelname='Topic', iskey=True)

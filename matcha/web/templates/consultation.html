@@ -94,7 +94,6 @@
     <tr><th>J'aime</th><th>Bloquer</th><th>Faux compte</th><th></th></tr>
   </thead>
   <tbody>
-    {{fake}}
     <tr><td>{% if nb_photo>0 %}<input type="checkbox" name="like" {% if visit.islike==True %}checked="checked"{% endif %}>{% endif %}</td>
     <td><input type="checkbox" name="block" {% if visit.isblocked==True %}checked="checked"{% endif %}></td>
     <td><input type="checkbox" name="fake" {% if fake==True %}checked="checked"{% endif %}></td>

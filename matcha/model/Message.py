@@ -1,10 +1,9 @@
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, ManyToOneField, IntField, DateTimeField, TextField, dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, ManyToOneField, IntField, DateTimeField, TextField, dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Message(ModelObject):
-    id: IntField(iskey=True)
+    id: IntField(iskey=True, iscomputed=True)
     room_id: ManyToOneField(modelname='Room')
     sender_id: ManyToOneField(modelname='Users')
     chat: TextField()

@@ -5,7 +5,7 @@ from matcha.orm.data_access import DataAccess
 
 def find_notif_list(us_id):
         notif_list = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id), 
-                                                                    ('read_notif', False),
+                                                                    ('is_read', False),
                                                                     ('notif_type', 'Message')
                                                                     ])
         return notif_list

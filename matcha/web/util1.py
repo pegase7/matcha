@@ -142,6 +142,7 @@ def find_profil(criteres):
     liste = DataAccess().fetch('Users')
     profil_found=[]
     for user in liste:
+        print(user.id)
         info={}
         info['nom']=user.user_name
         ok=1
@@ -174,8 +175,8 @@ def find_profil(criteres):
                     ok=1
                 elif user.gender==criteres['sexe_chercheur'] and user.orientation=='Hetero':
                     ok=0
-                elif user.gender!=criteres['sexe_chercheur'] and user.orientation=='Homo':
-                    ok=0
+                elif user.gender==criteres['sexe_chercheur'] and user.orientation=='Homo':
+                    ok=1
         #Critere Age
         if ok==1:
             if user.birthday:
@@ -222,9 +223,6 @@ def find_profil(criteres):
         if ok==1:
             profil_found.append(info)
            # profil_found = sorted(profil_found, key=lambda k: k['age'])
-        print("#############################################################")
-        print(profil_found)
-        print("#############################################################")
     return profil_found
 
 
@@ -275,7 +273,7 @@ def notif(sender,receiver,message):
     notif.sender_id = sender
     notif.receiver_id = receiver
     notif.notif_type = message
-    notif.read_notif = False
+    notif.is_read = False
     DataAccess().persist(notif)
 
 
@@ -292,3 +290,19 @@ def calculPopularite(person):
     if pop<0:
         pop=0
     return pop
+
+
+def closeRoom(u1,u2):
+    existroom = DataAccess().find('Users_room', conditions=[('master_id', u1), ('slave_id', u2)])
+    if existroom:
+        room = DataAccess().find('Room', conditions=('id', existroom.room_id))
+        room.active=False
+        DataAccess().merge(room)
+
+
+def openRoom(u1,u2):
+    existroom = DataAccess().find('Users_room', conditions=[('master_id', u1), ('slave_id', u2)])
+    if existroom:
+        room = DataAccess().find('Room', conditions=('id', existroom.room_id))
+        room.active=True
+        DataAccess().merge(room)

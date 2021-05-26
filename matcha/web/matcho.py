@@ -16,6 +16,7 @@ from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
+from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
 # import threading
 #from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
@@ -180,11 +181,13 @@ def consultation(login):
         else:
             fake=False
         if like != visit.islike:
-            if like==False:
+            if like==False and liked==True:
                 notif(visitor.id,us.id,'Dislike')
+                closeRoom(visitor.id,us.id)
             else:
-                notif(visitor.id,us.id,'Like')
-            visit.islike = like #modifier le score popularité et envoyer une notification
+                if like==True:
+                    notif(visitor.id,us.id,'Like')
+            visit.islike = like #modifier le score popularité 
         if block != visit.isblocked:
             visit.isblocked=block
         if fake != visit.isfake:
@@ -192,18 +195,22 @@ def consultation(login):
             if fake==True:
                 ft_send(login,'fake')
         dataAccess.merge(visit)
-        ##### creation de la room  ######
-        
+        us.popularity=calculPopularite(us.id)
+        DataAccess().merge(us)
+        ##### creation de la room si necessaire ######
         if visit.islike == True:
-            visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+            #visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+            if visited:
+                if visited.islike == True and visited.isblocked == False and visited.isfake == False:
+                    room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
+                    if room == None:
+                        new_room = Room()
+                        new_room.users_ids = [visited.visited_id, visited.visitor_id]
+                        new_room.active  = True
+                        DataAccess().persist(new_room)
+                    else:
+                        openRoom(visitor.id,us.id)
 
-            if visited.islike == True and visited.isblocked == False and visited.isfake == False:
-                room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
-                if room == None:
-                    new_room = Room()
-                    new_room.users_ids = [visited.visited_id, visited.visitor_id]
-                    new_room.active  = True
-                    DataAccess().persist(new_room)
         #################################
     return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
 
@@ -222,13 +229,6 @@ def profil():
     tags=[]
     for t in tag:
         tags.append(t.tag)
-    nom = us.last_name
-    login = us.user_name
-    prenom = us.first_name
-    bio= us.description
-    orientation = us.orientation
-    email= us.email
-    sexe=us.gender
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
@@ -307,9 +307,9 @@ def registration():
         session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
         new = Users()
-        print('Prenom '+prenom)
+        #print('Prenom '+prenom)
         new.first_name = prenom
-        print("nom"+nom)
+        #print("nom"+nom)
         new.last_name = nom
         new.user_name = login
         new.password = hash_pwd(pwd,login)
@@ -455,8 +455,10 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
-        
+        room_list = DataAccess().fetch('Users_room', 
+                                       conditions=[('R.active', True), ('U.slave_id', user.id)], 
+                                       joins=[('master_id', 'US'), ('room_id', 'R')])
+       # print('room_list', *room_list)
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
@@ -464,6 +466,7 @@ def chat():
                                 )
     else:
         return redirect(url_for('homepage'))  
+
 
 @app.after_request
 def add_header(r):
@@ -480,12 +483,12 @@ def add_header(r):
 ###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
-    print("ajax")
+   # print("ajax")
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
         notif_list = find_notif_list(user.id)
-        print('notif list : ', notif_list)
+        # print('notif list : ', notif_list)
         json_notif = json.dumps(notif_list)
         return json_notif
 
@@ -498,7 +501,8 @@ def refresh_notif():
 # Connexions des users
 @socketio.on('connect_user')
 def login_connect(data):
-    print('login-connect = ', data['msg'])
+    pass
+    #print('login-connect = ', data['msg'])
 
 
 ############# Chat  ###################
@@ -516,7 +520,7 @@ def message(data):
     notif.sender_id = data['user_id']
     notif.receiver_id = receiver.id
     notif.notif_type = 'Message'
-    notif.read_notif = False
+    notif.is_read = False
     DataAccess().persist(msg)
     DataAccess().persist(notif)
     send({
@@ -535,7 +539,7 @@ def message(data):
 def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
-        notif.read_notif = True
+        notif.is_read = True
         DataAccess().merge(notif)
         
         
@@ -559,17 +563,17 @@ def join(data):
     # print(data['username'])
     # print(user.id)
     # print("list msgs = ")
-    msgs_json = json.dumps(msgs)
+    msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
     # mise a jour des notifs 'message' a true (concernant cette room)
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
                                                                 ('receiver_id', sender_id),
                                                                 ('notif_type', 'Message'),
-                                                                ('read_notif', False)
+                                                                ('is_read', False)
                                                                 ])
-    print(notif_list)
+    #print(notif_list)
     for notif in notif_list:
-        notif.read_notif = True
+        notif.is_read = True
         DataAccess().merge(notif, autocommit=False)
     DataAccess().commit()
         
@@ -588,42 +592,10 @@ def join(data):
 @socketio.on('leave')
 def leave(data):
     leave_room(data['room'])
+    msg = ""
+    msg_json = json.dumps(msg, default=dispatcher.encoder_default)
     #enregistrer la date de deconnexion pour les notifications
-    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel
-    
-    
-@socketio.on('like')  # l'evenement 'like'  arrive ici
-def like(data):
-    # find users id
-    user1 = DataAccess().find('Users', conditions=('user_name', data['user1']))
-    user2 = DataAccess().find('Users', conditions=('user_name', data['user2']))
-    print(f"\n\n{user1.id}\n\n") 
-    print(f"\n\n{user2.id}\n\n")
-    print(f"\n\n{data}\n\n")
-    
-    # search if room already exists
-    # users_room = DataAccess().find('Users_room', conditions=[('master_id', user1.id),('slave_id', user2.id)], joins=[('room_id')])
-    # print("users_room : ", users_room.room_id, users_room.master_id, users_room.slave_id )
-    
-    # create new room
-    # newroom = Room()
-    # newroom.users_ids = [user1.id, user2.id]
-    # newroom.active = False
-    # DataAccess().persist(newroom)
-    # print("newroom_id : ",newroom.id)
-    
-    # join the newroom
-    # user1.join_room(newroom)
-    # user2.join_room(newroom)
-    # emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
-    
-# @ socketio.on('create')
-# def create(data):
-# username = data['username']
-# room = data['room_name']
-# join_room(data[room])
-# send(username + ' has left the room.', room=room)
-
+    send({msg_json}, room=data['room']) #msg optionnel
 
 # Lance les serveurs
 if __name__ == '__main__':

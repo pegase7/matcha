@@ -1,8 +1,7 @@
-from dataclasses import dataclass
-from matcha.orm.reflection import ModelObject, CharField, DateTimeField, dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, CharField, DateTimeField, dispatcher
 
-@dataclass(init=False)
 @dispatcher
+@metamodelclass
 class Topic(ModelObject):
-    tag: CharField(length=45)
+    tag: CharField(length=45, iskey=True)
     created: DateTimeField(iscomputed=True)
