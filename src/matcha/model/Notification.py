@@ -8,5 +8,5 @@ class Notification(ModelObject):
 	sender_id: ManyToOneField(modelname='Users')
 	receiver_id: ManyToOneField(modelname='Users')
 	notif_type: EnumField(values=['Like', 'Visit', 'Message', 'Like_too', 'Dislike'])
-	read_notif: BoolField()
+	is_read: BoolField()
 	created: DateTimeField(iscomputed=True)

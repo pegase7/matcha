@@ -12,6 +12,7 @@ from random import *
 from flask import *
 from math import sin, cos, acos, radians
 from matcha.model.Notification import Notification 
+from matcha.web.matcho import list_notifs
 
 class hashit:
     def hashing(self,texte,hash_type):
@@ -272,5 +273,5 @@ def notif(sender,receiver,message):
     notif.sender_id = sender
     notif.receiver_id = receiver
     notif.notif_type = message
-    notif.read_notif = False
+    notif.is_read = False
     DataAccess().persist(notif)
