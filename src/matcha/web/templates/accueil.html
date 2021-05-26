@@ -1,71 +1,48 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
-<style>
-    table {
-        border: medium solid #0b3688;
-        border-collapse: collapse;
-        /* width: 50%; */
-    }
-    
-    td,
-    th {
-        border: thin solid #6495ed;
-        /* width: 50%; */
-        padding: 5px;
-    }
-    
-    th {
-        text-align: center;
-        cursor: pointer;
-    }
-    
-    th:hover {
-        background: lightblue;
-    }
-    
-    .lien {
-        color: greenyellow;
-    }
-    
-    .alert {
-        color: orangered;
-        font-weight: bold;
-    }
-</style>
 
+
+<h1> Tableau de bord</h1> <br>
+<span class="accueil-pop"> Ma popularité : {{pop}} </span>
+<span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
 <br>
-
-<h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
-<h3> Popularité : {{pop}} </h3><br>
 <br>
 <h3>Qui a consulté mon profil ?</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Sexe</th>
-            <th>Age</th>
-            <th>Popularité</th>
-            <th>distance</th>
-            <th>Date</th>
-            <th>A liké</th>
-        </tr>
-    </thead>
-    <tbody>
 
-        {% for visitor in visitors %}
-        <tr class="visiteur_ligne">
-            <td><a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">{{visitor.pseudo}}</a></td>
-            <td align="center">{% if visitor.sex=='Male' %}M{% else %}F{% endif %}</td>
-            <td align="right">{{visitor.age}}</td>
-            <td align="center">{{visitor.popul}}</td>
-            <td align="right">{{visitor.distance}}</td>
-            <td>{{visitor.date}}</td>
-            <td align="center">{% if visitor.like==True %}oui{% endif %}</td>
-        </tr>
-        {% endfor %}
+<div class="container">
+    {% for visitor in visitors %}
 
-    </tbody>
-</table>
+
+    <div class="accueil-cards card">
+        <div class="card-header"> <img src="{{ visitor.photo }}" height="100" alt=""></div>
+        <div class="card-body">
+            <h3>{{ visitor.pseudo }}</h3>
+            <p>Age : {{ visitor.age }}</p>
+            <p>Popularité : {{ visitor.popul }}</p>
+            <p>A visité le : {{ visitor.date }}</p>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+<br><br>
+<hr>
+<h3>Mes dernières visites</h3>
+<div class="container">
+    {% for visited in visited_infos %}
+    <div class="accueil-cards card">
+        <div class="card-header"> <img src="{{ visited.photo }}" height="100" alt=""></div>
+        <div class="card-body">
+            <h3>{{ visited.pseudo }}</h3>
+            <p>Age : {{ visited.age }} ans</p>
+            <p>Popularité : {{ visited.popul }}</p>
+            <p>Dernière visite : {{ visited.date }}</p>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
 
 <br><br>
 <div>
@@ -76,19 +53,5 @@
     <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
     {% else %} {% include 'matching.html' %} {% endif %}
 </div>
-<script>
-    const compare = (ids, asc) => (row1, row2) => {
-        const tdValue = (row, ids) => row.children[ids].textContent;
-        const tri = (v1, v2) => v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
-        return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
-    };
 
-    const tbody = document.querySelector('tbody');
-    const thx = document.querySelectorAll('th');
-    const trxb = tbody.querySelectorAll('tr');
-    thx.forEach(th => th.addEventListener('click', () => {
-        let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
-        classe.forEach(tr => tbody.appendChild(tr));
-    }));
-</script>
 {% endblock %}
