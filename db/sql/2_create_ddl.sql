@@ -207,7 +207,7 @@ create table NOTIFICATION (
     sender_id   integer NOT NULL,
     receiver_id integer NOT NULL,
     notif_type  mpaa_notif_type  NOT NULL,
-    read_notif  boolean DEFAULT False NOT NULL,
+    is_read  boolean DEFAULT False NOT NULL,
     created     timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table NOTIFICATION owner to MATCHAADMIN;

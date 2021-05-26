@@ -7,6 +7,7 @@ from datetime import datetime
 DATA_ACCESS = DataAccess()
 TOPICS = {}
 
+populateconfig = Config(configpath='resources/configuration/configPopulate.json').config['populate']
 if __name__ == "__main__":
     starttime = datetime.now()
     for usr in DATA_ACCESS.fetch('Users'):

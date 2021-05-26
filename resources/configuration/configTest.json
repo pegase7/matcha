@@ -4,13 +4,15 @@
         "database":"matchadb",
         "user":"matchaadmin",
         "password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
-        "LoggingConnection":true
+        "LoggingConnection":"sql"
     },
     "logging":{
         "level":10,
         "dateFormat":"%Y-%m-%d:%H:%M:%S", 
-        "loggers": [
-            { "file_error":"resources/traces/standard_error.log" }
+        "handlers": [
+            
+            { "logger_file":"resources/traces/standard_error.log" },
+            { "name":"sql", "logger_file":"resources/traces/sql.log" }
         ]
     },
     "orm":{

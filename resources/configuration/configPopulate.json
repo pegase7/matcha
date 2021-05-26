@@ -9,8 +9,8 @@
 	"logging":{
         "level":10,
         "dateFormat":"%Y-%m-%d:%H:%M:%S", 
-        "loggers": [
-            { "file_error":"resources/traces/populate_error.log" }
+        "handlers": [
+            { "logger_file":"resources/traces/populate_error.log" }
         ]
     },
     "populate":{

@@ -5,10 +5,8 @@ from matcha.config import Config
 from matcha.orm.data_access import DataAccess
 
 RATIO_KMS = [1, 10, 25, 50, 100, 200, 500] # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
-config = Config(configpath='resources/configuration/configPopulate.json')
-populateconfig = Config(configpath='resources/configuration/configPopulate.json').config['populate']
-THRESHOLD = populateconfig['threshold']
-NB_RECOMMENDATIONS = populateconfig['nb_recommendations']
+THRESHOLD = Config().config['threshold']
+NB_RECOMMENDATIONS = Config().config['nb_recommendations']
 DATA_ACCESS = DataAccess()
 
 

@@ -40,6 +40,8 @@ class WebDriverPythonBasics(unittest.TestCase):
         print('elem2', elem2, elem2.text)
         elem3 = self.browser.find_element_by_xpath("//input[@value='Search']")
         print('elem3', elem3)
+        elem4 = self.browser.find_element_by_xpath("//button[@name='submit']")
+        print('elem4', elem4)
         time.sleep(20)
 
 

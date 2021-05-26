@@ -20,12 +20,13 @@ class Query():
     """
     Class Query for buildinq a sql command from parameter list
     """
-    def __init__(self, model, conditions, leftjoins, whereaddon, orderby):
+    def __init__(self, model, conditions, leftjoins, whereaddon, orderby, limit):
         self.model = model
         self.conditions = conditions
         self.leftjoins = leftjoins
         self.whereaddon = whereaddon
         self.orderby = orderby
+        self.limit = limit
     
     def get_condition(self, condition):
         """
@@ -108,6 +109,11 @@ class Query():
         '''
         if not self.orderby is None:
             query += ' order by ' + self.orderby
+        '''
+        Add limit clause
+        '''
+        if not self.limit is None:
+            query += ' limit ' + str(self.limit)
         return query, parameters
 
 class DataAccess():
@@ -142,10 +148,18 @@ class DataAccess():
             cryptedpassword = postgresql['password']
             totalpassword = str(base64.b64decode(bytearray(cryptedpassword, "utf8")), "utf8")
             password = totalpassword[:int((len(totalpassword) - 6) / 2)]
-            if 'LoggingConnection' in postgresql:
+            if 'loggingConnection' in postgresql:
                 from psycopg2.extras import LoggingConnection
                 DataAccess.__connection = p.connect(connection_factory=LoggingConnection, host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=password)
-                DataAccess.__connection.initialize(logging.getLogger())
+                loggingConnection = postgresql['loggingConnection']
+                logger = None
+                if not loggingConnection is None:
+                    logger = logging.getLogger(loggingConnection)
+                    if logger is None:
+                        logging.warn("No logger '" + loggingConnection + "' found. Standard logger is assumed!")
+                if logger is None:
+                    logger = logging.getLogger()
+                DataAccess.__connection.initialize(logger)
             else:
                 DataAccess.__connection = p.connect(host=postgresql['host'], database=postgresql['database'], user=postgresql['user'], password=password)
 
@@ -196,14 +210,14 @@ class DataAccess():
             setattr(record, field, None)
             return None
 
-    def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby):
-        query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby).build_query()
+    def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby, limit):
+        query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby, limit).build_query()
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(query, parameters)
             records = cursor.fetchall()
             return records
 
-    def fetch(self, model_name, conditions=[], joins=[], whereaddon=None, orderby=None):
+    def fetch(self, model_name, conditions=[], joins=[], whereaddon=None, orderby=None, limit=None):
         model = ModelDict().get_model_class(model_name)
         objects = []
         """
@@ -232,7 +246,7 @@ class DataAccess():
                     setjoins.append(leftjoin)
             except (ValueError) as e:
                 logging.error("Bad jointure '"+ join_name +"' for class " + model.name + ": " + str(e))
-        records = self.__fetch_records(model, conditions, leftjoins, whereaddon, orderby)
+        records = self.__fetch_records(model, conditions, leftjoins, whereaddon, orderby, limit)
         for record in records:
             (modelobject, start) = self.populate(record, model, 0)
             objects.append(modelobject)
@@ -275,9 +289,9 @@ class DataAccess():
                 if cmd.startswith('select '):
                     return cursor.fetchall()
                 else:
+                    if autocommit:
+                        self.commit()
                     return None
-            if autocommit:
-                self.commit()
             return returnvalue
         
     def executescript(self, filepath):

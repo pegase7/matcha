@@ -25,3 +25,5 @@ class OrmTestCase(unittest.TestCase):
             logging.info("Raise exception (invalid email) users.email = 'toto'") 
         room1 = data_access.find('Room', 1)
         self.assertIsNotNone(room1.users_ids, 'Room.users_ids must not be null')
+        userslist = data_access.fetch('Users', orderby='id', limit=3)
+        self.assertEqual(3, len(userslist), 'limit must be 3!')
