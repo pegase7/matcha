@@ -2,16 +2,17 @@
 
 
 <h1> Tableau de bord</h1> <br>
-<span class="accueil-pop"> Ma popularité : {{pop}} </span>
-<span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
-<br>
-<br>
-<h3>Qui a consulté mon profil ?</h3>
+<div class="container accueil-container">
+    <h3>Mes scores</h3>
+    <span class="accueil-pop"> Ma popularité : {{pop}} </span>
+    <span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
+    <span class="accueil-match"> Mes matchs : {{ match }}</span>
+</div>
 
-<div class="container">
+<div class="container accueil-container">
+    <h3>Qui a consulté mon profil ?</h3>
+
     {% for visitor in visitors %}
-
-
     <div class="accueil-cards card">
         <div class="card-header"> <img src="{{ visitor.photo }}" height="100" alt=""></div>
         <div class="card-body">
@@ -20,15 +21,13 @@
             <p>Popularité : {{ visitor.popul }}</p>
             <p>A visité le : {{ visitor.date }}</p>
         </div>
-
     </div>
     {% endfor %}
-
 </div>
-<br><br>
-<hr>
-<h3>Mes dernières visites</h3>
-<div class="container">
+
+<div class="container accueil-container">
+    <h3>Mes dernières visites</h3>
+
     {% for visited in visited_infos %}
     <div class="accueil-cards card">
         <div class="card-header"> <img src="{{ visited.photo }}" height="100" alt=""></div>
@@ -38,13 +37,10 @@
             <p>Popularité : {{ visited.popul }}</p>
             <p>Dernière visite : {{ visited.date }}</p>
         </div>
-
     </div>
     {% endfor %}
 </div>
 
-
-<br><br>
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");

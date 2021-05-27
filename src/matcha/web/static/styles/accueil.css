@@ -1,10 +1,17 @@
+.accueil-container {
+    border-top: 3px solid black;
+    padding: 10px 0px;
+}
+
 .accueil-cards {
     display: inline-block;
     border: 2px solid black;
     border-radius: 15px;
 }
 
-.accueil-pop {
+.accueil-pop,
+.accueil-like,
+.accueil-match {
     border: 2px solid black;
     border-radius: 5px;
     width: auto;
@@ -13,13 +20,14 @@
     margin-right: 50px;
 }
 
-.accueil-like {
+
+/* .accueil-like {
     border: 2px solid black;
     border-radius: 5px;
     width: auto;
     padding: 5px;
     font-size: 30px;
-}
+} */
 
 .fa-heart {
     color: tomato;

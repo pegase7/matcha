@@ -106,11 +106,18 @@ def accueil():
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
                                                   orderby='v.id desc', limit='3')
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
+        matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
         like = 0
+        match = 0
         for l in likes:
-            like= like + 1
-        
+            like = like + 1
+            
+        for m in matchs:
+            match = match + 1
         print('like : ', like)
+        print('matches : ', *matchs)
+        print('match : ', match)
+
         print('visits_made', *visits_made)
         # print("visits", *visits)
         visitors = []
@@ -148,7 +155,7 @@ def accueil():
                 info['photo'] = ('/static/nophoto.jpg')
             visited_infos.append(info)
         print('visited_infos : ', visited_infos)
-        return render_template('accueil.html', like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
+        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
     else:
         return redirect(url_for('homepage'))   
 
