@@ -1,22 +1,52 @@
-# import json
-# from pathlib import Path
-
-# basepath = Path(__file__).parent.parent
-# if 'src' == basepath.name:
-#     basepath = basepath.parent
-# basepath = basepath.joinpath('resources/configuration/config.json')
-# with open(basepath, 'r') as f:
-#     config = json.load(f)
-# print('Configuration:', config['postgresql'])
-
-###########################################
 import json
 from pathlib import Path
 import logging
 from logging import FileHandler
 
-print("Import Config")
-
+'''
+--------------------
+EXAMPLE of json file
+--------------------
+{
+    "postgresql":{
+        "host":"localhost",
+        "database":"matchadb",
+        "user":"matchaadmin",
+        "password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
+        "loggingConnection":"sql"
+    },
+    "logging":{
+        "level":10,
+        "format": "%(asctime)-19s,%(msecs)-4d %(levelname)-8s [%(module)-15s:%(lineno)-3d] %(message)s"
+        "dateFormat":"%Y-%m-%d:%H:%M:%S", 
+        "handlers": [
+            { "logger_file":"resources/traces/standard_error.log" },
+            { "name":"sql", "logger_file":"resources/traces/sql.log", "level":10 }
+        ]
+    },
+    "orm":{
+        "raise_error":false,
+        "logging_info":false,
+        "logging_error":true
+    }
+}
+------------
+EXPLANATIONS
+------------
+    1) postgresql module:
+        - host, database, user and password items determine connection parameters
+        - loggingConnection item gives the name of the handler used for storing sql orders.
+          If item value is null, standard logger is used. level must be equal to DEBUG (10).
+          If loggingConnection module is present, sql order are displayed on standard logger (console)
+    2) logging module:
+        - level item determines logging leve (i.e.: DEBUG, INFO, WARNING, ERROR, 10 means DEBUG).
+        - format item: output format. default value is "%(asctime)-19s,%(msecs)-4d %(levelname)-8s [%(module)-15s:%(lineno)-3d] %(message)s".
+        - dateformat item: Format of the date
+        - handlers module:
+          Different handlers can optionnally set. if name hamdler is null, default logger is assumed elsewhere a new logger is created.
+    3) orm module:
+        specify what to do when error occurs on field checking: raise_error stop program, logging_error 
+'''
 
 class Config():
     __instance = None
@@ -74,20 +104,23 @@ class Config():
         
         logging.basicConfig(format=loggingformat, datefmt=loggingdatefmt, level=logginglevel)
 
-        jsonloggers = jsonlogging['loggers'] if 'loggers' in jsonlogging else { "loggers":[{}] }
-        for jsonlogger in jsonloggers:
-            if "name" in jsonlogger.keys():
-                __logger = logging.getLogger(jsonlogger["name"])
+        jsonhandlers = jsonlogging['handlers'] if 'handlers' in jsonlogging else { "handlers":[{}] }
+        for jsonhandler in jsonhandlers:
+            if "name" in jsonhandler.keys():
+                __logger = logging.getLogger(jsonhandler["name"])
             else:
                 __logger = logging.getLogger()
-            if 'level' in jsonlogger:
-                __logger.setLevel(jsonlogger['level'])
+            level = logging.ERROR
+            if 'level' in jsonhandler:
+                level = jsonhandler['level']
+                __logger.setLevel(level)
 
-            if "file_error" in jsonlogger.keys():
-                errorpath = self.basepath.joinpath(jsonlogger["file_error"])
+            if "logger_file" in jsonhandler.keys():
+                errorpath = self.basepath.joinpath(jsonhandler["logger_file"])
                 if not errorpath.parent.exists():
                     errorpath.parent.mkdir()
                 error_fh = FileHandler(str(errorpath))
                 __logger.addHandler(error_fh)
                 error_fh.setFormatter(logging.Formatter(loggingformat))
-                error_fh.setLevel(logging.ERROR)
+                error_fh.setLevel(level)
+    

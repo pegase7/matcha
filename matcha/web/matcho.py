@@ -87,13 +87,11 @@ def accueil():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
         visitors=[]
         matching=True
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
             matching=False
         for visit in visits:
-            #vi = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id.id), ('visitor_id', us.id)])
             info={}
             info["pseudo"]=visit.visitor_id.user_name
             info["sex"]=visit.visitor_id.gender
@@ -110,6 +108,40 @@ def accueil():
         return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
         return redirect(url_for('homepage'))   
+
+@app.route('/visites/')
+def visites():
+    if "user" in session:
+        username = session['user']['name']
+        us = DataAccess().find('Users', conditions=('user_name', username))
+        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
+        visitors=[]
+        matching=True
+        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
+            matching=False
+        for visit in visits:
+            info={}
+            info["pseudo"]=visit.visitor_id.user_name
+            info["sex"]=visit.visitor_id.gender
+            info["popul"]=visit.visitor_id.popularity
+            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
+            info["like"]=visit.islike
+            if (visit.visitor_id.birthday):
+                info["age"]=calculate_age(visit.visitor_id.birthday)
+            else:
+               info["age"]=0
+            info["date"]=visit.last_update.date().isoformat()
+            if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
+                photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"
+            else:
+                photo='/static/nophoto.jpg'
+            info["photo"]=photo
+            if(visit.isblocked==False and visit.isfake==False):
+                visitors.append(info)
+        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+    else:
+        return redirect(url_for('homepage'))
 
 
 @app.route('/consultation/<login>/',methods=['GET', 'POST'])

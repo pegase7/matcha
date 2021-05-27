@@ -30,12 +30,12 @@ padding: 5px;
 <!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name"> -->
 <table>
     <thead>
-    <tr><th width=120>Pseudo</th><th width=80>age</th><th>distance (en km)</th><th>Popularité</th><th>Tags correspondants</th></tr>
+    <tr><th>Photo</th><th width=120>Pseudo</th><th width=80>age</th><th>distance (en km)</th><th>Popularité</th><th>Tags correspondants</th></tr>
     </thead>
     <tbody>
 {% for candidat in candidats %}
 
-<tr><td><a class="lien" href="{{ url_for('consultation', login=candidat.nom)}}">{{candidat.nom}} </a></td><td align="center">{{candidat.age}}</td> <td align="right">{{candidat.distance}}</td><td align="right">{{candidat.popularity}}</td>
+<tr><td><img src={{candidat.photo}} alt="" height="80"></td><td><a class="lien" href="{{ url_for('consultation', login=candidat.nom)}}">{{candidat.nom}} </a></td><td align="center">{{candidat.age}}</td> <td align="right">{{candidat.distance}}</td><td align="right">{{candidat.popularity}}</td>
 <td>{% for tag in candidat.tags %} {{tag}}, {% endfor %} </td></tr>
 
 {% endfor %}

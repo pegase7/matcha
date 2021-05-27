@@ -34,14 +34,15 @@
 
 <br>
 
-<h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
+<h1> Mes visiteurs<br>  </h1> <br>
 <h3> Ma popularité : {{pop}} </h3><br>
+<br>
 {%if visitors %}
-<h3><a href={{ url_for('visites')}}>Qui a consulté mon profil ?</a></h3>
-
+<h3>Qui a consulté mon profil ?</h3>
 <table>
     <thead>
         <tr>
+            <th>Photo</th>
             <th>Pseudo</th>
             <th>Sexe</th>
             <th>Age</th>
@@ -56,6 +57,7 @@
 
         {% for visitor in visitors %}
         <tr class="visiteur_ligne">
+            <td><img src={{visitor.photo}} alt="" height="80"></td>
             <td><a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">{{visitor.pseudo}}</a></td>
             <td align="center">{% if visitor.sex=='Male' %}M{% else %}F{% endif %}</td>
             <td align="right">{{visitor.age}}</td>
@@ -65,7 +67,6 @@
             <td align="center">{% if visitor.like==True %}oui{% endif %}</td>
         </tr>
         {% endfor %}
-
     </tbody>
 </table>
 {% endif %}
@@ -74,9 +75,7 @@
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
-    {% if matching==False %}
-    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
-    {% else %} {% include 'matching.html' %} {% endif %}
+   
 </div>
 <script>
     const compare = (ids, asc) => (row1, row2) => {

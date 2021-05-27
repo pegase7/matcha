@@ -145,6 +145,11 @@ def find_profil(criteres):
         print(user.id)
         info={}
         info['nom']=user.user_name
+        if os.path.isfile("./static/photo/"+user.user_name+'1'+".jpg"):
+            photo="/static/photo/"+user.user_name+'1'+".jpg"
+        else:
+            photo='/static/nophoto.jpg'
+        info["photo"]=photo
         ok=1
         #Ne pas se selectionner soi même !!!!
         if session['user']['name']==user.user_name:
@@ -171,12 +176,15 @@ def find_profil(criteres):
                     orientation=user.orientation
                 else:
                     orientation='Bi'
+                print('#####################################')
+                print(orientation, user.user_name)
+                print('#####################################')
                 if orientation=='Bi':
                     ok=1
-                elif user.gender==criteres['sexe_chercheur'] and user.orientation=='Hetero':
+                elif user.gender==criteres['sexe_chercheur'] and orientation=='Hetero':
                     ok=0
-                elif user.gender==criteres['sexe_chercheur'] and user.orientation=='Homo':
-                    ok=1
+                elif user.gender!=criteres['sexe_chercheur'] and orientation=='Homo':
+                    ok=0
         #Critere Age
         if ok==1:
             if user.birthday:
