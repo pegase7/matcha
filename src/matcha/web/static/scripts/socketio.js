@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chat-message-area').append(h3)
                 //display old messages
             list = JSON.parse(data.msgs_list)
-                // console.log(list)
+            console.log(list)
             list.forEach(
                 msg => {
                     // console.log(msg)

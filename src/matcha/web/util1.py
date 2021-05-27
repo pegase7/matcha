@@ -12,7 +12,6 @@ from random import *
 from flask import *
 from math import sin, cos, acos, radians
 from matcha.model.Notification import Notification 
-from matcha.web.matcho import list_notifs
 
 class hashit:
     def hashing(self,texte,hash_type):

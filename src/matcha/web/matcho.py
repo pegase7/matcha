@@ -35,8 +35,9 @@ socketio = SocketIO(app)
 # diut = DisconnectInactiveUsersThread()
 
 # diut.lauchThread(10)
-list_notifs = []
 
+notif_cache = NotificationCache()
+notif_cache.init()
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -546,16 +547,13 @@ def refresh_notif():
     print("ajax")
     if "user" in session:
         username = session['user']['name']
-        # user = DataAccess().find('Users', conditions=('user_name', username))
-        # notif_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), ('is_read', False)],
-                                                        # joins=[('sender_id','US')])
-        # print('notif list : ', *notif_list)
-        # print(type(notif_list))
-        # json_notif = json.dumps(notif_list, default=dispatcher.encoder_default)
-        print('list_notif2 : ', *list_notifs)
+        us = DataAccess().find('Users', conditions=[('user_name', username)])
+        (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
+        print('like : ', like)
+        list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
         json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
         return json_notif
-
+    
 ################################################
 ########## Temps réel avec socketio  ###########
 ################################################
@@ -584,13 +582,15 @@ def message(data):
     notif.notif_type = 'Message'
     notif.is_read = False
     DataAccess().persist(msg)
-    DataAccess().persist(notif)
+    # DataAccess().persist(notif)
+    notif_cache.persist(notif)
+    # print('notif_cache.cache : ', *notif_cache.cache)
     send({
           'msg': data['msg'],
           'sender': data['sender'],
           'receiver': data['receiver'],
-          'room': data['room'], 'notif':notif.id,
-          'time_stamp': strftime('%d-%b %I:%M%p', localtime())
+          'room': data['room'], 'notif': notif.id,
+          'time_stamp': strftime('%d-%b %H:%M', localtime())
           },
           room=data['room']
         )
@@ -602,7 +602,8 @@ def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
         notif.is_read = True
-        DataAccess().merge(notif)
+        # DataAccess().merge(notif)
+        notif_cache.merge(notif)
         
         
 # join room
@@ -612,7 +613,7 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    # print('room = ',data['room'])
+    print('room = ',data['room'])
     receiver_id = room_data.slave_id
     sender_id = room_data.master_id
     if room_data.slave_id == user.id:
@@ -636,8 +637,10 @@ def join(data):
     print(notif_list)
     for notif in notif_list:
         notif.is_read = True
-        DataAccess().merge(notif, autocommit=False)
-    DataAccess().commit()
+        # DataAccess().merge(notif, autocommit=False)
+        # notif_cache.merge(notif, autocommit=False)
+    # DataAccess().commit()
+    # notif_cache.commit()
         
     emit('display_old_messages', {
            'username': data['username'],
@@ -654,10 +657,11 @@ def join(data):
 @socketio.on('leave')
 def leave(data):
     leave_room(data['room'])
-    msg = ""
-    msg_json = json.dumps(msg, default=dispatcher.encoder_default)
+    ########## si on veut ajouter un message de deconnection  ##############
+    # msg = ""
+    # msg_json = json.dumps(msg, default=dispatcher.encoder_default)
     # enregistrer la date de deconnexion pour les notifications
-    send({msg_json}, room=data['room'])  # msg optionnel
+    # send({msg}, room=data['room'])  # msg optionnel
     
     
 # Lance les serveurs
