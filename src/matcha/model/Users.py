@@ -12,6 +12,7 @@ class Users(ModelObject):
     description: TextField()
     email: EmailField()
     active: BoolField()
+    is_recommendable: BoolField()
     confirm: CharField(length=20)
     gender: EnumField(values=['Male', 'Female'])
     orientation: EnumField(values=['Hetero', 'Homo', 'Bi'])
