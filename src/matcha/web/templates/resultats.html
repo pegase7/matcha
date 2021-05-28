@@ -33,6 +33,7 @@
         {% for candidat in candidats %}
 
         <tr>
+        	<td><img src={{candidat.photo}} alt="" height="80"></td>
             <td><a class="lien" href="{{ url_for('consultation', login=candidat.nom)}}">{{candidat.nom}} </a></td>
             <td align="center">{{candidat.age}}</td>
             <td align="right">{{candidat.distance}}</td>
