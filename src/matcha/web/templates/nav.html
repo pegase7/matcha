@@ -23,27 +23,17 @@
             <a href="{{ url_for('chat')}}" class="nav-link">Messages
             <span id="nb_messages" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
-        <li class="nav-item dropdown">
-            <a id="like-deroulant" href="" class="nav-link dropdown-toggle" role="link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Likes  
+        <li class="nav-item">
+            <a href="#" class="nav-link">Likes  
             <span id="nb_likes" class="badge badge-pill badge-warning count-notif"></span></a>
-            <div id="like-menu" class="dropdown-menu">
-                <!-- <a class="dropdown-item" href="#">Lien</a>
-                <button class="dropdown-item" type="button">Bouton</button>
-                <span class="dropdown-item-text">Texte</span> -->
-            </div>
         </li>
-        <li class="nav-item dropdown">
-            <a id="visit-deroulant" href="" class="nav-link dropdown-toggle" role="link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Visites
+        <li class="nav-item">
+            <a href="#" class="nav-link">Visites
                     <span id="nb_visites" class="badge badge-pill badge-warning count-notif"></span></a>
-            <div id="visit-menu" class="dropdown-menu">
-
         </li>
         <li class="nav-item">
             <a href="{{ url_for('logout')}}" class="nav-link">Deconnexion</a>
         </li>
 
     </ul>
-    <!-- <script src="connect_users.js">
-        sessionStorage.setItem("current_user", "{{session['user']['name']}}");
-    </script> -->
 </nav>

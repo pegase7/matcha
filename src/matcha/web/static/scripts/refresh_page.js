@@ -99,22 +99,7 @@ function display_notifs() {
                         } else {
                             input_nb.style.display = "none";
                         }
-
-
                     }
-                }
-
-
-                // affiche menu déroulant des visites
-                document.querySelector("#visit-deroulant").onclick = () => {
-                    notifs.forEach(notif => {
-                        if (notif.notif_type === 'Visit') {
-                            a_elem = document.createElement('a');
-                            a_elem.className = "dropdown-item";
-                            a_elem.innerHTML = notif.sender_id.user_name;
-                            document.querySelector("#visit-menu").append(a_elem);
-                        }
-                    });
                 }
             }
         }
