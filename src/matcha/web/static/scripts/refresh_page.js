@@ -10,6 +10,7 @@ function display_notifs() {
     let nb_mess_dom_element = document.getElementById("nb_messages");
     let nb_like_dom_element = document.getElementById("nb_likes");
     let nb_visit_dom_element = document.getElementById("nb_visites");
+    let nb_dislikes_dom_element = document.getElementById("nb_dislikes");
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             if (xhr.status != 200) {
@@ -52,6 +53,14 @@ function display_notifs() {
                     nb_visit_dom_element.style.display = "inline-block";
                 } else {
                     nb_visit_dom_element.style.display = "none";
+                }
+
+                // affiche nb total dislikes
+                if (nb_dislike > 0) {
+                    nb_dislikes_dom_element.innerHTML = nb_dislike;
+                    nb_dislikes_dom_element.style.display = "inline-block";
+                } else {
+                    nb_dislikes_dom_element.style.display = "none";
                 }
             }
         }

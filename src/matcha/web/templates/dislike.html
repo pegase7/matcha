@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block title %}Dislike{% endblock %} {% block content %} {% include 'nav.html' %}
+
+<h1 id="h1-dislike">Mes dislikes</h1>
+<div id="dislike-container" class="container">
+
+    {% if liste %}
+    <table id="dislike-table">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Pseudo</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in liste %}
+            <td class="img-user"><img src="{{ l.photo }}" alt="" height="100"> </td>
+            <td>{{ l.username }}</td>
+            <td>{{ l.date }}</td>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

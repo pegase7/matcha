@@ -267,13 +267,14 @@ def listePhoto(person):
     return liste_photo
 
 
-def notif(sender,receiver,message):
+def notif(sender,receiver,message, notif_cache):
     notif = Notification()
     notif.sender_id = sender
     notif.receiver_id = receiver
     notif.notif_type = message
     notif.is_read = False
-    DataAccess().persist(notif)
+    # DataAccess().persist(notif)
+    notif_cache.persist(notif)
     
 def calculPopularite(person):
     visits=DataAccess().fetch('Visit', conditions=('visited_id',person))

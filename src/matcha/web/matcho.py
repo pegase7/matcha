@@ -67,7 +67,36 @@ def homepage():
     else: 
         return render_template('home.html')
 
+@app.route('/dislike')
+def dislike():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=[('user_name', username)])
+    dislike_list = DataAccess().fetch('Notification', 
+                                      conditions=[('receiver_id', us.id), ('notif_type', 'Dislike'), ('is_read', False)], 
+                                      joins=('sender_id', 'S'),
+                                      orderby='N.id desc')
+    dislike_infos = []
+    for d in dislike_list:
+        info = {}
+        info['username'] = d.sender_id.user_name
+        info['date'] = d.created.isoformat()
+        if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        dislike_infos.append(info)
+        ######## update notification table #######
+        d.is_read = True 
+        print('d : ',d)
+
+        # notif_cache.merge(d, autocommit=False) #### creer une erreur "TypeError: get_model_class() missing 1 required positional argument: 'model_name"
+    # notif_cache.commit()
+        
+    return render_template('dislike.html', liste = dislike_infos)
     
+
 @app.route('/photo/', methods=['GET', 'POST'])
 def photo():
     if "user" not in session:
@@ -229,7 +258,7 @@ def consultation(login):
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
     ############## Notification de la visite ###################
-    notif(visitor.id,us.id,'Visit')
+    notif(visitor.id,us.id,'Visit', notif_cache)
     us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
     
@@ -262,11 +291,11 @@ def consultation(login):
             fake = False
         if like != visit.islike:
             if like == False:
-                notif(visitor.id, us.id, 'Dislike')
+                notif(visitor.id, us.id, 'Dislike', notif_cache)
                 closeRoom(visitor.id,us.id)
             else:
                 if like==True:
-                    notif(visitor.id, us.id, 'Like')
+                    notif(visitor.id, us.id, 'Like', notif_cache)
             visit.islike = like  # modifier le score popularité et envoyer une notification
         if block != visit.isblocked:
             visit.isblocked = block
@@ -649,15 +678,10 @@ def join(data):
     if room_data.slave_id == user.id:
         receiver_id = room_data.master_id
         sender_id = room_data.slave_id
-    # print('receiver_id = ', receiver_id)
     receiver = DataAccess().find('Users', conditions=('id', receiver_id))
-    # print('receiver = ', receiver.user_name)
-    # print('sender_id = ', sender_id)
-    # print(data['username'])
-    # print(user.id)
-    # print("list msgs = ")
+    
     msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
-    # mise a jour des notifs 'message' a true (concernant cette room)
+    ###### mise a jour des notifs 'message' a true (concernant cette room) ##########
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
                                                                 ('receiver_id', sender_id),
@@ -667,15 +691,13 @@ def join(data):
     print(notif_list)
     for notif in notif_list:
         notif.is_read = True
-        # DataAccess().merge(notif, autocommit=False)
         notif_cache.merge(notif, autocommit=False)
-    # DataAccess().commit()
     notif_cache.commit()
         
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,
-           'user_id': user.id,  # voir dans template si on peut l'enlever
+           'user_id': user.id,
            'receiver': receiver.user_name,
            'receiver_id': receiver.id,
           },
