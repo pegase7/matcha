@@ -1,75 +1,47 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
-<style>
-    table {
-        border: medium solid #0b3688;
-        border-collapse: collapse;
-        /* width: 50%; */
-    }
-    
-    td,
-    th {
-        border: thin solid #6495ed;
-        /* width: 50%; */
-        padding: 5px;
-    }
-    
-    th {
-        text-align: center;
-        cursor: pointer;
-    }
-    
-    th:hover {
-        background: lightblue;
-    }
-    
-    .lien {
-        color: greenyellow;
-    }
-    
-    .alert {
-        color: orangered;
-        font-weight: bold;
-    }
-</style>
 
-<br>
 
-<h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
-<h3> Ma popularité : {{pop}} </h3><br>
-{%if visitors %}
-<h3><a href={{ url_for('visites')}}>Qui a consulté mon profil ?</a></h3>
+<h1> Tableau de bord</h1> <br>
+<div class="container accueil-container">
+    <h3>Mes scores</h3>
+    <span class="accueil-pop"> Ma popularité : {{pop}} </span>
+    <span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
+    <span class="accueil-match"> Mes matchs : {{ match }}</span>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Sexe</th>
-            <th>Age</th>
-            <th>Popularité</th>
-            <th>distance</th>
-            <th>Date</th>
-            <th>A liké</th>
-        </tr>
-    </thead>
+<div class="container accueil-container">
+    <h3 align="center"><a href="{{ url_for('visites')}}" class="lien">Qui a consulté mon profil ?</a></h3>
+    <h3><br>Mes 3 derniers visiteurs :</h3>
+    {% for visitor in visitors %}
+    <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header"> <img src="{{ visitor.photo }}" height="100" alt=""></a></div>
+        <div class="card-body">
+            <h3>{{ visitor.pseudo }}</h3>
+            <p>Age : {{ visitor.age }}</p>
+            <p>Popularité : {{ visitor.popul }}</p>
+            <p>A visité le : {{ visitor.date }}</p>
+        </div>
+    </div></a>
+    {% endfor %}
+</div>
 
-    <tbody>
+<div class="container accueil-container">
+    <h3>Mes 3 dernières visites</h3>
 
-        {% for visitor in visitors %}
-        <tr class="visiteur_ligne">
-            <td><a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">{{visitor.pseudo}}</a></td>
-            <td align="center">{% if visitor.sex=='Male' %}M{% else %}F{% endif %}</td>
-            <td align="right">{{visitor.age}}</td>
-            <td align="center">{{visitor.popul}}</td>
-            <td align="right">{{visitor.distance}}</td>
-            <td>{{visitor.date}}</td>
-            <td align="center">{% if visitor.like==True %}oui{% endif %}</td>
-        </tr>
-        {% endfor %}
+    {% for visited in visited_infos %}
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="100" alt=""></a></div>
+        <div class="card-body">
+            <h3>{{ visited.pseudo }}</h3>
+            <p>Age : {{ visited.age }} ans</p>
+            <p>Popularité : {{ visited.popul }}</p>
+            <p>Dernière visite : {{ visited.date }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
-    </tbody>
-</table>
-{% endif %}
-<br><br>
 <div>
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
@@ -78,19 +50,5 @@
     <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
     {% else %} {% include 'matching.html' %} {% endif %}
 </div>
-<script>
-    const compare = (ids, asc) => (row1, row2) => {
-        const tdValue = (row, ids) => row.children[ids].textContent;
-        const tri = (v1, v2) => v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
-        return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
-    };
 
-    const tbody = document.querySelector('tbody');
-    const thx = document.querySelectorAll('th');
-    const trxb = tbody.querySelectorAll('tr');
-    thx.forEach(th => th.addEventListener('click', () => {
-        let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
-        classe.forEach(tr => tbody.appendChild(tr));
-    }));
-</script>
 {% endblock %}

@@ -18,6 +18,7 @@ from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
 from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
+from matcha.web.notification_cache import NotificationCache
 # import threading
 #from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
@@ -25,10 +26,16 @@ from matcha.web.util2 import *
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
-app.debug = True # a supprimer en production
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
+app.debug = True  # a supprimer en production
+# SESSION_COOKIE_SECURE=True,
+# SESSION_COOKIE_HTTPONLY=True,
+# SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
-#diut = DisconnectInactiveUsersThread()
+# diut = DisconnectInactiveUsersThread()
 
+notif_cache = NotificationCache()
+notif_cache.init()
 
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
@@ -86,30 +93,61 @@ def accueil():
     if "user" in session:
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
-        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-        visitors=[]
-        matching=True
-        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
-            matching=False
+        visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
+                                             orderby='v.last_update desc', limit='3')
+        visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
+                                                  orderby='v.last_update desc', limit='3')
+        likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
+        matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
+        like = 0
+        match = 0
+        for l in likes:
+            like = like + 1
+            
+        for m in matchs:
+            match = match + 1
+        
+        visitors = []
+        visited_infos = []
+        matching = True
+        if us.gender == None or us.description == None or us.orientation == None or us.birthday == None:
+            matching = False
         for visit in visits:
-            info={}
-            info["pseudo"]=visit.visitor_id.user_name
-            info["sex"]=visit.visitor_id.gender
-            info["popul"]=visit.visitor_id.popularity
-            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
-            info["like"]=visit.islike
+            info = {}
+            info["pseudo"] = visit.visitor_id.user_name
+            info["popul"] = visit.visitor_id.popularity
             if (visit.visitor_id.birthday):
-                info["age"]=calculate_age(visit.visitor_id.birthday)
+                info["age"] = calculate_age(visit.visitor_id.birthday)
             else:
-               info["age"]=0
-            info["date"]=visit.last_update.date().isoformat()
-            if(visit.isblocked==False and visit.isfake==False):
+                info["age"] = 0
+            info["date"] = visit.last_update.date().isoformat()
+            if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            if(visit.isblocked == False and visit.isfake == False):
                 visitors.append(info)
-        return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+        print('visitor : ', *visitors)
+            
+        for visited in visits_made:
+            info = {}
+            info['age'] = calculate_age(visited.visited_id.birthday)
+            info['date'] = visited.visited_id.last_update.date().isoformat()
+            info['popul'] = visited.visited_id.popularity
+            info['pseudo'] = visited.visited_id.user_name
+            print('visited-username : ', visited.visited_id.user_name)
+            if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            visited_infos.append(info)
+        print('visited_infos : ', visited_infos)
+        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
     else:
         return redirect(url_for('homepage'))   
 
 @app.route('/visites/')
+# @app.route('/likes/')
 def visites():
     if "user" in session:
         username = session['user']['name']
@@ -339,9 +377,7 @@ def registration():
         session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
         new = Users()
-        #print('Prenom '+prenom)
         new.first_name = prenom
-        #print("nom"+nom)
         new.last_name = nom
         new.user_name = login
         new.password = hash_pwd(pwd,login)
@@ -352,6 +388,7 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
+        new.is_recommendable = False
         new.latitude = request.form.get('latitude')
         new.longitude = request.form.get('longitude')
         new.popularity = 0
@@ -490,7 +527,6 @@ def chat():
         room_list = DataAccess().fetch('Users_room', 
                                        conditions=[('R.active', True), ('U.slave_id', user.id)], 
                                        joins=[('master_id', 'US'), ('room_id', 'R')])
-       # print('room_list', *room_list)
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
@@ -518,10 +554,11 @@ def refresh_notif():
    # print("ajax")
     if "user" in session:
         username = session['user']['name']
-        user = DataAccess().find('Users', conditions=('user_name', username))
-        notif_list = find_notif_list(user.id)
-        # print('notif list : ', notif_list)
-        json_notif = json.dumps(notif_list)
+        us = DataAccess().find('Users', conditions=[('user_name', username)])
+        (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
+        print('like : ', like)
+        list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
+        json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
         return json_notif
 
 
@@ -542,7 +579,7 @@ def login_connect(data):
 #receive and send message
 @socketio.on('message')
 def message(data):
-    #print(f"\n\n{data}\n\n")
+    # print(f"\n\n{data}\n\n")
     msg = Message()
     msg.chat = data['msg']
     msg.room_id = data['room']
@@ -554,14 +591,16 @@ def message(data):
     notif.notif_type = 'Message'
     notif.is_read = False
     DataAccess().persist(msg)
-    DataAccess().persist(notif)
+    # DataAccess().persist(notif)
+    notif_cache.persist(notif)
+    # print('notif_cache.cache : ', *notif_cache.cache)
     send({
           'msg': data['msg'],
           'sender': data['sender'],
           'receiver': data['receiver'],
-          'room': data['room'], 'notif':notif.id,
-          'time_stamp': strftime('%d-%b %I:%M%p', localtime())
-          }, 
+          'room': data['room'], 'notif': notif.id,
+          'time_stamp': strftime('%d-%b %H:%M', localtime())
+          },
           room=data['room']
         )
     
@@ -572,7 +611,8 @@ def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
         notif.is_read = True
-        DataAccess().merge(notif)
+        # DataAccess().merge(notif)
+        notif_cache.merge(notif)
         
         
 #join room
@@ -582,7 +622,7 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    # print('room = ',data['room'])
+    print('room = ',data['room'])
     receiver_id = room_data.slave_id
     sender_id = room_data.master_id
     if room_data.slave_id == user.id:
@@ -603,16 +643,18 @@ def join(data):
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    #print(notif_list)
+    print(notif_list)
     for notif in notif_list:
         notif.is_read = True
-        DataAccess().merge(notif, autocommit=False)
-    DataAccess().commit()
+        # DataAccess().merge(notif, autocommit=False)
+        notif_cache.merge(notif, autocommit=False)
+    # DataAccess().commit()
+    notif_cache.commit()
         
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,
-           'user_id': user.id, #voir dans template si on peut l'enlever
+           'user_id': user.id,  # voir dans template si on peut l'enlever
            'receiver': receiver.user_name,
            'receiver_id': receiver.id,
           },
@@ -624,10 +666,11 @@ def join(data):
 @socketio.on('leave')
 def leave(data):
     leave_room(data['room'])
-    msg = ""
-    msg_json = json.dumps(msg, default=dispatcher.encoder_default)
-    #enregistrer la date de deconnexion pour les notifications
-    send({msg_json}, room=data['room']) #msg optionnel
+    ########## si on veut ajouter un message de deconnection  ##############
+    # msg = ""
+    # msg_json = json.dumps(msg, default=dispatcher.encoder_default)
+    # enregistrer la date de deconnexion pour les notifications
+    # send({msg}, room=data['room'])  # msg optionnel
 
 # Lance les serveurs
 if __name__ == '__main__':

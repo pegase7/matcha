@@ -1,0 +1,43 @@
+.html{
+    color: midnightblue;
+}
+
+.accueil-container {
+    border-top: 3px solid black;
+    padding: 10px 0px;
+}
+
+.accueil-cards {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 15px;
+}
+
+.accueil-pop,
+.accueil-like,
+.accueil-match {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: auto;
+    padding: 5px;
+    font-size: 30px;
+    margin-right: 50px;
+}
+
+
+/* .accueil-like {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: auto;
+    padding: 5px;
+    font-size: 30px;
+} */
+
+.fa-heart {
+    color: tomato;
+    margin-right: 10px;
+}
+.lien {
+    color: greenyellow;
+    text-align: center;
+}

@@ -275,6 +275,7 @@ class DataAccess():
         return objects[0]
         
     def execute(self, cmd, parameters=None, model=None, record=None, autocommit=True):
+        returnvalue = None
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(cmd, parameters)   
             if not record is None:
@@ -288,11 +289,9 @@ class DataAccess():
             else:
                 if cmd.startswith('select '):
                     return cursor.fetchall()
-                else:
-                    if autocommit:
-                        self.commit()
-                    return None
-            return returnvalue
+            if autocommit:
+                self.commit()
+        return returnvalue
         
     def executescript(self, filepath):
         """
