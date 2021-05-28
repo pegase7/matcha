@@ -132,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
         p.onclick = () => {
             let newRoom = p.value.toString();
             let node = p;
-            // console.log("room = " + newRoom);
-            // console.log("username = " + username)
+            console.log("room = " + newRoom);
+            console.log("username = " + username)
             if (newRoom == room) {
                 msg = `Vous êtes déjà connecté à cette discussion.`;
                 printSysMsg(msg);

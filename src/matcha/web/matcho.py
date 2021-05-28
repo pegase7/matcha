@@ -55,7 +55,7 @@ def homepage():
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
             return  render_template('home.html', rep=rep)
         session['user'] = {'name': login}
-        session.permanent = True  # le cookie aura la duree definie plus haut
+        session.permanent = True  # le cookie a la duree definie plus haut
         print("cookie valeur : ", session.get)
         connect = Connection()
         connect.users_id = us.id
@@ -63,11 +63,6 @@ def homepage():
         connect.ip = request.remote_addr
         connect.disconnect_date = None
         DataAccess().persist(connect)
-        # global list_notifs
-        # list_notifs = DataAccess().fetch('Notification', 
-                                          # conditions=[('receiver_id', us.id), ('is_read', False)], 
-                                          # joins=[('sender_id', 'S')])
-        # print('list_notifs : ', *list_notifs)
         return redirect(url_for('accueil'))                      
     else: 
         return render_template('home.html')
@@ -103,9 +98,9 @@ def accueil():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
-                                             orderby='v.id desc', limit='3')
+                                             orderby='v.last_update desc', limit='3')
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
-                                                  orderby='v.id desc', limit='3')
+                                                  orderby='v.last_update desc', limit='3')
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
         matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
         like = 0
@@ -161,6 +156,41 @@ def accueil():
         return redirect(url_for('homepage'))   
 
 
+@app.route('/visites/')
+def visites():
+    if "user" in session:
+        username = session['user']['name']
+        us = DataAccess().find('Users', conditions=('user_name', username))
+        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
+        visitors=[]
+        matching=True
+        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
+            matching=False
+        for visit in visits:
+            info={}
+            info["pseudo"]=visit.visitor_id.user_name
+            info["sex"]=visit.visitor_id.gender
+            info["popul"]=visit.visitor_id.popularity
+            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
+            info["like"]=visit.islike
+            if (visit.visitor_id.birthday):
+                info["age"]=calculate_age(visit.visitor_id.birthday)
+            else:
+                info["age"]=0
+            info["date"]=visit.last_update.date().isoformat()
+            if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
+                photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"
+            else:
+                photo='/static/nophoto.jpg'
+            info["photo"]=photo
+            if(visit.isblocked==False and visit.isfake==False):
+                visitors.append(info)
+        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+    else:
+        return redirect(url_for('homepage'))
+
+
 @app.route('/consultation/<login>/', methods=['GET', 'POST'])
 def consultation(login):
     if "user" not in session:
@@ -199,11 +229,10 @@ def consultation(login):
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
     ############## Notification de la visite ###################
-    global list_notifs
-    notif(visitor.id, us.id, 'Visit')
-    #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
-    us.popularity = len(visits)
+    notif(visitor.id,us.id,'Visit')
+    us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
+    
     ###########
     tags = []
    
@@ -234,8 +263,10 @@ def consultation(login):
         if like != visit.islike:
             if like == False:
                 notif(visitor.id, us.id, 'Dislike')
+                closeRoom(visitor.id,us.id)
             else:
-                notif(visitor.id, us.id, 'Like')
+                if like==True:
+                    notif(visitor.id, us.id, 'Like')
             visit.islike = like  # modifier le score popularité et envoyer une notification
         if block != visit.isblocked:
             visit.isblocked = block
@@ -244,6 +275,8 @@ def consultation(login):
             if fake == True:
                 ft_send(login, 'fake')
         dataAccess.merge(visit)
+        us.popularity=calculPopularite(us.id)
+        DataAccess().merge(us)
         
         ##### creation de la room  ######
         
@@ -257,15 +290,11 @@ def consultation(login):
                     new_room.users_ids = [visited.visited_id, visited.visitor_id]
                     new_room.active = True
                     DataAccess().persist(new_room)
+                else:
+                    openRoom(visitor.id,us.id)
+                    
         #################################
-        ###### mettre room active == false si like == false || block == true || fake == true #############
-
     return render_template('consultation.html', profil=us, photos=liste_photo, naissance=naissance, tags=tags, last_connection=last_connection, visit=visit, nb_photo=nb_photo, liked=liked, fake=fake)
-
-
-@app.route('/test/')
-def test():
-    return render_template('test.html')
 
 
 @app.route('/profil/')
@@ -374,6 +403,7 @@ def registration():
         new.description = None
         new.email = mail
         new.active = False
+        new.is_recommendable = False
         new.confirm = lien
         new.gender = None
         new.orientation = None
@@ -638,9 +668,9 @@ def join(data):
     for notif in notif_list:
         notif.is_read = True
         # DataAccess().merge(notif, autocommit=False)
-        # notif_cache.merge(notif, autocommit=False)
+        notif_cache.merge(notif, autocommit=False)
     # DataAccess().commit()
-    # notif_cache.commit()
+    notif_cache.commit()
         
     emit('display_old_messages', {
            'username': data['username'],

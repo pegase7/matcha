@@ -274,3 +274,33 @@ def notif(sender,receiver,message):
     notif.notif_type = message
     notif.is_read = False
     DataAccess().persist(notif)
+    
+def calculPopularite(person):
+    visits=DataAccess().fetch('Visit', conditions=('visited_id',person))
+    nbVisit=nbLike=nbBlock=0
+    for visit in visits:
+        nbVisit+=1
+        if visit.islike:
+            nbLike+=1
+        if visit.isblocked:
+            nbBlock+=1
+    pop=int((nbLike/nbVisit)*100-(nbBlock/nbVisit)*100)
+    if pop<0:
+        pop=0
+    return pop
+
+
+def closeRoom(u1,u2):
+    existroom = DataAccess().find('Users_room', conditions=[('master_id', u1), ('slave_id', u2)])
+    if existroom:
+        room = DataAccess().find('Room', conditions=('id', existroom.room_id))
+        room.active=False
+        DataAccess().merge(room)
+
+
+def openRoom(u1,u2):
+    existroom = DataAccess().find('Users_room', conditions=[('master_id', u1), ('slave_id', u2)])
+    if existroom:
+        room = DataAccess().find('Room', conditions=('id', existroom.room_id))
+        room.active=True
+        DataAccess().merge(room)
