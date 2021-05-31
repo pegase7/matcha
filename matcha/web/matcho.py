@@ -19,6 +19,7 @@ from matcha.model.Notification import Notification
 from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
 from matcha.web.notification_cache import NotificationCache
+import urllib
 # import threading
 #from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
@@ -147,8 +148,8 @@ def accueil():
         return redirect(url_for('homepage'))   
 
 @app.route('/visites/')
-# @app.route('/likes/')
 def visites():
+    like = request.args['like']
     if "user" in session:
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
@@ -176,7 +177,10 @@ def visites():
                 photo='/static/nophoto.jpg'
             info["photo"]=photo
             if(visit.isblocked==False and visit.isfake==False):
-                visitors.append(info)
+                if like=='no':
+                    visitors.append(info)
+                elif visit.islike==True:
+                    visitors.append(info)
         return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
         return redirect(url_for('homepage'))

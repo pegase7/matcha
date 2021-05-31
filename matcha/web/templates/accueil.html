@@ -10,7 +10,7 @@
 </div>
 
 <div class="container accueil-container">
-    <h3 align="center"><a href="{{ url_for('visites')}}" class="lien">Qui a consulté mon profil ?</a></h3>
+    <h3 align="center"><a href="{{ url_for('visites', like='no')}}" class="lien">Qui a consulté mon profil ?</a></h3>
     <h3><br>Mes 3 derniers visiteurs :</h3>
     {% for visitor in visitors %}
     <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
