@@ -154,11 +154,7 @@ def visites():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
         visitors=[]
-        matching=True
-        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
-            matching=False
         for visit in visits:
             info={}
             info["pseudo"]=visit.visitor_id.user_name
@@ -181,7 +177,14 @@ def visites():
                     visitors.append(info)
                 elif visit.islike==True:
                     visitors.append(info)
-        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+        if like=='yes':
+            message="Qui m'a liké ?"
+        else:
+            message='Qui a consulté mon profil ?'
+        if visitors:
+            return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity, message=message)
+        else:
+            return redirect(url_for('accueil'))
     else:
         return redirect(url_for('homepage'))
 
@@ -352,11 +355,26 @@ def recherche():
         criteres['sexe_chercheur']=us.gender
         criteres['latitude']=latitude
         criteres['longitude']=longitude
-        criteres['dist_max']=request.form.get('km')
-        criteres['age_min']=request.form.get('agemin')
-        criteres['age_max']=request.form.get('agemax')
-        criteres['pop_min']=request.form.get('popmin')
-        criteres['pop_max']=request.form.get('popmax')
+        if request.form.get('km'):
+            criteres['dist_max']=request.form.get('km')
+        else:
+            criteres['dist_max']=20000
+        if request.form.get('agemin'):
+            criteres['age_min']=request.form.get('agemin')
+        else:
+            criteres['age_min']=18
+        if request.form.get('agemax'):
+            criteres['age_max']=request.form.get('agemax')
+        else:
+            criteres['age_max']=110
+        if request.form.get('popmin'):
+            criteres['pop_min']=request.form.get('popmin')
+        else:
+            criteres['pop_min']=0
+        if request.form.get('popmax'):
+            criteres['pop_max']=request.form.get('popmax')
+        else:
+            criteres['pop_max']=100
         criteres['interets']=request.form.getlist('interest')
         criteres['id']=us.id
         return render_template('resultats.html',candidats=find_profil(criteres))

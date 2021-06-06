@@ -33,9 +33,7 @@
     
     /* overflow:scroll; */
   }
-  .note{
-    font-size: 0.5rem;
-  }
+  
 </style>
 <div>
 <h1>bonjour {{session['user']['name']}} </h1>
@@ -56,9 +54,11 @@
       <p>Longitude : {{profil.longitude}}</p>
       <p>Pour de nouvelles coordonnées,<input type="hidden" step="0.000001" name="longlat" id='coor' size="30"/></p>
       cliquez dur la carte !<br>
-
-      <p>Naissance<input type="date" name="birthday" value={{naissance}} /></p>
-
+      {% if naissance %}
+        <p>Naissance  : <br><input type="date" name="birthday" value ={{naissance}} /></p>
+      {% else%}
+        <p>Naissance  : <br><input type="date" name="birthday" /></p>
+      {% endif %}
       <p>Sexe</p>
       <div>
         <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">

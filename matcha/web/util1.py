@@ -176,9 +176,6 @@ def find_profil(criteres):
                     orientation=user.orientation
                 else:
                     orientation='Bi'
-                print('#####################################')
-                print(orientation, user.user_name)
-                print('#####################################')
                 if orientation=='Bi':
                     ok=1
                 elif user.gender==criteres['sexe_chercheur'] and orientation=='Hetero':
