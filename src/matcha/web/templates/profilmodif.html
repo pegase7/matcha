@@ -1,134 +1,129 @@
-{% extends 'base.html' %} {% block title %}Modification du profil{% endblock %} {% block content %} {% include 'nav.html' %}
+{% extends 'base.html' %}
+
+{% block title %}Modification du profil{% endblock %}
+{% block content %}
+{% include 'nav.html' %}
 <style>
-    .conteneur {
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
+  .conteneur {
+    display: flex;
+    flex-flow : row wrap;
+    justify-content: space-around;
     }
+
+  .saisie {
+    min-width: 500px;
+    width: 30%;
+    }
+
+  .carte {
+    min-width: 600px;
+    height: 400px;
+    }
+
+  .bouton {
+    width: 500px;
+    text-align: center;
+  }
+  
+  .interets {
+    width: 600px;
+    column-width: 120px;
+    /* flex-grow: 2; */
+    height: 500px;
     
-    .saisie {
-        min-width: 500px;
-        width: 30%;
-    }
-    
-    .carte {
-        min-width: 600px;
-        height: 400px;
-    }
-    
-    .bouton {
-        width: 500px;
-        text-align: center;
-    }
-    
-    .interets {
-        width: 600px;
-        column-width: 120px;
-        /* flex-grow: 2; */
-        height: 500px;
-        /* overflow:scroll; */
-    }
+    /* overflow:scroll; */
+  }
+  
 </style>
 <div>
-    <h1>bonjour {{session['user']['name']}} </h1>
-    <br>
-    <h4>{{msg}}
-        <p>
-            <? php echo $_GET['msg'] ?>
-        </p>
-    </h4>
+<h1>bonjour {{session['user']['name']}} </h1>
+<br>
+<h4>{{msg}}
+  <p> <? php echo $_GET['msg'] ?> </p>
+</h4>
 </div>
 <br>
 <div class="conteneur">
-    <div class='saisie'>
-        <form method="post">
-            <p>Nom<br><input type="text" name="name" value="{{profil.last_name}}" /></p>
-            <p>Prénom<br><input type="text" name="first_name" value={{profil.first_name}} /></p>
-            <p>E-Mail<br><input type="email" name="courriel" value={{profil.email}} /></p>
+  <div class='saisie'>
+    <form method="post">
+      <p>Nom<br><input type="text" name="name" value="{{profil.last_name}}" /></p>
+      <p>Prénom<br><input type="text" name="first_name" value={{profil.first_name}} /></p>
+      <p>E-Mail<br><input type="email" name="courriel" value={{profil.email}} /></p>
+      
+      <p>Latitude : {{profil.latitude}}</p>
+      <p>Longitude : {{profil.longitude}}</p>
+      <p>Pour de nouvelles coordonnées,<input type="hidden" step="0.000001" name="longlat" id='coor' size="30"/></p>
+      cliquez dur la carte !<br>
+      {% if naissance %}
+        <p>Naissance  : <br><input type="date" name="birthday" value ={{naissance}} /></p>
+      {% else%}
+        <p>Naissance  : <br><input type="date" name="birthday" /></p>
+      {% endif %}
+      <p>Sexe</p>
+      <div>
+        <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">
+        <label for="Male">Masculin</label>
+        <input type="radio" id="Female" name="sexe" value="Female" "{% if profil.gender=='Female' %} checked {% endif %}">
+        <label for="Female">Féminin</label>
+      </div><br>
+      <p>Orientation</p>
+      <div>
+        <input type="radio" id="Bi" name="orientation" value="Bi" "{% if profil.orientation=='Bi' %} checked {% endif %}">
+        <label for="Bi">Bi</label>
+        <input type="radio" id="Hetero" name="orientation" value="Hetero" "{% if profil.orientation=='Hetero' %} checked {% endif %}">
+        <label for="Hetero">Hetero</label>
+       <input type="radio" id="Homo" name="orientation" value="Homo""{% if profil.orientation=='Homo' %} checked {% endif %}">
+        <label for="Homo">Homo</label>
+      </div>
+      <p>Présentation<br><textarea name="bio" id='bio' cols="50" rows="5" {{profil.description}}>{{profil.description}}</textarea><br>
+       
+       
+  </div>
 
-            <p>Latitude : {{profil.latitude}}</p>
-            <p>Longitude : {{profil.longitude}}</p>
-            <p>Pour de nouvelles coordonnées,<input type="hidden" step="0.000001" name="longlat" id='coor' size="30" /></p>
-            cliquez dur la carte !<br>
+  <div class='interets'>
+     <h2>Mes centres d'intérêts</h2><br><br>
+     <div class="checkbox_box">
+          <fieldset>
+          {% for topic in topics %}
+            <input type="checkbox" id={{topic}} name="interest" value={{topic}}          
+            {% for tag in tags %}
+               {% if tag == topic %}checked{% endif %} 
+            {% endfor %} /><label for={{topic}}>{{topic}}</label><br>
+          {% endfor %}
+        </fieldset>
+      </div>
+      
+      <strong> Rajouter un centre d'interet :</strong>
+      <p class="note"> (Majuscule en début de mot)</p>
+      <input type="text" name="interet" pattern="[A-Z]{1}\p{Ll}*">
+    
+  </div>
+  
+  <div class='carte'>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <div id="macarte" style="width:80%; height:100%"></div>
+  
+    <script>
+      var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 11);
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(carte);
+      var marker = L.marker([{{profil.latitude}}, {{profil.longitude}}]).addTo(carte);
+      carte.on('click', placerMarqueur);
 
-            <p>Naissance<input type="date" name="birthday" value={{naissance}} /></p>
-
-            <p>Sexe</p>
-            <div>
-                <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">
-                <label for="Male">Masculin</label>
-                <input type="radio" id="Female" name="sexe" value="Female" "{% if profil.gender=='Female' %} checked {% endif %}">
-                <label for="Female">Féminin</label>
-            </div><br>
-            <p>Orientation</p>
-            <div>
-                <input type="radio" id="Bi" name="orientation" value="Bi" "{% if profil.orientation=='Bi' %} checked {% endif %}">
-                <label for="Bi">Bi</label>
-                <input type="radio" id="Hetero" name="orientation" value="Hetero" "{% if profil.orientation=='Hetero' %} checked {% endif %}">
-                <label for="Hetero">Hetero</label>
-                <input type="radio" id="Homo" name="orientation" value="Homo" "{% if profil.orientation=='Homo' %} checked {% endif %}">
-                <label for="Homo">Homo</label>
-            </div>
-            <p>Présentation<br><textarea name="bio" id='bio' cols="50" rows="5" {{profil.description}}>{{profil.description}}</textarea><br>
-
-
-    </div>
-
-    <div class='interets'>
-        <h2>Mes centres d'intérêts</h2><br><br>
-        <div class="checkbox_box">
-            <fieldset>
-                {% for topic in topics %}
-                <input type="checkbox" id={{topic}} name="interest" value={{topic}} {% for tag in tags %} {% if tag==t opic %}checked{% endif %} {% endfor %} /><label for={{topic}}>{{topic}}</label><br> {% endfor %}
-            </fieldset>
-        </div>
-
-        <strong> Rajouter un centre d'interet :</strong>
-        <input type="text" name="interet">
-
-    </div>
-
-    <div class='carte'>
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-        <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-        <div id="macarte" style="width:80%; height:100%"></div>
-
-        <script>
-            var carte = L.map('macarte').setView([{
-                {
-                    profil.latitude
-                }
-            }, {
-                {
-                    profil.longitude
-                }
-            }], 14);
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(carte);
-            var marker = L.marker([{
-                {
-                    profil.latitude
-                }
-            }, {
-                {
-                    profil.longitude
-                }
-            }]).addTo(carte);
-            carte.on('click', placerMarqueur);
-
-            function placerMarqueur(e) {
-                marker.setLatLng(e.latlng);
-                document.getElementById('coor').value = e.latlng;
-            };
-        </script>
-    </div>
-    <div class="bouton">
-        <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
+      function placerMarqueur(e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById('coor').value=e.latlng;
+      };
+    </script>
+  </div>
+<div class="bouton">
+       <button type="submit" class="btn btn-primary btn-lg mb-2" name='save'>Modifier</button>
         <a href="{{ url_for('profil')}}">
-            <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a><br><br><br>
-    </div>
-    </form>
+          <button type="button" class="btn btn-primary btn-lg mb-2" name="abort">Annuler</button></a><br><br><br>
+        </div>
+</form>
 </div>
 
 {% endblock %}

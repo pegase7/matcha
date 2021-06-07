@@ -16,7 +16,7 @@
     "populate":{
     	"test_data":"both__",
         "#test_data":"faker",
-    	"threshold":8,
+    	"threshold":6,
     	"nb_recommendations":8
     },
     "orm":{

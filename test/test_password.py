@@ -12,6 +12,6 @@ from matcha.web.util1 import hash_pwd
 
 if __name__ == "__main__":
     data_access = DataAccess()
-    userslist = data_access.fetch('Users')
+    userslist = data_access.fetch('Users', orderby='id')
     for users in userslist:
         print(users.id, hash_pwd('PasseMot0', users.user_name))

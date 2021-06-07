@@ -15,11 +15,18 @@ from matcha.orm.data_access import DataAccess
 
 if __name__ == "__main__":
     data_access = DataAccess()
-    notification_cache = NotificationCache()
-    notification_cache.init()
+    # notification_cache = NotificationCache()
+    # notification_cache.init()
 
-    for usersid in notification_cache.cache.keys():
-        users = data_access.find('Users', usersid)
-        print(users.first_name, users.last_name, users.user_name)
-        print(notification_cache.get_unread(users.id))
+    f = float("122.33")
+    print("f:", float)
+    f = None
+    if isinstance(f, float):
+        print("OK")
+    else:
+        print("KO")
+    # for usersid in notification_cache.cache.keys():
+    #     users = data_access.find('Users', usersid)
+    #     print(users.first_name, users.last_name, users.user_name)
+    #     print(notification_cache.get_unread(users.id))
             

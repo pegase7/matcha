@@ -4,6 +4,7 @@ from faker import Faker
 from matcha.model.Users import Users
 from unidecode import unidecode
 from matcha.orm.data_access import DataAccess
+from matcha.web.util1 import hash_pwd
 
 mail_providers = ['free.fr','gmail.com', 'hotmail.com', 'yahoo.com', 'gmx.fr', 'gmail.com', 'gmail.com', 'gmail.com', 'free.fr', 'orange.fr', 'numericable.fr']
 coordinates = []
@@ -67,13 +68,14 @@ def compute_users(users, coordsize, usernames):
 
 def complete_users(users,fake, coordsize, usernames):
     users.last_name = fake.last_name()
-    users.password = fake.password(special_chars=False, upper_case=False)        
     compute_users(users, coordsize, usernames)
+    # users.password = fake.password(special_chars=False, upper_case=False)
+    users.password = hash_pwd('PasseMot0', users.user_name)    
     users.active = (randint(0,100) < 96)
     users.birthday = fake.date_between(start_date='-75y', end_date='-18y')
     users.description = None
     users.confirm = None
-    users.popularity = None
+    users.popularity = randint(0,100)
 
 def populate():    
     userslist = []

@@ -1,32 +1,42 @@
+from matcha.web.util1 import *
 from flask import *
 from PIL import Image  
 import os
 import psycopg2
-from datetime import datetime, timedelta
+from datetime import datetime,timedelta
 from random import *
 from flask_socketio import SocketIO, join_room, send, emit, leave_room
 from time import localtime, strftime
-from matcha.web.util1 import *
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
+from matcha.model.Visit import Visit
 from matcha.model.Connection import Connection
 import logging
-from matcha.model.Visit import Visit
 from matcha.model.Room import Room
 from matcha.model.Message import Message
 from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
+from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
+from matcha.web.notification_cache import NotificationCache
+import urllib
 # import threading
+#from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
-app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(seconds=6000) # definie une duree au cookie de session
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
+# SESSION_COOKIE_SECURE=True,
+# SESSION_COOKIE_HTTPONLY=True,
+# SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
+# diut = DisconnectInactiveUsersThread()
 
+notif_cache = NotificationCache()
+notif_cache.init()
 
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
@@ -44,8 +54,6 @@ def homepage():
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
             return  render_template('home.html', rep = rep)
         session['user']= {'name' : login}
-        session.permanent = True # le cookie aura la duree definie plus haut
-        print("cookie valeur : ", session.get)
         connect=Connection()
         connect.users_id=us.id
         connect.connect_date=datetime.now()
@@ -56,35 +64,97 @@ def homepage():
     else:   
         return render_template('home.html')
 
-    
 
-@app.route('/photo/', methods=['GET', 'POST'])
+@app.route('/photo/',methods=['GET', 'POST'])
 def photo():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    ph1 = "/static/photo/" + session['user']['name'] + "1.jpg"
-    ph2 = "/static/photo/" + session['user']['name'] + "2.jpg"
-    ph3 = "/static/photo/" + session['user']['name'] + "3.jpg"
-    ph4 = "/static/photo/" + session['user']['name'] + "4.jpg"
-    ph5 = "/static/photo/" + session['user']['name'] + "5.jpg"
-    if request.method == "POST":
+    if request.method=="POST":
+        path = 'static/photo'
         f = request.files['maphoto']
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
-        if request.form.get('bou') == 'raz':
-            os.remove('static/photo/' + photo_name)
-            return render_template('photo.html', ph1=ph1, ph2=ph2, ph3=ph3, ph4=ph4, ph5=ph5)
-        path = 'static/photo'
-        f.save(os.path.join(path, photo_name))     
-    return render_template('photo.html', ph1=ph1, ph2=ph2, ph3=ph3, ph4=ph4, ph5=ph5)
-    
+        if request.form.get('raz')!=None:
+            os.remove('static/photo/'+photo_name)
+            liste_photo=listePhoto(session['user']['name'])
+            return render_template('photo.html',photos=liste_photo)
+        if f:# verification de la présence d'un fichier
+            if extension_ok(f.filename): # on vérifie que son extension est valide 
+                f.save(os.path.join(path, photo_name))
+            else:
+                flash('Seuls les fichier JPG ou JPEG sont autorisés !')
+        else:
+             flash('Aucun fichier choisi !')
+    liste_photo=listePhoto(session['user']['name'])
+    return render_template('photo.html',photos=liste_photo)
+        
     
 @app.route('/accueil/')
 def accueil():
     if "user" in session:
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
+        visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
+                                             orderby='v.last_update desc', limit='3')
+        visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
+                                                  orderby='v.last_update desc', limit='3')
+        likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
+        matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
+        like = 0
+        match = 0
+        for l in likes:
+            like = like + 1
+            
+        for m in matchs:
+            match = match + 1
+        
+        visitors = []
+        visited_infos = []
+        matching = True
+        if us.gender == None or us.description == None or us.orientation == None or us.birthday == None:
+            matching = False
+        for visit in visits:
+            info = {}
+            info["pseudo"] = visit.visitor_id.user_name
+            info["popul"] = visit.visitor_id.popularity
+            if (visit.visitor_id.birthday):
+                info["age"] = calculate_age(visit.visitor_id.birthday)
+            else:
+                info["age"] = 0
+            info["date"] = visit.last_update.date().isoformat()
+            if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            if(visit.isblocked == False and visit.isfake == False):
+                visitors.append(info)
+        print('visitor : ', *visitors)
+            
+        for visited in visits_made:
+            info = {}
+            info['age'] = calculate_age(visited.visited_id.birthday)
+            info['date'] = visited.visited_id.last_update.date().isoformat()
+            info['popul'] = visited.visited_id.popularity
+            info['pseudo'] = visited.visited_id.user_name
+            print('visited-username : ', visited.visited_id.user_name)
+            if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            visited_infos.append(info)
+        print('visited_infos : ', visited_infos)
+        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
+    else:
+        return redirect(url_for('homepage'))   
+
+@app.route('/visites/')
+def visites():
+    like = request.args['like']
+    if "user" in session:
+        username = session['user']['name']
+        us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
         visitors=[]
         matching=True
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
@@ -101,14 +171,19 @@ def accueil():
             else:
                info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
-            if(visit.isblocked==False):
-                visitors.append(info)
-        notif_list = find_notif_list(us.id)
-        # print(notif_list)
-        # print(len(notif_list))
-        return render_template('accueil.html', username=username, visitors=visitors, pop=us.popularity,matching=matching, notif_list=notif_list, notif_nb=len(notif_list))
+            if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
+                photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"
+            else:
+                photo='/static/nophoto.jpg'
+            info["photo"]=photo
+            if(visit.isblocked==False and visit.isfake==False):
+                if like=='no':
+                    visitors.append(info)
+                elif visit.islike==True:
+                    visitors.append(info)
+        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
-        return redirect(url_for('homepage'))   
+        return redirect(url_for('homepage'))
 
 
 @app.route('/consultation/<login>/',methods=['GET', 'POST'])
@@ -124,17 +199,20 @@ def consultation(login):
     dates_c=[]
     for da in date_connect:
         dates_c.append(da.connect_date)
-    b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
-    last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
-    ###########
+    if len(dates_c)>0 :
+        b=str(max(dates_c).date().isoformat()) #champ date transformé en texte
+        last_connection=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
+    else:
+        last_connection=0
     visit = DataAccess().find('Visit', conditions=[('visited_id', us.id), ('visitor_id', visitor.id)])
     visited =DataAccess().find('Visit', conditions=[('visited_id', visitor.id), ('visitor_id', us.id)])
-    liked=False
+    liked=fake=False
     if visited:
         liked=visited.islike
     if visit:
         visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
+        fake=visit.isfake
     else:
         visit = Visit()
         visit.visited_id = us.id
@@ -142,22 +220,20 @@ def consultation(login):
         visit.visits_number = 1
         visit.islike=False
         visit.isblocked=False
+        visit.isfake=False
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
-    #################Calcul temporaire de popularite, a moderer ulterieurement avec les Like
-    us.popularity=len(visits)
+    ############## Notification de la visite ###################
+    notif(visitor.id,us.id,'Visit')
+    us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
     ###########
     tags=[]
    
     for t in tag:
         tags.append(t.tag)
-    ph1="/static/photo/"+us.user_name+"1.jpg"
-    ph2="/static/photo/"+us.user_name+"2.jpg"
-    ph3="/static/photo/"+us.user_name+"3.jpg"
-    ph4="/static/photo/"+us.user_name+"4.jpg"
-    ph5="/static/photo/"+us.user_name+"5.jpg"
-    nb_photo=comptage_photo(ph1,ph2,ph3,ph4,ph5)
+    liste_photo=listePhoto(us.user_name)
+    nb_photo = 5 - liste_photo.count('/static/nophoto.jpg')
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
@@ -165,6 +241,7 @@ def consultation(login):
     if request.method=="POST":
         like=request.form.get('like')
         block=request.form.get('block')
+        fake=request.form.get('fake')
         if like:
             like=True
         else:
@@ -173,26 +250,43 @@ def consultation(login):
             block=True
         else:
             block=False
-        #fake=request.form.get('fake')
+        if fake:
+            fake=True
+        else:
+            fake=False
         if like != visit.islike:
-            visit.islike = like #modifier le score popularité et envoyer une notification
+            if like==False and liked==True:
+                notif(visitor.id,us.id,'Dislike')
+                closeRoom(visitor.id,us.id)
+            else:
+                if like==True:
+                    notif(visitor.id,us.id,'Like')
+            visit.islike = like #modifier le score popularité 
         if block != visit.isblocked:
             visit.isblocked=block
+        if fake != visit.isfake:
+            visit.isfake=fake
+            if fake==True:
+                ft_send(login,'fake')
         dataAccess.merge(visit)
-    return render_template('consultation.html',profil=us,ph1=ph1,ph2=ph2,ph3=ph3,ph4=ph4,ph5=ph5,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked)
+        us.popularity=calculPopularite(us.id)
+        DataAccess().merge(us)
+        ##### creation de la room si necessaire ######
+        if visit.islike == True:
+            #visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+            if visited:
+                if visited.islike == True and visited.isblocked == False and visited.isfake == False:
+                    room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
+                    if room == None:
+                        new_room = Room()
+                        new_room.users_ids = [visited.visited_id, visited.visitor_id]
+                        new_room.active  = True
+                        DataAccess().persist(new_room)
+                    else:
+                        openRoom(visitor.id,us.id)
 
-
-@app.route('/test/')
-def test():
-    return render_template('test.html')
-
-
-@app.route('/test2/', methods=['GET', 'POST'])
-def test2():
-    if request.method == "POST":
-        a = request.form.get('bou')
-        return a
-    return render_template('test2.html')
+        #################################
+    return render_template('consultation.html',profil=us,photos=liste_photo,naissance=naissance,tags=tags,last_connection=last_connection,visit=visit,nb_photo=nb_photo,liked=liked,fake=fake)
 
 
 @app.route('/profil/')
@@ -200,19 +294,15 @@ def profil():
     if "user" not in session:
         return redirect(url_for('homepage')) 
     user = session['user']['name']
-    ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    if os.path.isfile("./static/photo/"+session['user']['name']+"1.jpg"):
+        ph1="/static/photo/"+session['user']['name']+"1.jpg"
+    else:
+        ph1='/static/nophoto.jpg'
     us = DataAccess().find('Users', conditions=('user_name', user))
     tag = DataAccess().fetch('Users_topic', conditions=('users_id',us.id))    
     tags=[]
     for t in tag:
         tags.append(t.tag)
-    nom = us.last_name
-    login = us.user_name
-    prenom = us.first_name
-    bio= us.description
-    orientation = us.orientation
-    email= us.email
-    sexe=us.gender
     b=str(us.birthday) #champ date transformé en texte
     naissance=b[8:]+'/'+b[5:7]+'/'+b[:4] #conversion date americaine en europeene
     if us.birthday ==None:
@@ -242,6 +332,8 @@ def recherche():
             sex_to_find="Female"
         else:
             sex_to_find="Male"
+    latitude=us.latitude
+    longitude=us.longitude
     ##### Criteres de recherches
     if request.method=="POST":
         coordonnee=request.form.get('longlat')
@@ -253,6 +345,11 @@ def recherche():
             longitude=us.longitude
         criteres={}
         criteres['sexe']=request.form.get('sexe')
+        if us.orientation:
+            criteres['orientation']=us.orientation
+        else:
+            criteres['orientation']='Bi'
+        criteres['sexe_chercheur']=us.gender
         criteres['latitude']=latitude
         criteres['longitude']=longitude
         criteres['dist_max']=request.form.get('km')
@@ -262,10 +359,8 @@ def recherche():
         criteres['pop_max']=request.form.get('popmax')
         criteres['interets']=request.form.getlist('interest')
         criteres['id']=us.id
-    ##### Recherche
-        #find_profil(criteres)
-        return render_template('resultats.html',candidats=find_profil(criteres))
-    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find)
+        return render_template('resultats.html',candidats=find_profile(criteres))
+    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find, latitude=latitude,longitude=longitude)
 
 
 @app.route('/registration/',methods=['GET', 'POST'])
@@ -286,9 +381,7 @@ def registration():
         session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
         new = Users()
-        print('Prenom '+prenom)
         new.first_name = prenom
-        print("nom"+nom)
         new.last_name = nom
         new.user_name = login
         new.password = hash_pwd(pwd,login)
@@ -299,40 +392,41 @@ def registration():
         new.gender = None
         new.orientation = None
         new.birthday = None
-        new.latitude = 0
-        new.longitude = 0
+        new.is_recommendable = False
+        new.latitude = request.form.get('latitude')
+        new.longitude = request.form.get('longitude')
         new.popularity = 0
         DataAccess().persist(new)
-
         ft_send(lien,'registration')
-        return redirect(url_for('accueil'))
+        session.clear()
+        return redirect(url_for('homepage'))
     else:
         return render_template('registration.html')
 
 
-@app.route('/forgot/', methods=['GET', 'POST'])
+@app.route('/forgot/',methods=['GET', 'POST'])
 def forgot():
     try:
-        user = session['user']['name']
+        user=session['user']['name']
     except:
-        user = ''
-    if request.method == "POST":
-        user = request.form.get('login')
-        mail = rep = ''
+        user=''
+    if request.method=="POST":
+        user=request.form.get('login')
+        mail = rep =''
         us = DataAccess().find('Users', conditions=('user_name', user))
-        mail = us.email
-        session['user'] = {'name': user, 'email': mail}
         if us == None:
-            rep = 'Utilisateur inconnu !'
-            return render_template('forgot_password.html', rep=rep)
-        else:
-            lien = lien_unique()
-            nature = 'password'
-            us.confirm = lien
+            rep='Utilisateur inconnu !'
+            return render_template('forgot_password.html',rep=rep)
+        else :
+            lien=lien_unique()
+            mail=us.email
+            session['user']= {'name' : user, 'email' : mail}
+            nature='password'
+            us.confirm=lien
             DataAccess().merge(us)  
             ft_send(lien, nature)
             return redirect(url_for('logout')) 
-    return render_template('forgot_password.html', user=user)
+    return render_template('forgot_password.html',user=user)
 
 
 @app.route('/logout/')
@@ -343,39 +437,40 @@ def logout():
     last_connect=connections[0]
     last_connect.disconnect_date=datetime.now()
     DataAccess().merge(last_connect)
-    #enregistrer deconnexion pour room du chat et autres notifs
     session.clear()
     return redirect(url_for('homepage'))
-
     
+
 @app.route('/validation/<code>')
 def validation(code):
     us = DataAccess().find('Users', conditions=('confirm', code))
-    if us == None:
-        rep = "ce lien n'est pas valable !"
+    if us==None:
+        rep="ce lien n'est pas valable !"
         return render_template('validation.html', rep=rep)
-    us.active = True
-    us.confirm = None
-    DataAccess().merge(us)       
-    return redirect(url_for('logout'))        
+    
+    us.active=True
+    us.confirm=None
+    DataAccess().merge(us)  
+    session.clear()     
+    return redirect(url_for('homepage'))        
 
 
-@app.route('/newpassword/<code>', methods=['GET', 'POST'])
+@app.route('/newpassword/<code>', methods=['GET','POST'])
 def newpassword(code):
     us = DataAccess().find('Users', conditions=('confirm', code))
-    if us == None:
-        rep = "ce lien n'est pas valable !"
-        return render_template('newpasswordfalse.html', rep=rep)
+    if us==None:
+        rep="ce lien n'est pas valable !"
+        return render_template('newpasswordfalse.html', rep =rep)
     session['user']= {'name' : us.user_name}
-    if request.method == "POST":
-        pwd = request.form.get('password')
-        pwd2 = request.form.get('password2')
-        if verif_password(pwd, pwd2) != 'ok':
-            return render_template('newpassword.html', message=verif_password(pwd, pwd2))
+    if request.method=="POST":
+        pwd=request.form.get('password')
+        pwd2=request.form.get('password2')
+        if verif_password(pwd,pwd2) !='ok':
+            return render_template('newpassword.html', message = verif_password(pwd,pwd2))
         else:
-            hash = hash_pwd(pwd, us.user_name)
-            us.confirm = None
-            us.password = hash
+            hash=hash_pwd(pwd,us.user_name)
+            us.confirm=None
+            us.password=hash
             DataAccess().merge(us)
             return redirect(url_for('logout'))
     return render_template('newpassword.html', login=us.user_name)
@@ -396,7 +491,6 @@ def profilmodif():
         topics.append(topic.tag)
     for t in tag:
         tags.append(t.tag)
-    ph1="/static/photo/"+session['user']['name']+"1.jpg"
     naissance=(us.birthday)
     latitude=us.latitude
     if latitude == None:
@@ -407,8 +501,8 @@ def profilmodif():
     if request.method=="POST":
         coordonnee=request.form.get('longlat')
         if (coordonnee):
-            us.latitude=coordonnees(coordonnee)[0]
-            us.longitude=coordonnees(coordonnee)[1]
+            us.latitude=float(coordonnees(coordonnee)[0])
+            us.longitude=float(coordonnees(coordonnee)[1])
         interets=request.form.getlist('interest')
         dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
         us.first_name=request.form.get('first_name')
@@ -434,22 +528,13 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        print(user)
-        # msgs = DataAccess()fetch('Message',)
-        print(f"\n\n{username}\n\n")
-        print('user_id :', user.id)
-        # print(f"\n\n{session}\n\n")
-        room_list = DataAccess().fetch('Users_room', joins=[('master_id', 'US')])
-        # print("liste : ", liste)
-        # print("\n\n")
-        notif_list = find_notif_list(user.id)
-        # print(notif_list)
-
+        room_list = DataAccess().fetch('Users_room', 
+                                       conditions=[('R.active', True), ('U.slave_id', user.id)], 
+                                       joins=[('master_id', 'US'), ('room_id', 'R')])
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id, 
-                                rooms=room_list,
-                                notif_list=notif_list
+                                rooms=room_list
                                 )
     else:
         return redirect(url_for('homepage'))  
@@ -467,16 +552,20 @@ def add_header(r):
     r.headers['Cache-Control'] = 'public, max-age=0'
     return r
 
+###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
-    print("ajax")
+   # print("ajax")
     if "user" in session:
         username = session['user']['name']
-        user = DataAccess().find('Users', conditions=('user_name', username))
-        notif_list = find_notif_list(user.id)
-        print('len list : ', len(notif_list))
-        return str(len(notif_list))
-    
+        us = DataAccess().find('Users', conditions=[('user_name', username)])
+        (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
+        print('like : ', like)
+        list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
+        json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
+        return json_notif
+
+
 
 ################################################
 ########## Temps réel avec socketio  ###########
@@ -485,7 +574,8 @@ def refresh_notif():
 # Connexions des users
 @socketio.on('connect_user')
 def login_connect(data):
-    print('login-connect = ', data['msg'])
+    pass
+    #print('login-connect = ', data['msg'])
 
 
 ############# Chat  ###################
@@ -493,7 +583,7 @@ def login_connect(data):
 #receive and send message
 @socketio.on('message')
 def message(data):
-    #print(f"\n\n{data}\n\n")
+    # print(f"\n\n{data}\n\n")
     msg = Message()
     msg.chat = data['msg']
     msg.room_id = data['room']
@@ -503,16 +593,18 @@ def message(data):
     notif.sender_id = data['user_id']
     notif.receiver_id = receiver.id
     notif.notif_type = 'Message'
-    notif.read_notif = False
+    notif.is_read = False
     DataAccess().persist(msg)
-    DataAccess().persist(notif)
+    # DataAccess().persist(notif)
+    notif_cache.persist(notif)
+    # print('notif_cache.cache : ', *notif_cache.cache)
     send({
           'msg': data['msg'],
           'sender': data['sender'],
           'receiver': data['receiver'],
-          'room': data['room'], 'notif':notif.id,
-          'time_stamp': strftime('%d-%b %I:%M%p', localtime())
-          }, 
+          'room': data['room'], 'notif': notif.id,
+          'time_stamp': strftime('%d-%b %H:%M', localtime())
+          },
           room=data['room']
         )
     
@@ -522,8 +614,9 @@ def message(data):
 def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
-        notif.read_notif = True
-        DataAccess().merge(notif)
+        notif.is_read = True
+        # DataAccess().merge(notif)
+        notif_cache.merge(notif)
         
         
 #join room
@@ -533,7 +626,7 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    # print('room = ',data['room'])
+    print('room = ',data['room'])
     receiver_id = room_data.slave_id
     sender_id = room_data.master_id
     if room_data.slave_id == user.id:
@@ -546,25 +639,28 @@ def join(data):
     # print(data['username'])
     # print(user.id)
     # print("list msgs = ")
-    msgs_json = json.dumps(msgs)
+    msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
     # mise a jour des notifs 'message' a true (concernant cette room)
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
                                                                 ('receiver_id', sender_id),
                                                                 ('notif_type', 'Message'),
-                                                                ('read_notif', False)
+                                                                ('is_read', False)
                                                                 ])
     print(notif_list)
     for notif in notif_list:
-        notif.read_notif = True
-        DataAccess().merge(notif, autocommit=False)
-    DataAccess().commit()
+        notif.is_read = True
+        # DataAccess().merge(notif, autocommit=False)
+        notif_cache.merge(notif, autocommit=False)
+    # DataAccess().commit()
+    notif_cache.commit()
         
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,
-           'user_id': user.id, #voir dans template si on peut l'enlever
+           'user_id': user.id,  # voir dans template si on peut l'enlever
            'receiver': receiver.user_name,
+           'receiver_id': receiver.id,
           },
         room=data['room']
         )
@@ -573,47 +669,13 @@ def join(data):
 #leave room       
 @socketio.on('leave')
 def leave(data):
-    # print("leave : ",data)
     leave_room(data['room'])
-    #enregistrer la date de deconnexion pour les notifications
-    send({'msg': data['username'] + " a quitté cette discussion."}, room=data['room']) #msg optionnel
-    
-    
-@socketio.on('like')  # l'evenement 'like'  arrive ici
-def like(data):
-    # find users id
-    user1 = DataAccess().find('Users', conditions=('user_name', data['user1']))
-    user2 = DataAccess().find('Users', conditions=('user_name', data['user2']))
-    print(f"\n\n{user1.id}\n\n") 
-    print(f"\n\n{user2.id}\n\n")
-    print(f"\n\n{data}\n\n")
-    
-    # search if room already exists
-    # users_room = DataAccess().find('Users_room', conditions=[('master_id', user1.id),('slave_id', user2.id)], joins=[('room_id')])
-    # print("users_room : ", users_room.room_id, users_room.master_id, users_room.slave_id )
-    
-    # create new room
-    # newroom = Room()
-    # newroom.users_ids = [user1.id, user2.id]
-    # newroom.active = False
-    # DataAccess().persist(newroom)
-    # print("newroom_id : ",newroom.id)
-    
-    # join the newroom
-    # user1.join_room(newroom)
-    # user2.join_room(newroom)
-    # emit("afterlike", {'username': data['username']}, room=newroom) # renvoie un evenement 'afterlike' 
-    
-# @ socketio.on('create')
-# def create(data):
-# username = data['username']
-# room = data['room_name']
-# join_room(data[room])
-# send(username + ' has left the room.', room=room)
-
+    ########## si on veut ajouter un message de deconnection  ##############
+    # msg = ""
+    # msg_json = json.dumps(msg, default=dispatcher.encoder_default)
+    # enregistrer la date de deconnexion pour les notifications
+    # send({msg}, room=data['room'])  # msg optionnel
 
 # Lance les serveurs
 if __name__ == '__main__':
     socketio.run(app)
-
-    

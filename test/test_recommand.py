@@ -1,17 +1,26 @@
 from matcha.config import Config
-# import logging
-# from test2 import test2
+Config(configpath='resources/configuration/configPopulate.json')
 from matcha.orm.data_access import DataAccess
-# from matcha.model.Room import Room
-# from matcha.model.Message import Message
-# # from matcha.model.Users import Users
 from matcha.web.util3 import compute_recommendations
-# import json
-# import traceback
-# import decimal
+from datetime import datetime
 
 if __name__ == "__main__":
-    data_access = DataAccess()
-    result = data_access.fetch('Users',1, joins='topics')
-    print(result)
-    print(compute_recommendations(result[0]))
+    starttime = datetime.now()
+    DATA_ACCESS = DataAccess()
+    users_topics = DATA_ACCESS.fetch('Users_topic', orderby='users_id')
+    currentusersid = -1   
+    global_topics = {}
+    global_recommend_count = {}
+    for (key, value) in  DATA_ACCESS.execute("select sender_id, count(*) from USERS_RECOMMENDATION where is_rejected=false group by sender_id"):
+        global_recommend_count[key] = value
+    for users_topic in users_topics:
+        if users_topic.users_id != currentusersid:   
+            topics = []
+            currentusersid = users_topic.users_id
+            global_topics[currentusersid] = topics
+        topics.append(users_topic)
+        
+    for users in DATA_ACCESS.fetch('Users'):
+        compute_recommendations(users, global_topics, {})
+    endtime = datetime.now()
+    print('END recommend', str(endtime - starttime))

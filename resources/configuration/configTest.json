@@ -4,7 +4,7 @@
         "database":"matchadb",
         "user":"matchaadmin",
         "password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
-        "LoggingConnection":"sql"
+        "loggingConnection":"sql"
     },
     "logging":{
         "level":10,

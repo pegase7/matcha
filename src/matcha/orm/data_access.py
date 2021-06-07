@@ -98,9 +98,9 @@ class Query():
             _, where_clause = appendif(where_clause is None, where_clause, self.whereaddon[0], " where ", " and ")
             if 0 < len(self.whereaddon[1]):
                 if isinstance(self.whereaddon[1], list):
-                    parameters.extends(self.whereaddon[1])                
+                    parameters += tuple(self.whereaddon[1])                
                 else:
-                    parameters.append(self.whereaddon[1])
+                    parameters += (self.whereaddon[1], )
  
         if not where_clause is None:
             query += where_clause
@@ -207,6 +207,7 @@ class DataAccess():
                 attr = fieldmodel.get_id(attr)
             return attr
         except (AttributeError):
+            print(field.name)
             setattr(record, field, None)
             return None
 
@@ -275,7 +276,6 @@ class DataAccess():
         return objects[0]
         
     def execute(self, cmd, parameters=None, model=None, record=None, autocommit=True):
-        returnvalue = None
         with DataAccess.__connection.cursor() as cursor:
             cursor.execute(cmd, parameters)   
             if not record is None:
@@ -289,8 +289,10 @@ class DataAccess():
             else:
                 if cmd.startswith('select '):
                     return cursor.fetchall()
-            if autocommit:
-                self.commit()
+                else:
+                    if autocommit:
+                        self.commit()
+                    return None
             return returnvalue
         
     def executescript(self, filepath):

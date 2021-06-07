@@ -28,12 +28,16 @@ class BorisTestCase(unittest.TestCase):
         boris.gender = 'Male'
         boris.orientation = 'Hetero'
         boris.birthday = '1964-06-19'
-        boris.latitude = None
-        boris.longitude = None
+        boris.latitude = 46.12375
+        boris.longitude = 3.42074
         boris.popularity = 10
         boris.is_recommendable = True
         data_access.persist(boris)
         
+        boris.latitude = "51.48138"
+        boris.longitude = "-0.10300"
+        data_access.merge(boris)
+
         borises = data_access.fetch('Users', conditions=('user_name', 'borisjohnson'))
         self.assertEqual(len(borises), 1, "No Boris (username='borisjohnson') had been persisted!")
 

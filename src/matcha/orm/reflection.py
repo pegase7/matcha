@@ -48,6 +48,11 @@ class IntField(Field):
     
     def check(self, instance, value):
         if not value is None: #Don't forget if value==0, return false
+            try:
+                if isinstance(value, str):
+                    return int(value)
+            except ValueError:
+                self.__raise_error__( TypeError(instance, self.name, int, value), "Type Error on field '" + self.name + "' for value:" + value)
             if isinstance(value, Decimal):
                 value = int(value)
             elif not isinstance(value, int):
@@ -106,10 +111,15 @@ class FloatField(Field):
     
     def check(self, instance, value):
         if not value is None: #Don't forget if value==0, return false
+            try:
+                if isinstance(value, str):
+                    return float(value)
+            except ValueError:
+                self.__raise_error__( TypeError(instance, float.name, int, value), "Type Error on field '" + self.name + "' for value:" + value)
             if isinstance(value, Decimal):
                 value = float(value)
             elif not isinstance(value, float):
-                logging.error(self.__msgtypeerror__(value, 'int', instance))
+                logging.error(self.__msgtypeerror__(value, 'float', instance))
         return value
 
 
@@ -119,6 +129,11 @@ class BoolField(Field):
         Field.__init__(self, iscomputed, iskey)
     
     def check(self, instance, value):
+        try:
+            if isinstance(value, str):
+                return bool(value)
+        except ValueError:
+            self.__raise_error__( TypeError(instance, self.name, bool, value), "Type Error on field '" + self.name + "' for value:" + value)
         if value and not isinstance(value, bool):
             logging.error(self.__msgtypeerror__(value, 'bool', instance))
         return value
@@ -127,25 +142,31 @@ class BoolField(Field):
 class DateField(Field):
 
     def check(self, instance, value):
-        if isinstance(value, str):
-            return date.fromisoformat(value)
-        elif isinstance(value, datetime):
-            return datetime.date(value.year, value.month, value.day)
-        else:
-            if value and not isinstance(value, date):
-                logging.error(self.__msgtypeerror__(value, 'date', instance))
+        try:
+            if isinstance(value, str):
+                return date.fromisoformat(value)
+            elif isinstance(value, datetime):
+                return datetime.date(value.year, value.month, value.day)
+            else:
+                if value and not isinstance(value, date):
+                    logging.error(self.__msgtypeerror__(value, 'date', instance))
+        except ValueError:
+            logging.error(self.__msgtypeerror__(value, 'date', instance))
         return value
-
 
 class DateTimeField(Field):
 
     def check(self, instance, value):
         if isinstance(value, str):
-            return datetime.fromisoformat(value)
+            try:
+                return datetime.fromisoformat(value)
+            except ValueError:
+                logging.error(self.__msgtypeerror__(value, 'datetime', instance))
+                return value
         else:
             if value and not isinstance(value, datetime):
                 logging.error(self.__msgtypeerror__(value, 'datetime', instance))
-            return value
+        return value
 
 
 class ArrayField(Field):
@@ -222,6 +243,8 @@ class ModelObject(object):
         modelclass = ModelDict().get_model_class(self.get_model_name())
         for field in modelclass.get_fields():
             if not isinstance(field, ListField):
+                if 'latitude' == field.name:
+                    print(field.name)
                 field.check(self, getattr(self, field.name))
         return self.haserror
     
