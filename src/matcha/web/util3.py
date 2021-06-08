@@ -1,5 +1,4 @@
 from pathlib import Path
-import operator
 import os
 from matcha.web.util1 import distanceGPS
 from matcha.config import Config
@@ -72,15 +71,26 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
     ''' 
     conditions=[]
     conditions.append(('active', True))
+    conditions.append(('id', '!=', usr.id))
+    
+    whereaddonstr = 'not exists (select null from USERS_RECOMMENDATION UR where UR.sender_id = %s and UR.receiver_id = U.id)'
+    whereaddonprm = [usr.id]
     if 'Hetero' == usr.orientation:
         conditions.append(('gender', 'Male' if 'Female' == usr.gender else 'Male'))
+        conditions.append(('orientation', 'Hetero'))
     elif 'Homo' == usr.orientation:
         conditions.append(('gender', usr.gender))
+        whereaddonstr += " and (orientation is null or orientation in ('Homo', 'Bi'))"
+    else:
+        whereaddonstr += " and (orientation is null or (orientation = 'Homo' and gender = %s) or (orientation = 'Hetero' and gender != %s))"
+        whereaddonprm.extend([usr.gender, usr.gender])
+        
     
     if global_recommend_count:
         current_count = global_recommend_count[usr.id]
     else:
         current_count = DATA_ACCESS.execute('select count(*) from USERS_RECOMMENDATION where sender_id = %s and is_rejected=false', [usr.id], autocommit=False)[0][0]
+    
     max_count = NB_RECOMMENDATIONS - current_count
     if max_count > 0:
         weighting = 0
@@ -88,31 +98,30 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
         
         ''' users2.topics is used when global_topics is None ''' 
         joins = [] if global_topics else 'topics'
-        for users in DATA_ACCESS.fetch('Users', conditions=conditions, whereaddon='not exists (select null from USERS_RECOMMENDATION UR where UR.sender_id = U.id)', joins=joins):
-            if usr.id != users.id:
-                if not users.latitude is None or not users.longitude is None:
-                    distance, ratio_km = users_distance(usr.latitude, usr.longitude, users.latitude, users.longitude)
-                else:
-                    ratio_km = 0
-                    distance = None
-                if global_topics:
-                    try:
-                        topics1 = global_topics[usr.id]
-                    except KeyError:
-                        topics1 = []
-                    try:
-                        topics2 = global_topics[users.id]
-                    except KeyError:
-                        topics2 = []
-                else:
-                    topics1 = usr.topics
-                    topics2 = users.topics
-                
-                topics_ratio = users_match_topics(topics1, len(topics1), topics2)
-                weighting = ratio_km + users_match_age(usr, users) + topics_ratio
-                if weighting >= THRESHOLD:
-                    delta = abs(relativedelta(usr.birthday, users.birthday).years)
-                    recommendations.append((weighting, delta, ratio_km, distance, topics_ratio, users.id))
+        for users in DATA_ACCESS.fetch('Users', conditions=conditions, whereaddon=(whereaddonstr, whereaddonprm), joins=joins):
+            if not users.latitude is None or not users.longitude is None:
+                distance, ratio_km = users_distance(usr.latitude, usr.longitude, users.latitude, users.longitude)
+            else:
+                ratio_km = 0
+                distance = None
+            if global_topics:
+                try:
+                    topics1 = global_topics[usr.id]
+                except KeyError:
+                    topics1 = []
+                try:
+                    topics2 = global_topics[users.id]
+                except KeyError:
+                    topics2 = []
+            else:
+                topics1 = usr.topics
+                topics2 = users.topics
+            
+            topics_ratio = users_match_topics(topics1, len(topics1), topics2)
+            weighting = ratio_km + users_match_age(usr, users) + topics_ratio
+            if weighting >= THRESHOLD:
+                delta = abs(relativedelta(usr.birthday, users.birthday).years)
+                recommendations.append((weighting, delta, ratio_km, distance, topics_ratio, users.id))
         if 0 != len(recommendations):
             i = 0
             for recommendation in sorted(recommendations, reverse=True):
