@@ -8,9 +8,9 @@ from dateutil.relativedelta import relativedelta
 from matcha.model.Users_recommendation import Users_recommendation
 
 RATIO_KMS = [1, 10, 25, 50, 100, 200, 500] # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
-POPULATE = Config().config['populate']
-THRESHOLD = POPULATE['threshold']
-NB_RECOMMENDATIONS = POPULATE['nb_recommendations']
+RECOMMENDATION = Config().config['recommendation']
+THRESHOLD = RECOMMENDATION['threshold']
+NB_RECOMMENDATIONS = RECOMMENDATION['nb_recommendations']
 DATA_ACCESS = DataAccess()
 
 
@@ -95,8 +95,18 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
                 else:
                     ratio_km = 0
                     distance = None
-                topics1 = global_topics[usr.id] if global_topics else usr.topics
-                topics2 = global_topics[users.id] if global_topics else users.topics
+                if global_topics:
+                    try:
+                        topics1 = global_topics[usr.id]
+                    except KeyError:
+                        topics1 = []
+                    try:
+                        topics2 = global_topics[users.id]
+                    except KeyError:
+                        topics2 = []
+                else:
+                    topics1 = usr.topics
+                    topics2 = users.topics
                 
                 topics_ratio = users_match_topics(topics1, len(topics1), topics2)
                 weighting = ratio_km + users_match_age(usr, users) + topics_ratio

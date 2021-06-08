@@ -13,11 +13,13 @@
             { "logger_file":"resources/traces/populate_error.log" }
         ]
     },
+    "recommendation":{
+        "threshold":6,
+        "nb_recommendations":8
+    },
     "populate":{
     	"test_data":"both__",
-        "#test_data":"faker",
-    	"threshold":6,
-    	"nb_recommendations":8
+        "#test_data":"faker"
     },
     "orm":{
         "raise_error":false,

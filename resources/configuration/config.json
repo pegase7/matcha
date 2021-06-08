@@ -14,6 +14,10 @@
             { "name":"sql", "logger_file":"resources/traces/sql.log", "level":10 }
         ]
     },
+    "recommendation":{
+        "threshold":6,
+        "nb_recommendations":8
+    },
     "orm":{
         "raise_error":false,
         "logging_info":false,
