@@ -20,8 +20,6 @@ from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
 from email.policy import default
 from matcha.web.notification_cache import NotificationCache
-# import threading
-# from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -32,9 +30,7 @@ app.debug = True  # a supprimer en production
 # SESSION_COOKIE_HTTPONLY=True,
 # SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
-# diut = DisconnectInactiveUsersThread()
 
-# diut.lauchThread(10)
 
 notif_cache = NotificationCache()
 notif_cache.init()
