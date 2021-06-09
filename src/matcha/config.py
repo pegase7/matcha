@@ -24,6 +24,10 @@ EXAMPLE of json file
             { "name":"sql", "logger_file":"resources/traces/sql.log", "level":10 }
         ]
     },
+    "recommendation":{
+        "threshold":80,
+        "nb_recommendations":80
+    },
     "orm":{
         "raise_error":false,
         "logging_info":false,
@@ -39,12 +43,15 @@ EXPLANATIONS
           If item value is null, standard logger is used. level must be equal to DEBUG (10).
           If loggingConnection module is present, sql order are displayed on standard logger (console)
     2) logging module:
-        - level item determines logging leve (i.e.: DEBUG, INFO, WARNING, ERROR, 10 means DEBUG).
+        - level item determines logging level (i.e.: DEBUG, INFO, WARNING, ERROR, 10 means DEBUG).
         - format item: output format. default value is "%(asctime)-19s,%(msecs)-4d %(levelname)-8s [%(module)-15s:%(lineno)-3d] %(message)s".
         - dateformat item: Format of the date
         - handlers module:
           Different handlers can optionnally set. if name hamdler is null, default logger is assumed elsewhere a new logger is created.
-    3) orm module:
+    3) recommendation module:
+        - threshold item: value giving the minimum of weighting needed to be selected.
+        - nb_recommendations item: Maximum number of active recommendations for a user.
+    4) orm module:
         specify what to do when error occurs on field checking: raise_error stop program, logging_error 
 '''
 

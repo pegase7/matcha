@@ -4,7 +4,7 @@
 		"database":"matchadb",
 		"user":"matchaadmin",
 		"password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
-		"logginConnection":true
+        "loggingConnection__":"sql"
     },
 	"logging":{
         "level":10,
@@ -14,12 +14,12 @@
         ]
     },
     "recommendation":{
-        "threshold":6,
-        "nb_recommendations":8
+        "threshold":80,
+        "nb_recommendations":8000
     },
     "populate":{
-    	"test_data":"both__",
-        "#test_data":"faker"
+    	"#test_data":"both__",
+        "test_data":"faker"
     },
     "orm":{
         "raise_error":false,

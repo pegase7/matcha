@@ -8,6 +8,7 @@ class Users_recommendation(ModelObject):
     receiver_id: ManyToOneField(modelname='Users')
     weighting: IntField()
     age_diff: IntField()
+    age_ratio: IntField()
     distance: FloatField()
     dist_ratio: IntField()
     topics_ratio: FloatField()

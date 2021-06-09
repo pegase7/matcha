@@ -75,18 +75,20 @@ alter table USERS_RECOMMENDATION_ID_SEQ owner to MATCHAADMIN;
 --- table USERS_RECOMMENDATION
 ---
 create table USERS_RECOMMENDATION (
-    id              integer DEFAULT nextval('USERS_RECOMMENDATION_ID_SEQ'::regclass) NOT NULL,
-    sender_id		integer NOT NULL,
-    receiver_id		integer NOT NULL,
-    weighting     integer,
-    age_diff		integer,
-    distance		numeric(9,2),
-    dist_ratio		numeric(2),
-    topics_ratio	numeric(9,2),
-    last_consult 	timestamp,    
-    is_rejected     boolean DEFAULT False NOT NULL,
-    created         timestamp without time zone DEFAULT now() NOT NULL,
-    last_update 	timestamp without time zone DEFAULT now() NOT NULL
+    id                  integer DEFAULT nextval('USERS_RECOMMENDATION_ID_SEQ'::regclass) NOT NULL,
+    sender_id           integer NOT NULL,
+    receiver_id         integer NOT NULL,
+    weighting           integer,
+    age_diff            integer,
+    age_ratio           integer,
+    distance            numeric(9,2),
+    dist_ratio          numeric(2),
+    topics_ratio        numeric(9,2),
+    popularity_ratio    integer,
+    last_consult        timestamp,    
+    is_rejected         boolean DEFAULT False NOT NULL,
+    created             timestamp without time zone DEFAULT now() NOT NULL,
+    last_update         timestamp without time zone DEFAULT now() NOT NULL
 );
 alter table USERS_RECOMMENDATION owner to MATCHAADMIN;
 

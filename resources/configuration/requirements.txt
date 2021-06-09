@@ -1,0 +1,10 @@
+#For web
+psycopg2-binary
+flask
+flask_socketio
+
+#For populate
+faker
+unidecode
+numpy
+python-dateutil
