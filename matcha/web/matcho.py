@@ -18,6 +18,7 @@ from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification 
 from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
+from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
 import urllib
 # import threading
@@ -93,13 +94,34 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        us = DataAccess().find('Users', conditions=('user_name', username))
+        us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
         visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
                                              orderby='v.last_update desc', limit='3')
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
                                                   orderby='v.last_update desc', limit='3')
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
         matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
+        #######################  recommandations  ###########################
+        compute_recommendations(us)
+        reco =DataAccess().fetch('Users_recommendation', conditions=('sender_id', us.id),joins='receiver_id')
+        print('#################################################')
+        suggest=[]
+        for rec in reco:
+            info={}
+            info["pseudo"]=rec.receiver_id.user_name
+            info["popul"] = rec.receiver_id.popularity
+            if (rec.receiver_id.birthday):
+                info["age"] = calculate_age(rec.receiver_id.birthday)
+            else:
+                info["age"] = 0
+            if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            print(info)
+            suggest.append(info)
+        print('#################################################')
+        #####################################################################
         like = 0
         match = 0
         for l in likes:
@@ -128,7 +150,6 @@ def accueil():
                 info['photo'] = ('/static/nophoto.jpg')
             if(visit.isblocked == False and visit.isfake == False):
                 visitors.append(info)
-        print('visitor : ', *visitors)
             
         for visited in visits_made:
             info = {}
@@ -142,8 +163,7 @@ def accueil():
             else:
                 info['photo'] = ('/static/nophoto.jpg')
             visited_infos.append(info)
-        print('visited_infos : ', visited_infos)
-        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
+        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching, suggest=suggest)
     else:
         return redirect(url_for('homepage'))   
 
@@ -360,11 +380,11 @@ def recherche():
         else:
             criteres['dist_max']=20000
         if request.form.get('agemin'):
-            criteres['age_min']=request.form.get('agemin')
+            criteres['age_min']=int(request.form.get('agemin'))
         else:
             criteres['age_min']=18
         if request.form.get('agemax'):
-            criteres['age_max']=request.form.get('agemax')
+            criteres['age_max']=int(request.form.get('agemax'))
         else:
             criteres['age_max']=110
         if request.form.get('popmin'):

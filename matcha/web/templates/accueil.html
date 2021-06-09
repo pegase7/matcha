@@ -1,25 +1,23 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
 
 
-<h1> Tableau de bord</h1> <br>
+<h1> Mon Tableau de bord</h1> <br>
 <div class="container accueil-container">
-    <h3>Mes scores</h3>
     <span class="accueil-pop"> Ma popularité : {{pop}} </span>
     <span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
     <span class="accueil-match"> Mes matchs : {{ match }}</span>
 </div>
 
 <div class="container accueil-container">
-    <h3 align="center"><a href="{{ url_for('visites', like='no')}}" class="lien">Qui a consulté mon profil ?</a></h3>
-    <h3><br>Mes 3 derniers visiteurs :</h3>
+    
+    <h3>Mes 3 derniers visiteurs : &emsp;&emsp; <a href="{{ url_for('visites', like='no')}}" class="lien">Tous mes visiteurs</a></h3>
     {% for visitor in visitors %}
     <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
     <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
-        <div class="card-header"> <img src="{{ visitor.photo }}" height="100" alt=""></a></div>
+        <div class="card-header"> <img src="{{ visitor.photo }}" height="80" alt=""></a></div>
         <div class="card-body">
             <h3>{{ visitor.pseudo }}</h3>
-            <p>Age : {{ visitor.age }}</p>
-            <p>Popularité : {{ visitor.popul }}</p>
+            <p>{{ visitor.age }} ans - Popularité : {{ visitor.popul }}</p>
             <p>A visité le : {{ visitor.date }}</p>
         </div>
     </div></a>
@@ -31,24 +29,45 @@
 
     {% for visited in visited_infos %}
     <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
-        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="100" alt=""></a></div>
+        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
         <div class="card-body">
-            <h3>{{ visited.pseudo }}</h3>
-            <p>Age : {{ visited.age }} ans</p>
-            <p>Popularité : {{ visited.popul }}</p>
-            <p>Dernière visite : {{ visited.date }}</p>
+            <h2>{{ visited.pseudo }}</h2>
+            <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
+            <p>le {{ visited.date }}</p>
         </div>
     </div>
     {% endfor %}
 </div>
 
 <div>
+    
+    {% if matching==False %}
+    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
+    {% else %}
+    <div class="container accueil-container">
+        <h3>Nos suggestions...</h3>
+    
+        {% for visited in suggest %}
+        <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+            <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
+            <div class="card-body">
+                <h2>{{ visited.pseudo }}</h2>
+                <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div>
+    
+    
+    
+    
+    {% endif %}
+
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
-    {% if matching==False %}
-    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
-    {% else %} {% include 'matching.html' %} {% endif %}
 </div>
 
 {% endblock %}
