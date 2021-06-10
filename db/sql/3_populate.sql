@@ -195,7 +195,7 @@ INSERT INTO public.topic VALUES ('Philatelie', '2021-05-28 12:49:27.317087');
 -- password is unique = PasseMot0
 INSERT INTO public.users VALUES (1, 'Donald', 'Trump', 'Duck', '8408ff8b4eb12ae70bb99055a571586620be97f5', 'Blond au tweet feroce', 'donald@duck.us', true, false, NULL, 'Male', 'Hetero', '1946-06-14', 38.89783, -77.03650, -1, '2021-04-09 09:02:36.549584', '2021-04-09 09:02:36.549584');
 INSERT INTO public.users VALUES (2, 'Angela', 'Merkel', 'LaBombe', 'b051e9143c2bbe4cb2e0f797ef0e60aefe2e2283', 'Mon serieux est mon principal atout', 'angela@frech.de', true, false, NULL, 'Female', 'Hetero', '1954-07-17', 52.52021, 13.36924, 0, '2021-04-09 09:02:36.549584', '2021-05-28 09:09:24.848434');
-INSERT INTO public.users VALUES (3, 'Emmanuel', 'Macron', 'Le Kiki', '2b912813da1e65a92c56b8505847ea3ed4c5ea61', 'Passionne des antiquites', 'manu@narcisse.com', true, false, NULL, 'Male', 'Bi', '1977-12-21', 48.87120, 2.31650, 0, '2021-04-09 09:02:36.549584', '2021-05-18 10:10:23.785694');
+INSERT INTO public.users VALUES (3, 'Emmanuel', 'Macron', 'LeKiki', '2b912813da1e65a92c56b8505847ea3ed4c5ea61', 'Passionne des antiquites', 'manu@narcisse.com', true, false, NULL, 'Male', 'Bi', '1977-12-21', 48.87120, 2.31650, 0, '2021-04-09 09:02:36.549584', '2021-05-18 10:10:23.785694');
 INSERT INTO public.users VALUES (4, 'Fogiel', 'Marc-Olivier', 'marcopapolo', '2dc3f30fd6e5cf6120d948b6ec00b462ea92ff31', 'Ouvert a toute les promotions', 'mo-fogiel@tetu.fr', true, false, NULL, 'Male', 'Homo', '1969-07-05', 48.83636, 2.27387, 1, '2021-04-09 09:02:36.549584', '2021-04-27 10:00:39.615892');
 INSERT INTO public.users VALUES (5, 'Elric', 'De Melnibonnée', 'elric', '9d16f572d8ec4336f5121de759fd1ee9c7f2f314', 'Du sang et des âmes pour mon seigneur Arioch !
 Pour la preservation de l''antique Melnibonnée
@@ -376,8 +376,8 @@ INSERT INTO public.visit VALUES (36, 18, 10, 23, true, false, false, '2021-04-27
 INSERT INTO public.visit VALUES (12, 7, 11, 7, false, false, false, '2021-04-22 09:15:22.5255', '2021-05-31 10:09:06.577966');
 INSERT INTO public.visit VALUES (1, 5, 10, 53, false, false, true, '2021-04-22 07:42:52.655962', '2021-05-28 08:41:17.770524');
 
-INSERT INTO public.room VALUES (1, '{2,3}', false, '2021-04-09 09:02:36.549584', '2021-04-09 09:02:36.549584');
-INSERT INTO public.room VALUES (2, '{2,1}', false, '2021-04-09 09:02:36.549584', '2021-04-09 09:02:36.549584');
+INSERT INTO public.room VALUES (1, '{2,3}', true, '2021-04-09 09:02:36.549584', '2021-04-09 09:02:36.549584');
+INSERT INTO public.room VALUES (2, '{2,1}', true, '2021-04-09 09:02:36.549584', '2021-04-09 09:02:36.549584');
 INSERT INTO public.room VALUES (3, '{4,3}', true, '2021-05-18 12:51:32.452186', '2021-05-18 12:51:32.452186');
 
 insert into message(room_id, sender_id, chat) values (1,3, 'Que dois-je faire pour l''Astra-Zeneca');
