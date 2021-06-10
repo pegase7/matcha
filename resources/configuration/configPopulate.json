@@ -4,7 +4,7 @@
 		"database":"matchadb",
 		"user":"matchaadmin",
 		"password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
-        "loggingConnection__":"sql"
+        "loggingConnection":"sql"
     },
 	"logging":{
         "level":10,
@@ -19,7 +19,7 @@
     },
     "populate":{
     	"#test_data":"both__",
-        "test_data":"faker"
+        "test_data":"faker__"
     },
     "orm":{
         "raise_error":false,

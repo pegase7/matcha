@@ -2,6 +2,7 @@ drop table if exists MESSAGE;
 drop table if exists VISIT;
 drop table if exists NOTIFICATION;
 drop table if exists CONNECTION;
+drop table if exists RECOMMENDATION_TOPIC;
 drop table if exists USERS_RECOMMENDATION;
 drop table if exists USERS_TOPIC;
 drop table if exists TOPIC;

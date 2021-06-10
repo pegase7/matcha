@@ -16,21 +16,21 @@ class NotificationCacheTestCase(unittest.TestCase):
         self.data_access = DataAccess()
         notification_cache = NotificationCache()
         notification_cache.init()
-        self.assertEqual(3, len(notification_cache.cache), 'cache must contain 3 entry key!')
-        self.assertEqual((2,0,4,1), notification_cache.get_unread(4), 'cache must contain (2,0,4,1) unread notifications for entry key 4!')
+        self.assertEqual(21, len(notification_cache.cache), 'cache must contain 21 entry key!')
+        self.assertEqual((2,0,5,1), notification_cache.get_unread(4), 'cache must contain (2,0,5,1) unread notifications for entry key 4!')
         newnotification = Notification()
         newnotification.sender_id = 1
         newnotification.receiver_id = 4
         newnotification.notif_type = 'Visit'
         newnotification.is_read = False
         notification_cache.persist(newnotification)
-        self.assertEqual((2,0,5,1), notification_cache.get_unread(4), 'cache must contain (2,0,5,1) unread notifications for entry key 4 after persist!')
+        self.assertEqual((2,0,6,1), notification_cache.get_unread(4), 'cache must contain (2,0,6,1) unread notifications for entry key 4 after persist!')
         self.newid = newnotification.id
         notif10 = self.data_access.find('Notification', 10)
         self.assertEqual(False, notif10.is_read, 'All notifications in cache must have unread status!')
         notif10.is_read = True
         notification_cache.merge(notif10)
-        self.assertEqual((2,0,4,1), notification_cache.get_unread(4), 'cache must contain (2,0,4,1) unread notifications for entry key 4! after merge')
+        self.assertEqual((2,0,5,1), notification_cache.get_unread(4), 'cache must contain (2,0,5,1) unread notifications for entry key 4! after merge')
 
     def cleanup(self):
         notif10 = self.data_access.find('Notification', 10)

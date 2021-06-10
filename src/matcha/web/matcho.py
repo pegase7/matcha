@@ -84,7 +84,7 @@ def photo():
             else:
                 flash('Seuls les fichier JPG ou JPEG sont autorisés !')
         else:
-             flash('Aucun fichier choisi !')
+            flash('Aucun fichier choisi !')
     liste_photo=listePhoto(session['user']['name'])
     return render_template('photo.html',photos=liste_photo)
         
@@ -169,7 +169,7 @@ def visites():
             if (visit.visitor_id.birthday):
                 info["age"]=calculate_age(visit.visitor_id.birthday)
             else:
-               info["age"]=0
+                info["age"]=0
             info["date"]=visit.last_update.date().isoformat()
             if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
                 photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"

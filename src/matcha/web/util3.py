@@ -5,6 +5,7 @@ from matcha.config import Config
 from matcha.orm.data_access import DataAccess
 from dateutil.relativedelta import relativedelta
 from matcha.model.Users_recommendation import Users_recommendation
+from matcha.model.Recommendation_topic import Recommendation_topic
 
 RATIO_KMS = [1, 10, 25, 50, 100, 200, 500] # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
 RECOMMENDATION = Config().config['recommendation']
@@ -53,16 +54,19 @@ def users_match_age(usr1, usr2):
     
 def users_match_topics(topics1, size, topics2):
     if not len(topics1) or not len(topics2):
-        return 0
+        return [], 0
     match = 0
+    matched_tags = []
     for tag1 in topics1:
         i = 0
         for tag2 in topics2:
-            match += (tag1.tag == tag2.tag)
+            if tag1.tag == tag2.tag:
+                matched_tags.append(tag2)
+                match += 1
             i += 1
     minimum = min(i, size)
     maximum = max(i, size)
-    return (1 - ((minimum - match) / minimum)) * 100  * (minimum / maximum)
+    return matched_tags, (1 - ((minimum - match) / minimum)) * 100  * (minimum / maximum)
     
 def compute_recommendations(usr, global_topics=None, global_recommend_count=None):
     '''
@@ -79,19 +83,20 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
     whereaddonprm = [usr.id, usr.id, usr.id]
     if 'Hetero' == usr.orientation:
         conditions.append(('gender', 'Male' if 'Female' == usr.gender else 'Female'))
-        conditions.append(('orientation', 'Hetero'))
+        whereaddonstr += " and (orientation is null or orientation in ('Hetero', 'Bi'))"
     elif 'Homo' == usr.orientation:
         conditions.append(('gender', usr.gender))
         whereaddonstr += " and (orientation is null or orientation in ('Homo', 'Bi'))"
     else:
-        whereaddonstr += " and (orientation is null or (orientation = 'Homo' and gender = %s) or (orientation = 'Hetero' and gender != %s))"
+        whereaddonstr += " and (orientation is null or orientation = 'Bi' or (orientation = 'Homo' and gender = %s) or (orientation = 'Hetero' and gender != %s))"
         whereaddonprm.extend([usr.gender, usr.gender])
         
     
     if global_recommend_count:
         current_count = global_recommend_count[usr.id]
     else:
-        current_count = DATA_ACCESS.execute('select count(*) from USERS_RECOMMENDATION where sender_id = %s and is_rejected=false', [usr.id], autocommit=False)[0][0]
+        DATA_ACCESS.execute('delete from users_recommendation where sender_id=%s and is_rejected=false', parameters=[usr.id], autocommit=False)
+        current_count = 0
     
     max_count = NB_RECOMMENDATIONS - current_count
     if max_count > 0:
@@ -119,7 +124,7 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
                 topics1 = usr.topics
                 topics2 = users.topics
             
-            topics_ratio = users_match_topics(topics1, len(topics1), topics2)
+            matched_tags, topics_ratio = users_match_topics(topics1, len(topics1), topics2)
             age_ratio = users_match_age(usr, users)
             weighting = ratio_km + age_ratio + topics_ratio
             if weighting >= THRESHOLD:
@@ -141,6 +146,12 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
                 users_recommendation.topics_ratio = recommendation[5]
                 users_recommendation.is_rejected = False
                 DATA_ACCESS.persist(users_recommendation, autocommit=False)
+                for tag in matched_tags:
+                    recommendation_topic = Recommendation_topic()
+                    recommendation_topic.recommend_id = users_recommendation.id
+                    recommendation_topic.tag = tag
+                    DATA_ACCESS.persist(recommendation_topic, autocommit=False)
+                   
                 i = i + 1  
         DATA_ACCESS.commit()   
 
