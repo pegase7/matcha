@@ -3,24 +3,15 @@
 <h1 id="h1-dislike">Mes dislikes</h1>
 <div id="dislike-container" class="container">
 
-    {% if liste %}
-    <table id="dislike-table">
-        <thead>
-            <tr>
-                <th>Photo</th>
-                <th>Pseudo</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for l in liste %}
-            <td class="img-user"><img src="{{ l.photo }}" alt="" height="100"> </td>
-            <td>{{ l.username }}</td>
-            <td>{{ l.date }}</td>
-
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
+    {% if liste %} {% for l in liste %}
+    <a href="{{ url_for('consultation', login=l.username)}}" class="lien">
+        <div class="accueil-cards card">
+            <div class="card-header"> <img src="{{ l.photo }}" height="80" alt=""></div>
+            <div class="card-body">
+                <h3>{{ l.username }}</h3>
+                <p>Dislike le : {{ l.date }}</p>
+            </div>
+        </div>
+        {% endfor %} {% endif %}
 </div>
 {% endblock %}

@@ -1,27 +1,4 @@
 #dislike-container {
-    justify-content: center;
-}
-
-#dislike-table {
-    border: 3px solid black;
-    border-radius: 5px;
-    margin: 50px 50px;
-    padding-bottom: 20px;
-}
-
-thead {
-    border: 2px solid black;
-}
-
-th {
-    border: 2px solid black;
-    text-align: center;
-    padding: 5px;
-}
-
-#dislike-table td {
-    text-align: center;
-    border: 1px solid black;
-    padding: 3px;
-    font-weight: 700;
+    border-top: 3px solid black;
+    padding: 10px 0px;
 }

@@ -64,36 +64,6 @@ def homepage():
         return render_template('home.html')
     
 
-@app.route('/dislike')
-def dislike():
-    if "user" not in session:
-        return redirect(url_for('homepage'))
-    username = session['user']['name']
-    us = DataAccess().find('Users', conditions=[('user_name', username)])
-    dislike_list = DataAccess().fetch('Notification', 
-                                      conditions=[('receiver_id', us.id), ('notif_type', 'Dislike'), ('is_read', False)], 
-                                      joins=('sender_id', 'S'),
-                                      orderby='N.id desc')
-    dislike_infos = []
-    for d in dislike_list:
-        info = {}
-        info['username'] = d.sender_id.user_name
-        info['date'] = d.created.isoformat()
-        if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
-            info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
-        else:
-            info['photo'] = ('/static/nophoto.jpg')
-        dislike_infos.append(info)
-        ######## update notification table #######
-        d.is_read = True 
-        print('d : ',d)
-
-        # notif_cache.merge(d, autocommit=False) #### creer une erreur "TypeError: get_model_class() missing 1 required positional argument: 'model_name"
-    # notif_cache.commit()
-        
-    return render_template('dislike.html', liste = dislike_infos)
-    
-
 @app.route('/photo/', methods=['GET', 'POST'])
 def photo():
     if "user" not in session:
@@ -307,17 +277,17 @@ def consultation(login):
         ##### creation de la room  ######
         
         if visit.islike == True:
-            visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
-
-            if visited.islike == True and visited.isblocked == False and visited.isfake == False:
-                room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
-                if room == None:
-                    new_room = Room()
-                    new_room.users_ids = [visited.visited_id, visited.visitor_id]
-                    new_room.active = True
-                    DataAccess().persist(new_room)
-                else:
-                    openRoom(visitor.id,us.id)
+            # visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
+            if visited:
+                if visited.islike == True and visited.isblocked == False and visited.isfake == False:
+                    room = DataAccess().find('Users_room', conditions=[('master_id', visited.visited_id), ('slave_id', visited.visitor_id)])
+                    if room == None:
+                        new_room = Room()
+                        new_room.users_ids = [visited.visited_id, visited.visitor_id]
+                        new_room.active = True
+                        DataAccess().persist(new_room)
+                    else:
+                        openRoom(visitor.id,us.id)
                     
         #################################
     return render_template('consultation.html', profil=us, photos=liste_photo, naissance=naissance, tags=tags, last_connection=last_connection, visit=visit, nb_photo=nb_photo, liked=liked, fake=fake)
@@ -574,19 +544,15 @@ def chat():
         room_list = DataAccess().fetch('Users_room',
                                        conditions=[('R.active', True), ('U.slave_id', user.id)],
                                        joins=[('master_id', 'US'), ('room_id', 'R')])
-        # print('room_list', *room_list)
         messages_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), 
                                                                         ('notif_type', 'Message'),
                                                                         ('is_read', False)])
-        # print('message_list', *messages_list)
         msgs = {}
         for m in messages_list:
             if m.sender_id in msgs:
                 msgs[m.sender_id] += 1
-                print('msgs val :', msgs[m.sender_id])
             else:
                 msgs[m.sender_id] = 1
-        print('msgs : ', msgs)
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id,
@@ -596,6 +562,44 @@ def chat():
     else:
         return redirect(url_for('homepage'))
 
+@app.route('/dislike')
+def dislike():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=[('user_name', username)])
+    dislike_list = DataAccess().fetch('Notification', 
+                                      conditions=[('receiver_id', us.id), 
+                                                  ('notif_type', 'Dislike'), 
+                                                  ('is_read', False)], 
+                                      joins=('sender_id', 'S'),
+                                      orderby='N.id desc')
+    
+    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id), 
+                                                  ('notif_type', 'Dislike'), 
+                                                  ('is_read', False)])
+    
+    dislike_infos = []
+    for d in dislike_list:
+        info = {}
+        info['username'] = d.sender_id.user_name
+        info['date'] = d.created.date().isoformat()
+        if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        dislike_infos.append(info)
+        
+        ######## update notification table #######
+    for d in dislike_list2:
+        d.is_read = True 
+        print('d : ',d)
+
+        notif_cache.merge(d, autocommit=False) 
+    DataAccess().commit()
+        
+    return render_template('dislike.html', liste = dislike_infos)
+    
 
 @app.after_request
 def add_header(r):
@@ -618,7 +622,6 @@ def refresh_notif():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=[('user_name', username)])
         (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
-        print('like : ', like)
         list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
         json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
         return json_notif
