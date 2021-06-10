@@ -62,6 +62,7 @@ def homepage():
         return redirect(url_for('accueil'))                      
     else: 
         return render_template('home.html')
+    
 
 @app.route('/dislike')
 def dislike():
@@ -573,14 +574,27 @@ def chat():
         room_list = DataAccess().fetch('Users_room',
                                        conditions=[('R.active', True), ('U.slave_id', user.id)],
                                        joins=[('master_id', 'US'), ('room_id', 'R')])
-        print('room_list', *room_list)
+        # print('room_list', *room_list)
+        messages_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), 
+                                                                        ('notif_type', 'Message'),
+                                                                        ('is_read', False)])
+        # print('message_list', *messages_list)
+        msgs = {}
+        for m in messages_list:
+            if m.sender_id in msgs:
+                msgs[m.sender_id] += 1
+                print('msgs val :', msgs[m.sender_id])
+            else:
+                msgs[m.sender_id] = 1
+        print('msgs : ', msgs)
         return render_template('chat.html',
                                 username=username,
                                 user_id=user.id,
-                                rooms=room_list
+                                rooms=room_list,
+                                msgs=msgs
                                 )
     else:
-        return redirect(url_for('homepage'))  
+        return redirect(url_for('homepage'))
 
 
 @app.after_request
@@ -688,7 +702,7 @@ def join(data):
     for notif in notif_list:
         notif.is_read = True
         notif_cache.merge(notif, autocommit=False)
-    notif_cache.commit()
+    DataAccess().commit()
         
     emit('display_old_messages', {
            'username': data['username'],

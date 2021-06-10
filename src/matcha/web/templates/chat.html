@@ -18,12 +18,13 @@
         <nav id="chat-rooms">
             <h4>Discussions</h4>
             <ul>
-
                 {% for room in rooms %}
                 <li class="select-room" value="{{ room.room_id.id }}">
-                    <span>{{ room.master_id.user_name }}</span>
-                    <span id="chat-room-receiver-{{ room.master_id.id }}" class="badge badge-pill badge-warning count-notif"></span>
-                    <p class="state-connection">Déconnecté</p>
+                    <span>{{ room.master_id.user_name }}</span> {% for key, value in msgs.items() %} {% if key == room.master_id.id %}
+
+                    <span id="chat-room-receiver-{{ room.master_id.id }}" class="badge badge-pill badge-warning count-notif">{{ value }}</span>
+                    <!-- <p class="state-connection">Déconnecté</p> -->
+                    {% endif %} {% endfor %}
                 </li>
                 {% endfor %}
             </ul>

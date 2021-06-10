@@ -56,6 +56,3 @@ class NotificationCache():
             return like, message, visit, dislike
         except KeyError:
             return 0, 0, 0, 0
-
-    def commit(self):
-        self.data_access.commit()
