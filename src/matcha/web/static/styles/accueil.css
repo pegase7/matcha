@@ -5,8 +5,9 @@
 
 .accueil-cards {
     display: inline-block;
-    border: 2px solid black;
+    border: 2px solid #000000;
     border-radius: 15px;
+    background-color: rgba(245, 245, 245, 0.4);
 }
 
 .accueil-pop,

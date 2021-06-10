@@ -10,44 +10,65 @@
 </div>
 
 <div class="container accueil-container">
-    <h3>Qui a consulté mon profil ?</h3>
 
+    <h3>Mes 3 derniers visiteurs : &emsp;&emsp; <a href="{{ url_for('visites', like='no')}}" class="lien">Tous mes visiteurs</a></h3>
     {% for visitor in visitors %}
-    <div class="accueil-cards card">
-        <div class="card-header"> <img src="{{ visitor.photo }}" height="100" alt=""></div>
+    <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
+        <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+            <div class="card-header"> <img src="{{ visitor.photo }}" height="80" alt=""></a>
+    </div>
+    <div class="card-body">
+        <h3>{{ visitor.pseudo }}</h3>
+        <p>{{ visitor.age }} ans - Popularité : {{ visitor.popul }}</p>
+        <p>A visité le : {{ visitor.date }}</p>
+    </div>
+    </div>
+    </a>
+    {% endfor %}
+</div>
+
+
+<div class="container accueil-container">
+    <h3>Mes 3 dernières visites</h3>
+
+    {% for visited in visited_infos %}
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header">
+            <a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a>
+        </div>
         <div class="card-body">
-            <h3>{{ visitor.pseudo }}</h3>
-            <p>Age : {{ visitor.age }}</p>
-            <p>Popularité : {{ visitor.popul }}</p>
-            <p>A visité le : {{ visitor.date }}</p>
+            <h2>{{ visited.pseudo }}</h2>
+            <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
+            <p>le {{ visited.date }}</p>
         </div>
     </div>
     {% endfor %}
 </div>
 
+{% if matching==False %}
+<p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
+{% else %}
 <div class="container accueil-container">
-    <h3>Mes dernières visites</h3>
+    <h3>Nos suggestions...</h3>
 
-    {% for visited in visited_infos %}
-    <div class="accueil-cards card">
-        <div class="card-header"> <img src="{{ visited.photo }}" height="100" alt=""></div>
+    {% for visited in suggest %}
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header">
+            <a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a>
+        </div>
         <div class="card-body">
-            <h3>{{ visited.pseudo }}</h3>
-            <p>Age : {{ visited.age }} ans</p>
-            <p>Popularité : {{ visited.popul }}</p>
-            <p>Dernière visite : {{ visited.date }}</p>
+            <h2>{{ visited.pseudo }}</h2>
+            <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
         </div>
     </div>
     {% endfor %}
 </div>
 
 <div>
+    {% endif %}
+
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
-    {% if matching==False %}
-    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
-    {% else %} {% include 'matching.html' %} {% endif %}
-</div>
 
-{% endblock %}
+    {% endblock %}
