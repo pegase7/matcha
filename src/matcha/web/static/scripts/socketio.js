@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //display old message
     socket.on('display_old_messages', data => {
-        console.log('1 ' + data.username);
-        console.log('2 ' + data.user_id);
-        console.log('3 ' + sessionStorage.getItem("current_user"));
-        console.log('4 ' + data.receiver);
-        console.log('5 ' + data.receiver_id);
+        // console.log('1 ' + data.username);
+        // console.log('2 ' + data.user_id);
+        // console.log('3 ' + sessionStorage.getItem("current_user"));
+        // console.log('4 ' + data.receiver);
+        // console.log('5 ' + data.receiver_id);
 
         // met le nb de message non lu à 0
         if (document.getElementById("chat-room-receiver-" + data.receiver_id)) {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chat-message-area').append(h3)
                 //display old messages
             list = JSON.parse(data.msgs_list)
-            console.log(list)
+                // console.log(list)
             list.forEach(
                 msg => {
                     // console.log(msg)
@@ -111,8 +111,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             p.className = "current";
                             data.username = "Moi";
                         }
+                        let date = new Date(msg.created);
+                        let day = date.getDate();
+                        let month = date.getMonth() + 1;
+                        if (month < 10) {
+                            month = '0' + month;
+                        }
+                        let hour = date.getHours();
+                        let minute = date.getMinutes();
+                        if (minute < 10) {
+                            minute = '0' + minute;
+                        }
                         span_username.innerHTML = data.username;
-                        span_timestamp.innerHTML = msg.created;
+                        span_timestamp.innerHTML = day + '-' + month + ' ' + hour + ':' + minute;
                         p.innerHTML = msg.chat +
                             br.outerHTML + span_timestamp.outerHTML;
                         document.querySelector('#display-message-section').append(p);
