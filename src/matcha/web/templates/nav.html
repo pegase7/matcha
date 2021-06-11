@@ -24,7 +24,7 @@
             <span id="nb_messages" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">Likes  
+            <a href="{{ url_for('like')}}" class="nav-link">Likes  
             <span id="nb_likes" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
@@ -32,7 +32,7 @@
                     <span id="nb_visites" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
-            <a href="{{ url_for('dislike')}}" class="nav-link">Dislike
+            <a href="{{ url_for('dislike')}}" class="nav-link">Dislikes
                     <span id="nb_dislikes" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">

@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% block title %}Dislike{% endblock %} {% block content %} {% include 'nav.html' %}
+{% extends 'base.html' %} {% block title %}Like{% endblock %} {% block content %} {% include 'nav.html' %}
 
-<h1 id="h1-dislike">Dislikes</h1>
-<div id="dislike-container" class="container">
+<h1 id="h1-like">Likes</h1>
+<div id="like-container" class="container">
 
     {% if liste %} {% for l in liste %}
     <a href="{{ url_for('consultation', login=l.username)}}" class="lien">
@@ -9,7 +9,7 @@
             <div class="card-header"> <img src="{{ l.photo }}" height="80" alt=""></div>
             <div class="card-body">
                 <h3>{{ l.username }}</h3>
-                <p>Dislike le : {{ l.date }}</p>
+                <p>Like le : {{ l.date }}</p>
             </div>
         </div>
     </a>

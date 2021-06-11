@@ -8,6 +8,7 @@
     border: 2px solid #000000;
     border-radius: 15px;
     background-color: rgba(245, 245, 245, 0.4);
+    margin: 10px;
 }
 
 .accueil-pop,
@@ -24,4 +25,8 @@
 .fa-heart {
     color: tomato;
     margin-right: 10px;
+}
+
+.is-not-read {
+    background-color: rgba(230, 155, 149, 0.4);
 }

@@ -562,6 +562,41 @@ def chat():
     else:
         return redirect(url_for('homepage'))
 
+
+@app.route('/like')
+def like():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=[('user_name', username)])
+    like_list = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
+                                                               ('notif_type', 'Like')],
+                                                   joins=('sender_id', 'S'), 
+                                                   orderby='N.id desc')
+    like_infos = []
+    for l in like_list:
+        info = {}
+        info['username'] = l.sender_id.user_name
+        info['date'] = l.created.date().isoformat()
+        info['is_read'] = l.is_read
+        if os.path.isfile("./static/photo/" + l.sender_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + l.sender_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        like_infos.append(info)
+        
+        ############# update notification table and cache file #########
+    like_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
+                                                                ('notif_type', 'Like'),
+                                                                ('is_read', False)])
+    for l in like_list2:
+        l.is_read = True
+        notif_cache.merge(l, autocommit=False)
+    DataAccess().commit()
+        
+    return render_template('like.html', liste = like_infos)
+        
+
 @app.route('/dislike')
 def dislike():
     if "user" not in session:
@@ -569,32 +604,29 @@ def dislike():
     username = session['user']['name']
     us = DataAccess().find('Users', conditions=[('user_name', username)])
     dislike_list = DataAccess().fetch('Notification', 
-                                      conditions=[('receiver_id', us.id), 
-                                                  ('notif_type', 'Dislike'), 
-                                                  ('is_read', False)], 
+                                      conditions=[('receiver_id', us.id),
+                                                  ('notif_type', 'Dislike')], 
                                       joins=('sender_id', 'S'),
                                       orderby='N.id desc')
-    
-    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id), 
-                                                  ('notif_type', 'Dislike'), 
-                                                  ('is_read', False)])
     
     dislike_infos = []
     for d in dislike_list:
         info = {}
         info['username'] = d.sender_id.user_name
         info['date'] = d.created.date().isoformat()
+        info['is_read'] = d.is_read
         if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
             info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
         else:
             info['photo'] = ('/static/nophoto.jpg')
         dislike_infos.append(info)
         
-        ######## update notification table #######
+        ######## update notification table and cache file #######
+    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id), 
+                                                                   ('notif_type', 'Dislike'), 
+                                                                   ('is_read', False)])
     for d in dislike_list2:
         d.is_read = True 
-        print('d : ',d)
-
         notif_cache.merge(d, autocommit=False) 
     DataAccess().commit()
         
@@ -694,6 +726,7 @@ def join(data):
     receiver = DataAccess().find('Users', conditions=('id', receiver_id))
     
     msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
+    
     ###### mise a jour des notifs 'message' a true (concernant cette room) ##########
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
