@@ -158,7 +158,7 @@ def visites():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-        #visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id))
+       
         visitors=[]
         matching=True
         if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
@@ -182,6 +182,16 @@ def visites():
             info["photo"]=photo
             if(visit.isblocked==False and visit.isfake==False):
                 visitors.append(info)
+                
+        ############# update notification table and cached file ##############
+        notifs = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
+                                                                ('notif_type', 'Visit'),
+                                                                ('is_read', False)])
+        for n in notifs:
+            n.is_read = True
+            notif_cache.merge(n, autocommit=False)
+        DataAccess().commit()
+        
         return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
     else:
         return redirect(url_for('homepage'))
