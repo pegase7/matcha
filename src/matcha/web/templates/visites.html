@@ -1,44 +1,11 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
-<style>
-    table {
-        border: medium solid #0b3688;
-        border-collapse: collapse;
-        /* width: 50%; */
-    }
-    
-    td,
-    th {
-        border: thin solid #6495ed;
-        /* width: 50%; */
-        padding: 5px;
-    }
-    
-    th {
-        text-align: center;
-        cursor: pointer;
-    }
-    
-    th:hover {
-        background: lightblue;
-    }
-    
-    .lien {
-        color: greenyellow;
-    }
-    
-    .alert {
-        color: orangered;
-        font-weight: bold;
-    }
-</style>
 
 <br>
 
-<h1> Mes visiteurs<br>  </h1> <br>
+<h1> Mes visiteurs<br> </h1> <br>
 <h3> Ma popularité : {{pop}} </h3><br>
-<br>
-{%if visitors %}
-<h3>Qui a consulté mon profil ?</h3>
+<br> {%if visitors %}
+<h3>{{message}}</h3>
 <table>
     <thead>
         <tr>
@@ -75,7 +42,7 @@
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
-   
+
 </div>
 <script>
     const compare = (ids, asc) => (row1, row2) => {

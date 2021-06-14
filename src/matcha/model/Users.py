@@ -28,8 +28,3 @@ class Users(ModelObject):
     asvisiteds: ListField(modelname='Visit', select='select V.* from VISIT as V where visited_id = %s order by v.last_update')
     asvisitors: ListField(modelname='Visit', select='select V.* from VISIT as V where visitor_id = %s order by v.last_update')
     messages: ListField(modelname='Message', select='select M.* from MESSAGE as M where sender_id = %s order by M.created')
-# 
-#     def __init__(self):
-#         self.connections = []
-#         self.topics = []
-#         self.rooms = []

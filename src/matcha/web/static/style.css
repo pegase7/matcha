@@ -1,0 +1,90 @@
+P {
+    margin: 1px;
+    /* font-size: 1rem;
+    text-align: justify; */
+}
+
+h1 {
+    text-align: center;
+}
+
+h1,
+h3 {
+    color: midnightblue
+}
+
+h4 {
+    text-align: center;
+    color: #fe0000;
+}
+
+header {
+    background-color: #72D8D5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: url("{{url_for('static', filename='polynesie.jpg')}}") no-repeat center fixed;
+    background-size: cover;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    color: midnightblue
+}
+
+.lien {
+    color: greenyellow;
+}
+
+.center {
+    text-align: center;
+}
+
+.alert {
+    color: orangered;
+    font-weight: bold;
+}
+
+
+/* ##################### tableau ################## */
+
+table {
+    border: medium solid #0b3688;
+    border-collapse: collapse;
+    /* width: 50%; */
+}
+
+td,
+th {
+    border: thin solid #6495ed;
+    /* width: 50%; */
+    padding: 5px;
+}
+
+th {
+    text-align: center;
+    cursor: pointer;
+}
+
+th:hover {
+    background: lightblue;
+}
+
+
+/* ##################### fin tableau ################## */
+
+.note {
+    font-size: 0.5rem;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background: #62d0df;
+    text-align: center;
+}

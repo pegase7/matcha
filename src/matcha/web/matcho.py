@@ -18,8 +18,9 @@ from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification
 from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
-from email.policy import default
+# from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
+import urllib
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -30,6 +31,7 @@ app.debug = True  # a supprimer en production
 # SESSION_COOKIE_HTTPONLY=True,
 # SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
+
 
 
 notif_cache = NotificationCache()
@@ -52,7 +54,6 @@ def homepage():
             return  render_template('home.html', rep=rep)
         session['user'] = {'name': login}
         session.permanent = True  # le cookie a la duree definie plus haut
-        print("cookie valeur : ", session.get)
         connect = Connection()
         connect.users_id = us.id
         connect.connect_date = datetime.now()
@@ -92,13 +93,34 @@ def photo():
 def accueil():
     if "user" in session:
         username = session['user']['name']
-        us = DataAccess().find('Users', conditions=('user_name', username))
+        us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
         visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
                                              orderby='v.last_update desc', limit='3')
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
                                                   orderby='v.last_update desc', limit='3')
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
         matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
+        #######################  recommandations  ###########################
+        # compute_recommendations(us)
+        # reco =DataAccess().fetch('Users_recommendation', conditions=('sender_id', us.id),joins='receiver_id')
+        print('#################################################')
+        # suggest=[]
+        # for rec in reco:
+        #     info={}
+        #     info["pseudo"]=rec.receiver_id.user_name
+        #     info["popul"] = rec.receiver_id.popularity
+        #     if (rec.receiver_id.birthday):
+        #         info["age"] = calculate_age(rec.receiver_id.birthday)
+        #     else:
+        #         info["age"] = 0
+        #     if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
+        #         info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
+        #     else:
+        #         info['photo'] = ('/static/nophoto.jpg')
+        #     print(info)
+        #     suggest.append(info)
+        print('#################################################')
+        #####################################################################
         like = 0
         match = 0
         for l in likes:
@@ -106,12 +128,7 @@ def accueil():
             
         for m in matchs:
             match = match + 1
-        print('like : ', like)
-        print('matches : ', *matchs)
-        print('match : ', match)
-
-        print('visits_made', *visits_made)
-        # print("visits", *visits)
+        
         visitors = []
         visited_infos = []
         matching = True
@@ -132,7 +149,6 @@ def accueil():
                 info['photo'] = ('/static/nophoto.jpg')
             if(visit.isblocked == False and visit.isfake == False):
                 visitors.append(info)
-        print('visitor : ', *visitors)
             
         for visited in visits_made:
             info = {}
@@ -146,7 +162,6 @@ def accueil():
             else:
                 info['photo'] = ('/static/nophoto.jpg')
             visited_infos.append(info)
-        print('visited_infos : ', visited_infos)
         return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
     else:
         return redirect(url_for('homepage'))   
@@ -158,11 +173,8 @@ def visites():
         username = session['user']['name']
         us = DataAccess().find('Users', conditions=('user_name', username))
         visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-       
         visitors=[]
-        matching=True
-        if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
-            matching=False
+        
         for visit in visits:
             info={}
             info["pseudo"]=visit.visitor_id.user_name
@@ -181,8 +193,14 @@ def visites():
                 photo='/static/nophoto.jpg'
             info["photo"]=photo
             if(visit.isblocked==False and visit.isfake==False):
-                visitors.append(info)
-                
+                if like=='no':
+                    visitors.append(info)
+                elif visit.islike==True:
+                    visitors.append(info)
+        if like=='yes':
+            message="Qui m'a liké ?"
+        else:
+            message='Qui a consulté mon profil ?'
         ############# update notification table and cached file ##############
         notifs = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
                                                                 ('notif_type', 'Visit'),
@@ -191,8 +209,12 @@ def visites():
             n.is_read = True
             notif_cache.merge(n, autocommit=False)
         DataAccess().commit()
+        ######################################################################
         
-        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity,matching=matching)
+        if visitors:
+            return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity, message=message)
+        else:
+            return redirect(url_for('accueil'))
     else:
         return redirect(url_for('homepage'))
 
@@ -238,7 +260,6 @@ def consultation(login):
     notif(visitor.id,us.id,'Visit', notif_cache)
     us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
-    
     ###########
     tags = []
    
@@ -267,7 +288,7 @@ def consultation(login):
         else:
             fake = False
         if like != visit.islike:
-            if like == False:
+            if like == False and liked==True:
                 notif(visitor.id, us.id, 'Dislike', notif_cache)
                 closeRoom(visitor.id,us.id)
             else:
@@ -317,13 +338,6 @@ def profil():
     tags = []
     for t in tag:
         tags.append(t.tag)
-    nom = us.last_name
-    login = us.user_name
-    prenom = us.first_name
-    bio = us.description
-    orientation = us.orientation
-    email = us.email
-    sexe = us.gender
     b = str(us.birthday)  # champ date transformé en texte
     naissance = b[8:] + '/' + b[5:7] + '/' + b[:4]  # conversion date americaine en europeene
     if us.birthday == None:
@@ -353,7 +367,9 @@ def recherche():
             sex_to_find = "Female"
         else:
             sex_to_find = "Male"
-    ##### Criteres de recherches
+    latitude=us.latitude
+    longitude=us.longitude
+    ##### Criteres de recherches ##################
     if request.method == "POST":
         coordonnee = request.form.get('longlat')
         if (coordonnee):
@@ -371,58 +387,72 @@ def recherche():
         criteres['sexe_chercheur'] = us.gender
         criteres['latitude'] = latitude
         criteres['longitude'] = longitude
-        criteres['dist_max'] = request.form.get('km')
-        criteres['age_min'] = request.form.get('agemin')
-        criteres['age_max'] = request.form.get('agemax')
-        criteres['pop_min'] = request.form.get('popmin')
-        criteres['pop_max'] = request.form.get('popmax')
-        criteres['interets'] = request.form.getlist('interest')
-        criteres['id'] = us.id
-        return render_template('resultats.html', candidats=find_profil(criteres))
-    return render_template('recherche.html', topics=topics, sex_to_find=sex_to_find)
+        if request.form.get('km'):
+            criteres['dist_max']=request.form.get('km')
+        else:
+            criteres['dist_max']=20000
+        if request.form.get('agemin'):
+            criteres['age_min']=int(request.form.get('agemin'))
+        else:
+            criteres['age_min']=18
+        if request.form.get('agemax'):
+            criteres['age_max']=int(request.form.get('agemax'))
+        else:
+            criteres['age_max']=110
+        if request.form.get('popmin'):
+            criteres['pop_min']=request.form.get('popmin')
+        else:
+            criteres['pop_min']=0
+        if request.form.get('popmax'):
+            criteres['pop_max']=request.form.get('popmax')
+        else:
+            criteres['pop_max']=100
+        criteres['interets']=request.form.getlist('interest')
+        criteres['id']=us.id
+        return render_template('resultats.html',candidats=find_profil(criteres))
+    return render_template('recherche.html',topics=topics, sex_to_find=sex_to_find, latitude=latitude,longitude=longitude)
 
 
-@app.route('/registration/', methods=['GET', 'POST'])
+@app.route('/registration/',methods=['GET', 'POST'])
 def registration():
-    if request.method == "POST":
-        login = request.form.get('login')
-        if verif_login(login) != 'ok':
-            return render_template('registration.html', message=verif_login(login))
-        mail = request.form.get('courriel')
-        pwd = request.form.get('password')
-        pwd2 = request.form.get('password2')
-        nom = request.form.get('name')
-        prenom = request.form.get('first_name')
-        if verif_password(pwd, pwd2) != 'ok':
-            return render_template('registration.html', message=verif_password(pwd, pwd2))
-        if verif_identity(nom, prenom) != 'ok':
-            return render_template('registration.html', message=verif_identity(nom, prenom))
-        session['user'] = {'name': login, 'email': mail}   
-        lien = lien_unique()
+    if request.method=="POST":
+        login=request.form.get('login')
+        if verif_login(login) !='ok':
+            return render_template('registration.html', message = verif_login(login))
+        mail=request.form.get('courriel')
+        pwd=request.form.get('password')
+        pwd2 =request.form.get('password2')
+        nom=request.form.get('name')
+        prenom=request.form.get('first_name')
+        if verif_password(pwd,pwd2) !='ok':
+            return render_template('registration.html', message = verif_password(pwd,pwd2))
+        if verif_identity(nom,prenom) !='ok':
+            return render_template('registration.html', message = verif_identity(nom,prenom))
+        session['user']= {'name' : login, 'email' : mail}   
+        lien=lien_unique()
         new = Users()
-        print('Prenom ' + prenom)
         new.first_name = prenom
-        print("nom" + nom)
         new.last_name = nom
         new.user_name = login
-        new.password = hash_pwd(pwd, login)
+        new.password = hash_pwd(pwd,login)
         new.description = None
         new.email = mail
         new.active = False
-        new.is_recommendable = False
         new.confirm = lien
         new.gender = None
         new.orientation = None
         new.birthday = None
+        new.is_recommendable = False
         new.latitude = request.form.get('latitude')
         new.longitude = request.form.get('longitude')
         new.popularity = 0
         DataAccess().persist(new)
-        ft_send(lien, 'registration')
+        ft_send(lien,'registration')
+        session.clear()
         return redirect(url_for('homepage'))
     else:
         return render_template('registration.html')
-
+    
 
 @app.route('/forgot/', methods=['GET', 'POST'])
 def forgot():
@@ -603,7 +633,7 @@ def like():
         l.is_read = True
         notif_cache.merge(l, autocommit=False)
     DataAccess().commit()
-        
+        ###############################################################
     return render_template('like.html', liste = like_infos)
         
 
@@ -620,6 +650,7 @@ def dislike():
                                       orderby='N.id desc')
     
     dislike_infos = []
+    
     for d in dislike_list:
         info = {}
         info['username'] = d.sender_id.user_name
@@ -639,7 +670,7 @@ def dislike():
         d.is_read = True 
         notif_cache.merge(d, autocommit=False) 
     DataAccess().commit()
-        
+        #########################################################
     return render_template('dislike.html', liste = dislike_infos)
     
 
@@ -696,7 +727,6 @@ def message(data):
     notif.notif_type = 'Message'
     notif.is_read = False
     DataAccess().persist(msg)
-    # DataAccess().persist(notif)
     notif_cache.persist(notif)
     # print('notif_cache.cache : ', *notif_cache.cache)
     send({
@@ -727,7 +757,7 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    print('room = ',data['room'])
+    # print('room = ',data['room'])
     receiver_id = room_data.slave_id
     sender_id = room_data.master_id
     if room_data.slave_id == user.id:
@@ -744,7 +774,7 @@ def join(data):
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    print(notif_list)
+    # print(notif_list)
     for notif in notif_list:
         notif.is_read = True
         notif_cache.merge(notif, autocommit=False)

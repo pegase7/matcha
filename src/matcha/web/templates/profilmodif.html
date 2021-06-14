@@ -49,10 +49,11 @@
             <p>Latitude : {{profil.latitude}}</p>
             <p>Longitude : {{profil.longitude}}</p>
             <p>Pour de nouvelles coordonnées,<input type="hidden" step="0.000001" name="longlat" id='coor' size="30" /></p>
-            cliquez dur la carte !<br>
-
-            <p>Naissance<input type="date" name="birthday" value={{naissance}} /></p>
-
+            cliquez dur la carte !<br> {% if naissance %}
+            <p>Naissance : <br><input type="date" name="birthday" value={{naissance}} /></p>
+            {% else%}
+            <p>Naissance : <br><input type="date" name="birthday" /></p>
+            {% endif %}
             <p>Sexe</p>
             <div>
                 <input type="radio" id="Male" name="sexe" value="Male" "{% if profil.gender=='Male' %} checked {% endif %}">
@@ -84,7 +85,8 @@
         </div>
 
         <strong> Rajouter un centre d'interet :</strong>
-        <input type="text" name="interet">
+        <p class="note"> (Majuscule en début de mot)</p>
+        <input type="text" name="interet" pattern="[A-Z]{1}\p{Ll}*">
 
     </div>
 
@@ -102,10 +104,11 @@
                 {
                     profil.longitude
                 }
-            }], 14);
+            }], 11);
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(carte);
+
             var marker = L.marker([{
                 {
                     profil.latitude

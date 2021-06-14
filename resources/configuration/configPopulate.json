@@ -14,7 +14,7 @@
         ]
     },
     "recommendation":{
-        "threshold":80,
+        "threshold":0,
         "nb_recommendations":8000
     },
     "populate":{

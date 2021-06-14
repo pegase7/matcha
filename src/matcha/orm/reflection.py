@@ -152,6 +152,7 @@ class DateField(Field):
             logging.error(self.__msgtypeerror__(value, 'date', instance))
         return value
 
+
 class DateTimeField(Field):
 
     def check(self, instance, value):
@@ -241,8 +242,6 @@ class ModelObject(object):
         modelclass = ModelDict().get_model_class(self.get_model_name())
         for field in modelclass.get_fields():
             if not isinstance(field, ListField):
-                if 'latitude' == field.name:
-                    print(field.name)
                 field.check(self, getattr(self, field.name))
         return self.haserror
     

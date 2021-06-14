@@ -275,6 +275,7 @@ def notif(sender,receiver,message, notif_cache):
     notif.is_read = False
     # DataAccess().persist(notif)
     notif_cache.persist(notif)
+    print('notifaaaaaaaaaaaaaaa', notif)
     
 def calculPopularite(person):
     visits=DataAccess().fetch('Visit', conditions=('visited_id',person))

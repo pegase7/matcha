@@ -25,10 +25,10 @@ function display_notifs() {
                 let nb_mess = notifs.msg;
                 let nb_visit = notifs.visit;
                 let nb_dislike = notifs.dislike;
-                // console.log("nb_like : ", nb_like);
-                // console.log("nb_mess : ", nb_mess);
-                // console.log("nb_visit : ", nb_visit);
-                // console.log("nb_dislike : ", nb_dislike);
+                console.log("nb_like : ", nb_like);
+                console.log("nb_mess : ", nb_mess);
+                console.log("nb_visit : ", nb_visit);
+                console.log("nb_dislike : ", nb_dislike);
 
 
                 // affichage des notifications //
