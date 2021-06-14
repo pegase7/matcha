@@ -129,7 +129,7 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
             weighting = ratio_km + age_ratio + topics_ratio
             if weighting >= THRESHOLD:
                 delta = abs(relativedelta(usr.birthday, users.birthday).years)
-                recommendations.append((weighting, delta, age_ratio, ratio_km, distance, topics_ratio, users.id))
+                recommendations.append((weighting, delta, age_ratio, ratio_km, distance, topics_ratio, users.id, matched_tags))
         if 0 != len(recommendations):
             i = 0
             for recommendation in sorted(recommendations, reverse=True):
@@ -146,7 +146,7 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
                 users_recommendation.topics_ratio = recommendation[5]
                 users_recommendation.is_rejected = False
                 DATA_ACCESS.persist(users_recommendation, autocommit=False)
-                for tag in matched_tags:
+                for tag in recommendation[7]:
                     recommendation_topic = Recommendation_topic()
                     recommendation_topic.recommend_id = users_recommendation.id
                     recommendation_topic.tag = tag
