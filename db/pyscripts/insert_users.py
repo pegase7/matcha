@@ -25,8 +25,8 @@ def compute_users(users, coordsize, usernames):
     '''
     1/100 Bi, 10/100 Homo reste Hetero
     '''
-    if 100 == methodid:
-        users.orientation = 'Bi'
+    if 98 < methodid:
+        users.orientation = 'Bi' if randint(0,1) else None
     elif methodid < 9:
         users.orientation = 'Homo'
     else:

@@ -6,6 +6,7 @@ from datetime import datetime
 
 if __name__ == "__main__":
     starttime = datetime.now()
+    print('Start recommend', str(starttime))
     DATA_ACCESS = DataAccess()
     users_topics = DATA_ACCESS.fetch('Users_topic', orderby='users_id')
     currentusersid = -1   
@@ -23,4 +24,4 @@ if __name__ == "__main__":
     for users in DATA_ACCESS.fetch('Users'):
         compute_recommendations(users, global_topics, {})
     endtime = datetime.now()
-    print('END recommend', str(endtime - starttime))
+    print('END recommend', endtime, str(endtime - starttime))

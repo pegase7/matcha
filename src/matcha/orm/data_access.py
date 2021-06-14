@@ -288,10 +288,9 @@ class DataAccess():
             else:
                 if cmd.startswith('select '):
                     return cursor.fetchall()
-                else:
-                    if autocommit:
-                        self.commit()
-                    return None
+                returnvalue = None
+            if autocommit:
+                self.commit()
             return returnvalue
         
     def executescript(self, filepath):

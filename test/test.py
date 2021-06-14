@@ -1,6 +1,7 @@
 from matcha.config import Config
 from matcha.model.Notification import Notification
 from matcha.web.notification_cache import NotificationCache
+from random import randint
 import logging
 # from test2 import test2
 from matcha.orm.data_access import DataAccess
@@ -18,15 +19,26 @@ if __name__ == "__main__":
     # notification_cache = NotificationCache()
     # notification_cache.init()
 
-    f = float("122.33")
-    print("f:", float)
-    f = None
-    if isinstance(f, float):
-        print("OK")
-    else:
-        print("KO")
+    data_access.fetch('Users', 1)
     # for usersid in notification_cache.cache.keys():
     #     users = data_access.find('Users', usersid)
     #     print(users.first_name, users.last_name, users.user_name)
     #     print(notification_cache.get_unread(users.id))
-            
+    
+    
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')
+    print('Ok' if randint(0,1) else 'KO')

@@ -1,4 +1,4 @@
-from matcha.orm.reflection import ModelObject, metamodelclass, IntField, FloatField, DateTimeField, ManyToOneField, BoolField, dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, IntField, FloatField, DateTimeField, ManyToOneField, BoolField, dispatcher, ListField
 
 @dispatcher
 @metamodelclass
@@ -16,3 +16,4 @@ class Users_recommendation(ModelObject):
     last_consult: DateTimeField(iscomputed=True)
     created: DateTimeField(iscomputed=True)
     last_update: DateTimeField(iscomputed=True)
+    topics: ListField(modelname='Recommendation_topic', select='select * from Recommendation_topic where recommend_id = %s order by tag')
