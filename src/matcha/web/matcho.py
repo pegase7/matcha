@@ -33,9 +33,19 @@ app.debug = True  # a supprimer en production
 socketio = SocketIO(app)
 
 
+dict_users_ids = {}
+
 
 notif_cache = NotificationCache()
 notif_cache.init()
+
+def get_user_id(user_name):
+        if user_name not in dict_users_ids:
+            us = DataAccess().find('Users', conditions=('user_name', user_name))
+            dict_users_ids[user_name] = us.id
+            return us.id
+        return dict_users_ids[user_name]
+
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -98,6 +108,7 @@ def accueil():
                                              orderby='v.last_update desc', limit='3')
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
                                                   orderby='v.last_update desc', limit='3')
+        print('visits_madeeeeeeeeeeeeeeeee', *visits_made)
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
         matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
         #######################  recommandations  ###########################
@@ -139,6 +150,7 @@ def accueil():
             info["pseudo"] = visit.visitor_id.user_name
             info["popul"] = visit.visitor_id.popularity
             if (visit.visitor_id.birthday):
+                print('birthdayaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',visit.visitor_id.birthday)
                 info["age"] = calculate_age(visit.visitor_id.birthday)
             else:
                 info["age"] = 0
@@ -151,6 +163,7 @@ def accueil():
                 visitors.append(info)
             
         for visited in visits_made:
+            
             info = {}
             info['age'] = calculate_age(visited.visited_id.birthday)
             info['date'] = visited.visited_id.last_update.date().isoformat()
@@ -258,6 +271,7 @@ def consultation(login):
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
     ############## Notification de la visite ###################
     notif(visitor.id,us.id,'Visit', notif_cache)
+    ############################################################
     us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
     ###########
@@ -290,7 +304,7 @@ def consultation(login):
         if like != visit.islike:
             if like == False and liked==True:
                 notif(visitor.id, us.id, 'Dislike', notif_cache)
-                closeRoom(visitor.id,us.id)
+                closeRoom(visitor.id,us.id, notif_cache)
             else:
                 if like==True:
                     notif(visitor.id, us.id, 'Like', notif_cache)
@@ -580,11 +594,11 @@ def profilmodif():
 def chat():
     if "user" in session:
         username = session['user']['name']
-        user = DataAccess().find('Users', conditions=('user_name', username))
+        us_id = get_user_id(username)
         room_list = DataAccess().fetch('Users_room',
-                                       conditions=[('R.active', True), ('U.slave_id', user.id)],
+                                       conditions=[('R.active', True), ('U.slave_id', us_id)],
                                        joins=[('master_id', 'US'), ('room_id', 'R')])
-        messages_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), 
+        messages_list = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id), 
                                                                         ('notif_type', 'Message'),
                                                                         ('is_read', False)])
         msgs = {}
@@ -595,7 +609,7 @@ def chat():
                 msgs[m.sender_id] = 1
         return render_template('chat.html',
                                 username=username,
-                                user_id=user.id,
+                                user_id=us_id,
                                 rooms=room_list,
                                 msgs=msgs
                                 )
@@ -608,32 +622,38 @@ def like():
     if "user" not in session:
         return redirect(url_for('homepage'))
     username = session['user']['name']
-    us = DataAccess().find('Users', conditions=[('user_name', username)])
-    like_list = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
-                                                               ('notif_type', 'Like')],
-                                                   joins=('sender_id', 'S'), 
-                                                   orderby='N.id desc')
-    like_infos = []
-    for l in like_list:
-        info = {}
-        info['username'] = l.sender_id.user_name
-        info['date'] = l.created.date().isoformat()
-        info['is_read'] = l.is_read
-        if os.path.isfile("./static/photo/" + l.sender_id.user_name + '1' + ".jpg"):
-            info['photo'] = ("/static/photo/" + l.sender_id.user_name + '1' + ".jpg")
-        else:
-            info['photo'] = ('/static/nophoto.jpg')
-        like_infos.append(info)
-        
-        ############# update notification table and cache file #########
-    like_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
+    us_id = get_user_id(username)
+    like_list = DataAccess().fetch('Visit', conditions=[('visited_id', us_id),
+                                                               ('islike', True)],
+                                                   joins=('visitor_id', 'V2'), 
+                                                   orderby='V.id desc')
+    ############# update notification table and cache file #########
+    like_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id),
                                                                 ('notif_type', 'Like'),
                                                                 ('is_read', False)])
+    new_like = []
     for l in like_list2:
+        if l.sender_id not in new_like:
+            new_like.append(l.sender_id)
         l.is_read = True
         notif_cache.merge(l, autocommit=False)
     DataAccess().commit()
         ###############################################################
+    like_infos = []
+    for l in like_list:
+        info = {}
+        info['username'] = l.visitor_id.user_name
+        info['date'] = l.last_update.date().isoformat()
+        info['is_read'] = True
+        if l.visitor_id.id in new_like:   
+            info['is_read'] = False
+        if os.path.isfile("./static/photo/" + l.visitor_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + l.visitor_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        like_infos.append(info)
+        
+       
     return render_template('like.html', liste = like_infos)
         
 
@@ -642,28 +662,30 @@ def dislike():
     if "user" not in session:
         return redirect(url_for('homepage'))
     username = session['user']['name']
-    us = DataAccess().find('Users', conditions=[('user_name', username)])
+    us_id = get_user_id(username)
     dislike_list = DataAccess().fetch('Notification', 
-                                      conditions=[('receiver_id', us.id),
+                                      conditions=[('receiver_id', us_id),
                                                   ('notif_type', 'Dislike')], 
                                       joins=('sender_id', 'S'),
                                       orderby='N.id desc')
     
     dislike_infos = []
-    
+    test_duplicate = {}
     for d in dislike_list:
-        info = {}
-        info['username'] = d.sender_id.user_name
-        info['date'] = d.created.date().isoformat()
-        info['is_read'] = d.is_read
-        if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
-            info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
-        else:
-            info['photo'] = ('/static/nophoto.jpg')
-        dislike_infos.append(info)
+        if not d.sender_id.user_name in test_duplicate:
+            test_duplicate[d.sender_id.user_name] = 1
+            info = {}
+            info['username'] = d.sender_id.user_name
+            info['date'] = d.created.date().isoformat()
+            info['is_read'] = d.is_read
+            if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            dislike_infos.append(info)
         
         ######## update notification table and cache file #######
-    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id), 
+    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id), 
                                                                    ('notif_type', 'Dislike'), 
                                                                    ('is_read', False)])
     for d in dislike_list2:
@@ -693,8 +715,8 @@ def refresh_notif():
     print("ajax")
     if "user" in session:
         username = session['user']['name']
-        us = DataAccess().find('Users', conditions=[('user_name', username)])
-        (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
+        # us = DataAccess().find('Users', conditions=[('user_name', username)])
+        (like, msg, visit, dislike) = notif_cache.get_unread(username)
         list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
         json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
         return json_notif
@@ -774,7 +796,7 @@ def join(data):
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    # print(notif_list)
+    print('notif_messagsssssssssssssssss', *notif_list)
     for notif in notif_list:
         notif.is_read = True
         notif_cache.merge(notif, autocommit=False)
