@@ -4,7 +4,7 @@
         "database": "matchadb",
         "user": "lwiller",
         "password": "bHdpbGxlcnNhbGFnZWx3aWxsZXI=",
-        "logginConnection": true
+        "loggingConnection": "sql"
     },
    "logging":{
         "level":10,
