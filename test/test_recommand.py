@@ -22,6 +22,6 @@ if __name__ == "__main__":
         topics.append(users_topic)
         
     for users in DATA_ACCESS.fetch('Users'):
-        compute_recommendations(users, global_topics, {})
+        compute_recommendations(users, global_topics, delete_existing_recommendation=False)
     endtime = datetime.now()
     print('END recommend', endtime, str(endtime - starttime))

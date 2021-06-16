@@ -19,7 +19,7 @@
     },
     "populate":{
     	"#test_data":"both__",
-        "test_data":"faker"
+        "test_data":"faker__"
     },
     "orm":{
         "raise_error":false,

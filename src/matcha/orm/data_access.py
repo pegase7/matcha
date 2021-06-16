@@ -360,3 +360,5 @@ class DataAccess():
     def commit(self):
         DataAccess.__connection.commit()
 
+    def get_connection(self):
+        return DataAccess.__connection

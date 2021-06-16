@@ -68,7 +68,7 @@ def users_match_topics(topics1, size, topics2):
     maximum = max(i, size)
     return matched_tags, (1 - ((minimum - match) / minimum)) * 100  * (minimum / maximum)
     
-def compute_recommendations(usr, global_topics=None, global_recommend_count=None):
+def compute_recommendations(usr, global_topics=None, delete_existing_recommendation=True):
     '''
     Retrieve needed recommendation
         global_topics is a dictionary of list of topics 
@@ -92,66 +92,61 @@ def compute_recommendations(usr, global_topics=None, global_recommend_count=None
         whereaddonprm.extend([usr.gender, usr.gender])
         
     
-    if global_recommend_count:
-        current_count = global_recommend_count[usr.id]
-    else:
+    if delete_existing_recommendation:
         DATA_ACCESS.execute('delete from users_recommendation where sender_id=%s and is_rejected=false', parameters=[usr.id], autocommit=False)
-        current_count = 0
     
-    max_count = NB_RECOMMENDATIONS - current_count
-    if max_count > 0:
-        weighting = 0
-        recommendations = []
+    weighting = 0
+    recommendations = []
+    
+    ''' users2.topics is used when global_topics is None ''' 
+    joins = [] if global_topics else 'topics'
+    for users in DATA_ACCESS.fetch('Users', conditions=conditions, whereaddon=(whereaddonstr, whereaddonprm), joins=joins):
+        if not users.latitude is None or not users.longitude is None:
+            distance, ratio_km = users_distance(usr.latitude, usr.longitude, users.latitude, users.longitude)
+        else:
+            ratio_km = 0
+            distance = None
+        if global_topics:
+            try:
+                topics1 = global_topics[usr.id]
+            except KeyError:
+                topics1 = []
+            try:
+                topics2 = global_topics[users.id]
+            except KeyError:
+                topics2 = []
+        else:
+            topics1 = usr.topics
+            topics2 = users.topics
         
-        ''' users2.topics is used when global_topics is None ''' 
-        joins = [] if global_topics else 'topics'
-        for users in DATA_ACCESS.fetch('Users', conditions=conditions, whereaddon=(whereaddonstr, whereaddonprm), joins=joins):
-            if not users.latitude is None or not users.longitude is None:
-                distance, ratio_km = users_distance(usr.latitude, usr.longitude, users.latitude, users.longitude)
-            else:
-                ratio_km = 0
-                distance = None
-            if global_topics:
-                try:
-                    topics1 = global_topics[usr.id]
-                except KeyError:
-                    topics1 = []
-                try:
-                    topics2 = global_topics[users.id]
-                except KeyError:
-                    topics2 = []
-            else:
-                topics1 = usr.topics
-                topics2 = users.topics
-            
-            matched_tags, topics_ratio = users_match_topics(topics1, len(topics1), topics2)
-            age_ratio = users_match_age(usr, users)
-            weighting = ratio_km + age_ratio + topics_ratio
-            if weighting >= THRESHOLD:
-                delta = abs(relativedelta(usr.birthday, users.birthday).years)
-                recommendations.append((weighting, delta, age_ratio, ratio_km, distance, topics_ratio, users.id, matched_tags))
-        if 0 != len(recommendations):
-            i = 0
-            for recommendation in sorted(recommendations, reverse=True):
-                if i == max_count:
-                    break
-                users_recommendation = Users_recommendation()
-                users_recommendation.sender_id = usr.id
-                users_recommendation.receiver_id = recommendation[6]
-                users_recommendation.weighting = recommendation[0]
-                users_recommendation.age_diff = recommendation[1]
-                users_recommendation.age_ratio = recommendation[2]
-                users_recommendation.distance = recommendation[4]
-                users_recommendation.dist_ratio = recommendation[3]
-                users_recommendation.topics_ratio = recommendation[5]
-                users_recommendation.is_rejected = False
-                DATA_ACCESS.persist(users_recommendation, autocommit=False)
-                for tag in recommendation[7]:
-                    recommendation_topic = Recommendation_topic()
-                    recommendation_topic.recommend_id = users_recommendation.id
-                    recommendation_topic.tag = tag
-                    DATA_ACCESS.persist(recommendation_topic, autocommit=False)
-                   
-                i = i + 1  
-        DATA_ACCESS.commit()   
+        matched_tags, topics_ratio = users_match_topics(topics1, len(topics1), topics2)
+        age_ratio = users_match_age(usr, users)
+        weighting = ratio_km + age_ratio + topics_ratio
+        if weighting >= THRESHOLD:
+            delta = abs(relativedelta(usr.birthday, users.birthday).years)
+            recommendations.append((weighting, delta, age_ratio, ratio_km, distance, topics_ratio, users.id, matched_tags))
+    if 0 != len(recommendations):
+        i = 0
+        for recommendation in sorted(recommendations, reverse=True):
+            if i == NB_RECOMMENDATIONS:
+                break
+            users_recommendation = Users_recommendation()
+            users_recommendation.sender_id = usr.id
+            users_recommendation.receiver_id = recommendation[6]
+            users_recommendation.weighting = recommendation[0]
+            users_recommendation.age_diff = recommendation[1]
+            users_recommendation.age_ratio = recommendation[2]
+            users_recommendation.distance = recommendation[4]
+            users_recommendation.dist_ratio = recommendation[3]
+            users_recommendation.topics_ratio = recommendation[5]
+            users_recommendation.is_rejected = False
+            DATA_ACCESS.persist(users_recommendation, autocommit=False)
+            for tag in recommendation[7]:
+                recommendation_topic = Recommendation_topic()
+                recommendation_topic.recommend_id = users_recommendation.id
+                recommendation_topic.tag = tag
+                DATA_ACCESS.persist(recommendation_topic, autocommit=False)
+               
+            i = i + 1  
+    DATA_ACCESS.commit()   
 
