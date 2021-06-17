@@ -8,6 +8,8 @@ Otherwise, database would be queried every 5 seconds.
     - merge and persist on Notification must use NotificationCache functions instead of DataAccess functions.
     - get_unread gives numbers of unread notificationsß split in Like, Message, Visit, Dislike types for an User Id.
 '''
+
+
 class NotificationCache():
     
     def init(self):
@@ -49,7 +51,7 @@ class NotificationCache():
     def get_unread(self, receiver_name):
         try:
             notificationids = self.dict_users[receiver_name]
-            like = message = visit = dislike  = 0
+            like = message = visit = dislike = 0
             for notifid in notificationids:
                 notification = self.dict_notification[notifid]
                 if 'Like' == notification.notif_type:
@@ -61,7 +63,7 @@ class NotificationCache():
                 elif 'Dislike' == notification.notif_type:
                     dislike += 1
             return like, message, visit, dislike
-        except KeyError:
+        except KeyError: #Users can have no Notification.
             return 0, 0, 0, 0
 
     def get_user_name(self, users_id):

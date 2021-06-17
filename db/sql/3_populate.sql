@@ -586,7 +586,6 @@ INSERT INTO public.notification VALUES (83, 10, 11, 'Dislike', false, '2021-05-2
 INSERT INTO public.notification VALUES (84, 10, 11, 'Visit', false, '2021-05-26 11:17:58.0815');
 INSERT INTO public.notification VALUES (85, 10, 11, 'Visit', false, '2021-05-26 11:18:04.261329');
 INSERT INTO public.notification VALUES (86, 10, 11, 'Like', false, '2021-05-26 11:18:04.26553');
-INSERT INTO public.notification VALUES (87, 10, 10, 'Visit', false, '2021-05-26 11:32:21.243997');
 INSERT INTO public.notification VALUES (88, 10, 13, 'Visit', false, '2021-05-26 11:32:28.160601');
 INSERT INTO public.notification VALUES (89, 10, 18, 'Visit', false, '2021-05-26 12:34:48.557348');
 INSERT INTO public.notification VALUES (90, 10, 10, 'Visit', false, '2021-05-26 12:58:22.270926');
