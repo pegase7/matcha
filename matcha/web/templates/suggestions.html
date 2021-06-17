@@ -1,0 +1,108 @@
+{% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
+<style>
+    .filtre {
+        display: flex;
+        flex-flow: row wrap;
+        columns: 12 8em;
+        justify-content: space-around;
+        border: medium solid #0b3688;
+    }
+    .conteneur {
+       width: 800px;
+       -webkit-columns:  auto;
+       -moz-columns: 4 auto;
+       columns: 4 auto;
+    }
+    .checkbox{
+	/* float: left; */
+	width:50%; /* 2 colonnes */
+    font-size: 0.8rem;
+}
+</style>
+<br>
+
+<h1> Suggestions<br> </h1> <br>
+<h3> </h3><br>
+<br>
+
+<form action="" method="post">
+    <div>
+        <input type="radio" id="Male" name="sexe" value="Male">
+        <label for="Male">un homme</label>
+        <input type="radio" id="Female" name="sexe" value="Female">
+        <label for="Female">une femme</label>&emsp;&emsp;&emsp;&emsp;&emsp;
+        <button type="submit" class="btn btn-primary btn-lg mb-2">filtrer les suggestions</button>
+    </div>
+    Age compris entre <input type="number" name="agemin" min="18" max="110" size=8 /> et <input type="number"
+    name="agemax" min="18" max="110" size=8 />
+    Popularite entre <input type="number" name="popmin" min="0" max="100" value=0 /> et <input type="number"
+    value=100 name="popmax" min="0" max="100" /> Distance Maximum <input type="number" min="0" max="20000" name="dist"><br>
+    <div class="conteneur">
+        <div class="checkbox">
+            {%for topic in liste_topics%}
+            <input type="checkbox" id={{topic}} name="interest"  value={{topic}} /><label
+                for={{topic}}>{{topic}}</label><br>
+            {%endfor%}
+        </div></div>
+
+</form>
+{%if suggests %}   
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Pseudo</th>
+                <th>Sexe</th>
+                <th>Age</th>
+                <th>Popularité</th>
+                <th>distance</th>
+                <th>Tags communs</th>
+                <th></th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+
+            {% for suggest in suggests %}
+            <tr class="visiteur_ligne">
+                <td><img src={{suggest.photo}} alt="" height="80"></td>
+                <td><a href="{{ url_for('consultation', login=suggest.pseudo)}}" class="lien">{{suggest.pseudo}}</a>
+                </td>
+                <td align="center">{% if suggest.sex=='Male' %}M{% else %}F{% endif %}</td>
+                <td align="right">{{suggest.age}}</td>
+                <td align="center">{{suggest.popul}}</td>
+                <td align="right">{{suggest.distance}}</td>
+                <td>{%for ta  in suggest.tag %}{{ta}} {% endfor %}</td>
+                <td><a href="{{ url_for('rejection', reject=suggest.id)}}" class="lienRed">Refuser</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+<br><br>
+<div>
+    <script>
+        sessionStorage.setItem("current_user", "{{session['user']['name']}}");
+    </script>
+
+</div>
+<script>
+    const compare = (ids, asc) => (row1, row2) => {
+        const tdValue = (row, ids) => row.children[ids].textContent;
+        const tri = (v1, v2) => v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+        return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
+    };
+
+    const tbody = document.querySelector('tbody');
+    const thx = document.querySelectorAll('th');
+    const trxb = tbody.querySelectorAll('tr');
+    thx.forEach(th => th.addEventListener('click', () => {
+        let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
+        classe.forEach(tr => tbody.appendChild(tr));
+    }));
+</script>
+{% endif %}
+{% endblock %}

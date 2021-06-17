@@ -45,7 +45,7 @@
     <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
     {% else %}
     <div class="container accueil-container">
-        <h3>Nos suggestions...</h3>
+        <h3>Nos suggestions... &emsp;&emsp; <a href="{{ url_for('suggestions')}}" class="lien">Toutes nos suggestions</a></h3>
     
         {% for visited in suggest %}
         <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">

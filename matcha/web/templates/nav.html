@@ -24,12 +24,17 @@
             <span id="nb_messages" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
-            <a href="{{ url_for('visites', like='yes')}}" class="nav-link">Likes  
+            <a href="{{ url_for('like')}}" class="nav-link">Likes
+            <!-- <a href="{{ url_for('visites', like='yes')}}" class="nav-link">Likes   -->
             <span id="nb_likes" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
             <a href="{{ url_for('visites', like='no')}}" class="nav-link" >Visites
                     <span id="nb_visites" class="badge badge-pill badge-warning count-notif"></span></a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ url_for('dislike')}}" class="nav-link">Dislikes
+                    <span id="nb_dislikes" class="badge badge-pill badge-warning count-notif"></span></a>
         </li>
         <li class="nav-item">
             <a href="{{ url_for('logout')}}" class="nav-link">Deconnexion</a>

@@ -203,14 +203,13 @@ class DataAccess():
         try:
             attr = getattr(record, field.name)
             if isinstance(attr, ModelObject):
-                fieldmodel = ModelDict.get_model_class(field.modelname)
+                fieldmodel = ModelDict().get_model_class(field.modelname)
                 attr = fieldmodel.get_id(attr)
             return attr
         except (AttributeError):
-            print(field.name)
             setattr(record, field, None)
             return None
-
+            
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby, limit):
         query, parameters = Query(model, conditions, leftjoins, whereaddon, orderby, limit).build_query()
         with DataAccess.__connection.cursor() as cursor:
@@ -289,10 +288,9 @@ class DataAccess():
             else:
                 if cmd.startswith('select '):
                     return cursor.fetchall()
-                else:
-                    if autocommit:
-                        self.commit()
-                    return None
+                returnvalue = None
+            if autocommit:
+                self.commit()
             return returnvalue
         
     def executescript(self, filepath):
@@ -361,3 +359,6 @@ class DataAccess():
         
     def commit(self):
         DataAccess.__connection.commit()
+
+    def get_connection(self):
+        return DataAccess.__connection

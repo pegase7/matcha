@@ -261,13 +261,44 @@ def listePhoto(person):
     return liste_photo
 
 
-def notif(sender,receiver,message):
+def notif(sender,receiver,message, notif_cache):
+    ################ avoid duplicate notifications #####
+    if message == 'Like':
+        dislike = DataAccess().fetch('Notification', conditions=[('notif_type', 'Dislike'),
+                                                                ('sender_id', sender),
+                                                                ('receiver_id', receiver),
+                                                                ('is_read', False)])
+        for d in dislike:
+            d.is_read = True
+            notif_cache.merge(d, autocommit=False)
+        DataAccess().commit()
+    
+    if message == 'Dislike':
+        like = DataAccess().fetch('Notification', conditions=[('notif_type', 'Like'),
+                                                                ('sender_id', sender),
+                                                                ('receiver_id', receiver),
+                                                                ('is_read', False)])
+        for l in like:
+            l.is_read = True
+            notif_cache.merge(l, autocommit=False)
+        DataAccess().commit()
+    
+    if message == 'Visit':
+        visit = DataAccess().fetch('Notification', conditions=[('notif_type', 'Visit'),
+                                                               ('sender_id', sender),
+                                                               ('receiver_id', receiver),
+                                                               ('is_read', False)])
+        for v in visit:
+            v.is_read = True
+            notif_cache.merge(v, autocommit=False)
+        DataAccess().commit()
+    ##########################################
     notif = Notification()
     notif.sender_id = sender
     notif.receiver_id = receiver
     notif.notif_type = message
     notif.is_read = False
-    DataAccess().persist(notif)
+    notif_cache.persist(notif)
 
 
 def calculPopularite(person):
@@ -285,12 +316,20 @@ def calculPopularite(person):
     return pop
 
 
-def closeRoom(u1,u2):
+def closeRoom(u1, u2, cache_notifs):
     existroom = DataAccess().find('Users_room', conditions=[('master_id', u1), ('slave_id', u2)])
     if existroom:
         room = DataAccess().find('Room', conditions=('id', existroom.room_id))
-        room.active=False
+        room.active = False
         DataAccess().merge(room)
+        ############### update message notification is_read = true #############
+        whereaddon = ('((sender_id = %s and receiver_id = %s) or (sender_id = %s and receiver_id = %s)) and notif_type = %s and is_read = %s', [u1, u2, u2, u1, 'Message', False])
+        msgs = DataAccess().fetch('Notification', whereaddon=whereaddon)
+        print('msgsssssssssssss : ', *msgs)
+        for m in msgs:
+            m.is_read = True
+            cache_notifs.merge(m, autocommit=False)
+        DataAccess().commit()
 
 
 def openRoom(u1,u2):

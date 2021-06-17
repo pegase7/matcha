@@ -21,8 +21,6 @@ from matcha.web.util2 import *
 from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
 import urllib
-# import threading
-#from matcha.web.thread.disconnect import DisconnectInactiveUsersThread
 
 
 app = Flask(__name__)
@@ -34,10 +32,18 @@ app.debug = True  # a supprimer en production
 # SESSION_COOKIE_HTTPONLY=True,
 # SESSION_COOKIE_SAMESITE='Strict'
 socketio = SocketIO(app)
-# diut = DisconnectInactiveUsersThread()
+
+dict_users_ids = {}
 
 notif_cache = NotificationCache()
 notif_cache.init()
+
+def get_user_id(user_name):
+        if user_name not in dict_users_ids:
+            us = DataAccess().find('Users', conditions=('user_name', user_name))
+            dict_users_ids[user_name] = us.id
+            return us.id
+        return dict_users_ids[user_name]
 
 @app.route('/',methods=['GET', 'POST'])
 def homepage():
@@ -55,6 +61,7 @@ def homepage():
             rep = "Vous n'avez pas confirmé votre inscription, veuillez consulter vos mails."
             return  render_template('home.html', rep = rep)
         session['user']= {'name' : login}
+        session.permanent = True  # le cookie a la duree definie plus haut
         connect=Connection()
         connect.users_id=us.id
         connect.connect_date=datetime.now()
@@ -92,123 +99,216 @@ def photo():
     
 @app.route('/accueil/')
 def accueil():
-    if "user" in session:
-        username = session['user']['name']
-        us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
-        visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
-                                             orderby='v.last_update desc', limit='3')
-        visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
-                                                  orderby='v.last_update desc', limit='3')
-        likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
-        matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
-        #######################  recommandations  ###########################
-        compute_recommendations(us)
-        reco =DataAccess().fetch('Users_recommendation', conditions=('sender_id', us.id),joins='receiver_id')
-        print('#################################################')
-        suggest=[]
-        for rec in reco:
-            info={}
-            info["pseudo"]=rec.receiver_id.user_name
-            info["popul"] = rec.receiver_id.popularity
-            if (rec.receiver_id.birthday):
-                info["age"] = calculate_age(rec.receiver_id.birthday)
-            else:
-                info["age"] = 0
-            if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
-                info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
-            else:
-                info['photo'] = ('/static/nophoto.jpg')
-            print(info)
-            suggest.append(info)
-        print('#################################################')
-        #####################################################################
-        like = 0
-        match = 0
-        for l in likes:
-            like = like + 1
-            
-        for m in matchs:
-            match = match + 1
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
+    visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id), joins=('visitor_id', 'V2'),
+                                         orderby='v.last_update desc', limit='3')
+    visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
+                                              orderby='v.last_update desc', limit='3')
+    likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
+    matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
+
+
+    #######################  recommandations  ###########################
+    compute_recommendations(us)
+    reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
+    suggest=[]
+    for rec in reco:
+        print (rec)
+        info = {
+            "pseudo": rec.receiver_id.user_name,
+            "popul": rec.receiver_id.popularity,
+            "id":rec.receiver_id.id
+        }
+
+        if (rec.receiver_id.birthday):
+            info["age"] = calculate_age(rec.receiver_id.birthday)
+        else:
+            info["age"] = 0
         
-        visitors = []
-        visited_infos = []
-        matching = True
-        if us.gender == None or us.description == None or us.orientation == None or us.birthday == None:
-            matching = False
-        for visit in visits:
-            info = {}
-            info["pseudo"] = visit.visitor_id.user_name
-            info["popul"] = visit.visitor_id.popularity
-            if (visit.visitor_id.birthday):
-                info["age"] = calculate_age(visit.visitor_id.birthday)
-            else:
-                info["age"] = 0
-            info["date"] = visit.last_update.date().isoformat()
-            if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
-                info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
-            else:
-                info['photo'] = ('/static/nophoto.jpg')
-            if(visit.isblocked == False and visit.isfake == False):
-                visitors.append(info)
-            
-        for visited in visits_made:
-            info = {}
-            info['age'] = calculate_age(visited.visited_id.birthday)
-            info['date'] = visited.visited_id.last_update.date().isoformat()
-            info['popul'] = visited.visited_id.popularity
-            info['pseudo'] = visited.visited_id.user_name
-            print('visited-username : ', visited.visited_id.user_name)
-            if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
-                info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
-            else:
-                info['photo'] = ('/static/nophoto.jpg')
-            visited_infos.append(info)
-        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching, suggest=suggest)
-    else:
-        return redirect(url_for('homepage'))   
+        if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        suggest.append(info)
+        #####################################################################
+    like = sum(1 for _ in likes)
+    match = sum(1 for _ in matchs)
+    visitors = []
+    visited_infos = []
+    matching = True
+    if (
+        us.gender is None
+        or us.description is None
+        or us.orientation is None
+        or us.birthday is None
+    ):
+        matching = False
+    for visit in visits:
+        info = {}
+        info["pseudo"] = visit.visitor_id.user_name
+        info["popul"] = visit.visitor_id.popularity
+        if (visit.visitor_id.birthday):
+            info["age"] = calculate_age(visit.visitor_id.birthday)
+        else:
+            info["age"] = 0
+        info["date"] = visit.last_update.date().isoformat()
+        if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        if(visit.isblocked == False and visit.isfake == False):
+            visitors.append(info)
+
+    for visited in visits_made:
+        info = {}
+        info['age'] = calculate_age(visited.visited_id.birthday)
+        info['date'] = visited.visited_id.last_update.date().isoformat()
+        info['popul'] = visited.visited_id.popularity
+        info['pseudo'] = visited.visited_id.user_name
+        print('visited-username : ', visited.visited_id.user_name)
+        if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        visited_infos.append(info)
+    return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching, suggest=suggest, userid=us.id)   
 
 @app.route('/visites/')
 def visites():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', username))
+    visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
+    visitors=[]
     like = request.args['like']
-    if "user" in session:
-        username = session['user']['name']
-        us = DataAccess().find('Users', conditions=('user_name', username))
-        visits=DataAccess().fetch('Visit', conditions=('visited_id',us.id), joins=('visitor_id', 'V2'))
-        visitors=[]
-        for visit in visits:
-            info={}
-            info["pseudo"]=visit.visitor_id.user_name
-            info["sex"]=visit.visitor_id.gender
-            info["popul"]=visit.visitor_id.popularity
-            info["distance"]=int(distanceGPS(us.latitude,us.longitude,visit.visitor_id.latitude,visit.visitor_id.longitude))
-            info["like"]=visit.islike
-            if (visit.visitor_id.birthday):
-                info["age"]=calculate_age(visit.visitor_id.birthday)
-            else:
-               info["age"]=0
-            info["date"]=visit.last_update.date().isoformat()
-            if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
-                photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"
-            else:
-                photo='/static/nophoto.jpg'
-            info["photo"]=photo
-            if(visit.isblocked==False and visit.isfake==False):
-                if like=='no':
-                    visitors.append(info)
-                elif visit.islike==True:
-                    visitors.append(info)
-        if like=='yes':
-            message="Qui m'a liké ?"
+    for visit in visits:
+        info = {
+            "pseudo": visit.visitor_id.user_name,
+            "sex": visit.visitor_id.gender,
+            "popul": visit.visitor_id.popularity,
+            "distance": int(
+                distanceGPS(
+                    us.latitude,
+                    us.longitude,
+                    visit.visitor_id.latitude,
+                    visit.visitor_id.longitude,
+                )
+            ),
+        }
+
+        info["like"]=visit.islike
+        if (visit.visitor_id.birthday):
+            info["age"]=calculate_age(visit.visitor_id.birthday)
         else:
-            message='Qui a consulté mon profil ?'
-        if visitors:
-            return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity, message=message)
+           info["age"]=0
+        info["date"]=visit.last_update.date().isoformat()
+        if os.path.isfile("./static/photo/"+visit.visitor_id.user_name+'1'+".jpg"):
+            photo="/static/photo/"+visit.visitor_id.user_name+'1'+".jpg"
         else:
-            return redirect(url_for('accueil'))
+            photo='/static/nophoto.jpg'
+        info["photo"]=photo
+        if (visit.isblocked == False and visit.isfake == False) and (
+            like == 'no' or visit.islike == True
+        ):
+            visitors.append(info)
+    ############# update notification table and cached file ##############
+    notifs = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
+                                                            ('notif_type', 'Visit'),
+                                                            ('is_read', False)])
+    for n in notifs:
+        n.is_read = True
+        notif_cache.merge(n, autocommit=False)
+    DataAccess().commit()
+            
+    if visitors:
+        message = "Qui m'a liké ?" if like=='yes' else 'Qui a consulté mon profil ?'
+        return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity, message=message)
     else:
+        return redirect(url_for('accueil'))
+
+@app.route('/suggestions/',methods=['GET', 'POST'])
+def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
+    if "user" not in session:
         return redirect(url_for('homepage'))
 
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
+    reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins=['receiver_id', 'topics'])
 
+    liste_topics = [topic.tag for topic in us.topics]
+    suggests=[]
+    for suggest in reco:
+        liste_tag = [rec_topi.tag for rec_topi in suggest.topics]
+        info={}
+        info["tag"]=liste_tag
+        info["pseudo"]=suggest.receiver_id.user_name
+        info["sex"]=suggest.receiver_id.gender
+        info["popul"]=suggest.receiver_id.popularity
+        info["distance"]=int(distanceGPS(us.latitude,us.longitude,suggest.receiver_id.latitude,suggest.receiver_id.longitude))
+        if (suggest.receiver_id.birthday):
+            info["age"]=calculate_age(suggest.receiver_id.birthday)
+        else:
+           info["age"]=0
+        if os.path.isfile("./static/photo/"+suggest.receiver_id.user_name+'1'+".jpg"):
+            photo="/static/photo/"+suggest.receiver_id.user_name+'1'+".jpg"
+        else:
+            photo='/static/nophoto.jpg'
+        info["photo"]=photo
+        info['id']=suggest.receiver_id.id
+        suggests.append(info)
+    if request.method=="POST":
+        sex=request.form.get('sexe')
+        agemin=request.form.get('agemin')
+        agemax=request.form.get('agemax')
+        popmax=request.form.get('popmax')
+        popmin=request.form.get('popmin')
+        dist=request.form.get('dist')
+        interest=request.form.getlist('interest')
+        filtered=[]
+        for sug in suggests:
+            if sex != None and sug['sex'] != sex:
+                continue
+            if agemin and sug['age'] < int(agemin):
+                continue
+            if agemax and sug['age'] > int(agemax):
+                continue
+            if popmax and sug['popul'] > int(popmax):
+                continue
+            if popmin and sug['popul'] < int(popmin):
+                continue
+            if dist and sug['distance'] > int(dist):
+                continue
+            if len(interest) >0:
+                to_remove=0
+                for topic in interest:
+                    for tag in sug['tag']:
+                        if tag == topic:
+                            to_remove += 1
+                if to_remove==0:
+                    continue
+            filtered.append(sug)
+        return render_template('suggestions.html', username=username, suggests=filtered, liste_topics=liste_topics)
+    if suggests:
+        return render_template('suggestions.html', username=username, suggests=suggests, liste_topics=liste_topics)
+    else:
+        return redirect(url_for('accueil'))
+    
+@app.route('/rejection/<reject>/',methods=['GET', 'POST'])
+def rejection(reject):
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', username))
+    rejected =DataAccess().find('Users_recommendation', conditions=[('sender_id',us.id), ('receiver_id', reject)])
+    rejected.is_rejected=True
+    DataAccess().merge(rejected)
+    return redirect(url_for('accueil'))
+        
+    
 @app.route('/consultation/<login>/',methods=['GET', 'POST'])
 def consultation(login):
     if "user" not in session:
@@ -247,7 +347,7 @@ def consultation(login):
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
     ############## Notification de la visite ###################
-    notif(visitor.id,us.id,'Visit')
+    notif(visitor.id,us.id,'Visit', notif_cache)
     us.popularity=calculPopularite(us.id)
     DataAccess().merge(us)
     ###########
@@ -278,12 +378,12 @@ def consultation(login):
         else:
             fake=False
         if like != visit.islike:
-            if like==False and liked==True:
-                notif(visitor.id,us.id,'Dislike')
-                closeRoom(visitor.id,us.id)
+            if like == False and liked==True:
+                notif(visitor.id, us.id, 'Dislike', notif_cache)
+                closeRoom(visitor.id,us.id, notif_cache)
             else:
                 if like==True:
-                    notif(visitor.id,us.id,'Like')
+                    notif(visitor.id, us.id, 'Like', notif_cache)
             visit.islike = like #modifier le score popularité 
         if block != visit.isblocked:
             visit.isblocked=block
@@ -294,7 +394,7 @@ def consultation(login):
         dataAccess.merge(visit)
         us.popularity=calculPopularite(us.id)
         DataAccess().merge(us)
-        ##### creation de la room si necessaire ######
+        ##### creation de la room ######
         if visit.islike == True:
             #visited = DataAccess().find('Visit', conditions=[('visited_id', visit.visitor_id), ('visitor_id', visit.visited_id)])
             if visited:
@@ -434,6 +534,9 @@ def registration():
         new.latitude = request.form.get('latitude')
         new.longitude = request.form.get('longitude')
         new.popularity = 0
+        print('##########################################################################################')
+        print(new)
+        print('##########################################################################################')
         DataAccess().persist(new)
         ft_send(lien,'registration')
         session.clear()
@@ -566,16 +669,104 @@ def chat():
     if "user" in session:
         username = session['user']['name']
         user = DataAccess().find('Users', conditions=('user_name', username))
-        room_list = DataAccess().fetch('Users_room', 
-                                       conditions=[('R.active', True), ('U.slave_id', user.id)], 
+        room_list = DataAccess().fetch('Users_room',
+                                       conditions=[('R.active', True), ('U.slave_id', user.id)],
                                        joins=[('master_id', 'US'), ('room_id', 'R')])
+        messages_list = DataAccess().fetch('Notification', conditions=[('receiver_id', user.id), 
+                                                                        ('notif_type', 'Message'),
+                                                                        ('is_read', False)])
+        msgs = {}
+        for m in messages_list:
+            if m.sender_id in msgs:
+                msgs[m.sender_id] += 1
+            else:
+                msgs[m.sender_id] = 1
         return render_template('chat.html',
                                 username=username,
-                                user_id=user.id, 
-                                rooms=room_list
+                                user_id=user.id,
+                                rooms=room_list,
+                                msgs=msgs
                                 )
     else:
-        return redirect(url_for('homepage'))  
+        return redirect(url_for('homepage'))
+
+@app.route('/like')
+def like():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us_id = get_user_id(username)
+    like_list = DataAccess().fetch('Visit', conditions=[('visited_id', us_id),
+                                                               ('islike', True)],
+                                                   joins=('visitor_id', 'V2'), 
+                                                   orderby='V.id desc')
+    ############# update notification table and cache file #########
+    like_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id),
+                                                                ('notif_type', 'Like'),
+                                                                ('is_read', False)])
+    new_like = []
+    for l in like_list2:
+        if l.sender_id not in new_like:
+            new_like.append(l.sender_id)
+        l.is_read = True
+        notif_cache.merge(l, autocommit=False)
+    DataAccess().commit()
+        ###############################################################
+    like_infos = []
+    for l in like_list:
+        info = {}
+        info['username'] = l.visitor_id.user_name
+        info['date'] = l.last_update.date().isoformat()
+        info['is_read'] = True
+        if l.visitor_id.id in new_like:   
+            info['is_read'] = False
+        if os.path.isfile("./static/photo/" + l.visitor_id.user_name + '1' + ".jpg"):
+            info['photo'] = ("/static/photo/" + l.visitor_id.user_name + '1' + ".jpg")
+        else:
+            info['photo'] = ('/static/nophoto.jpg')
+        like_infos.append(info)
+        
+       
+    return render_template('like.html', liste = like_infos)
+        
+
+@app.route('/dislike')
+def dislike():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us_id = get_user_id(username)
+    dislike_list = DataAccess().fetch('Notification', 
+                                      conditions=[('receiver_id', us_id),
+                                                  ('notif_type', 'Dislike')], 
+                                      joins=('sender_id', 'S'),
+                                      orderby='N.id desc')
+    
+    dislike_infos = []
+    test_duplicate = {}
+    for d in dislike_list:
+        if not d.sender_id.user_name in test_duplicate:
+            test_duplicate[d.sender_id.user_name] = 1
+            info = {}
+            info['username'] = d.sender_id.user_name
+            info['date'] = d.created.date().isoformat()
+            info['is_read'] = d.is_read
+            if os.path.isfile("./static/photo/" + d.sender_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + d.sender_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            dislike_infos.append(info)
+        
+        ######## update notification table and cache file #######
+    dislike_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id), 
+                                                                   ('notif_type', 'Dislike'), 
+                                                                   ('is_read', False)])
+    for d in dislike_list2:
+        d.is_read = True 
+        notif_cache.merge(d, autocommit=False) 
+    DataAccess().commit()
+        #########################################################
+    return render_template('dislike.html', liste = dislike_infos)
 
 
 @app.after_request
@@ -593,16 +784,14 @@ def add_header(r):
 ###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
-   # print("ajax")
+    print("ajax")
     if "user" in session:
         username = session['user']['name']
-        us = DataAccess().find('Users', conditions=[('user_name', username)])
-        (like, msg, visit, dislike) = notif_cache.get_unread(us.id)
-        print('like : ', like)
+        # us = DataAccess().find('Users', conditions=[('user_name', username)])
+        (like, msg, visit, dislike) = notif_cache.get_unread(username)
         list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
         json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
         return json_notif
-
 
 
 ################################################
@@ -612,8 +801,7 @@ def refresh_notif():
 # Connexions des users
 @socketio.on('connect_user')
 def login_connect(data):
-    pass
-    #print('login-connect = ', data['msg'])
+    print('login-connect = ', data['msg'])
 
 
 ############# Chat  ###################
@@ -633,7 +821,6 @@ def message(data):
     notif.notif_type = 'Message'
     notif.is_read = False
     DataAccess().persist(msg)
-    # DataAccess().persist(notif)
     notif_cache.persist(notif)
     # print('notif_cache.cache : ', *notif_cache.cache)
     send({
@@ -664,39 +851,33 @@ def join(data):
     msgs = DataAccess().fetch("Message", conditions=('room_id', data['room']))
     user = DataAccess().find('Users', conditions=('user_name', data['username']))
     room_data = DataAccess().find('Users_room', conditions=('room_id', data['room']))
-    print('room = ',data['room'])
+    # print('room = ',data['room'])
     receiver_id = room_data.slave_id
     sender_id = room_data.master_id
     if room_data.slave_id == user.id:
         receiver_id = room_data.master_id
         sender_id = room_data.slave_id
-    # print('receiver_id = ', receiver_id)
     receiver = DataAccess().find('Users', conditions=('id', receiver_id))
-    # print('receiver = ', receiver.user_name)
-    # print('sender_id = ', sender_id)
-    # print(data['username'])
-    # print(user.id)
-    # print("list msgs = ")
+    
     msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
-    # mise a jour des notifs 'message' a true (concernant cette room)
+    
+    ###### mise a jour des notifs 'message' a true (concernant cette room) ##########
     notif_list = DataAccess().fetch('Notification', conditions=[
                                                                 ('sender_id', receiver_id),
                                                                 ('receiver_id', sender_id),
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    print(notif_list)
+    print('notif_messagsssssssssssssssss', *notif_list)
     for notif in notif_list:
         notif.is_read = True
-        # DataAccess().merge(notif, autocommit=False)
         notif_cache.merge(notif, autocommit=False)
-    # DataAccess().commit()
-    notif_cache.commit()
+    DataAccess().commit()
         
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,
-           'user_id': user.id,  # voir dans template si on peut l'enlever
+           'user_id': user.id,
            'receiver': receiver.user_name,
            'receiver_id': receiver.id,
           },

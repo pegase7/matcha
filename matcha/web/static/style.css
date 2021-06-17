@@ -40,6 +40,9 @@ html {
     color: greenyellow;
 }
 
+.lienRed {
+    color: rgb(255, 47, 47);
+}
 .center
 {
     text-align: center;

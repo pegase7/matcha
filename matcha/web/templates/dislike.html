@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block title %}Dislike{% endblock %} {% block content %} {% include 'nav.html' %}
+
+<h1 id="h1-dislike">Qui ne m'aime plus ?</h1>
+<div id="dislike-container" class="container">
+
+    {% if liste %} {% for l in liste %}
+    <a href="{{ url_for('consultation', login=l.username)}}" class="lien">
+        <div class="accueil-cards card {{ 'is-not-read' if not l.is_read }}">
+            <div class="card-header"> <img src="{{ l.photo }}" height="80" alt=""></div>
+            <div class="card-body">
+                <h3>{{ l.username }}</h3>
+                <p>Dislike le : {{ l.date }}</p>
+            </div>
+        </div>
+    </a>
+    {% endfor %} {% endif %}
+</div>
+{% endblock %}

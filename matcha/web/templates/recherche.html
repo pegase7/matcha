@@ -65,6 +65,7 @@
     flex-grow: 2;
     height: 500px;
     }   
+    
 </style>
 <br><br>
 <h1>Je recherche... </h1>
@@ -73,6 +74,7 @@
   <div class="contenu">
     <form method="post" >
       <div>
+
         <input type="radio" id="Male" name="sexe" value="Male" {% if sex_to_find=='Male' %} checked {% endif %}>
         <label for="Male">un homme</label>
         <input type="radio" id="Female" name="sexe" value="Female" {% if sex_to_find=='Female' %} checked {% endif %}>

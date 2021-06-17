@@ -6,7 +6,19 @@
 
 <h2>Candidats repondant à vos critères</h2>
 <br>
-<!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name"> -->
+
+  <div>
+     &emsp;&emsp;&emsp;&emsp;&emsp;
+      
+      <button class="btn btn-primary btn-lg mb-2" onclick="filtrer(this);">Filtrer</button>
+  </div>
+  Age compris entre <input type="number" id="agemin" name="agemin" min="18" max="110" size=8 /> et <input type="number"
+  id="agemax" name="agemax" min="18" max="110" size=8 />
+  Popularite entre <input type="number" id="popmin" name="popmin" min="0" max="100" value=0 /> et <input type="number"
+  value=100 id="popmax" name="popmax" min="0" max="100" /> Distance Maximum <input type="number" min="0" max="20000" id="dist" name="dist"><br>
+  </div>
+
+<br>
 <table>
     <thead>
     <tr><th>Photo</th><th width=120>Pseudo</th><th width=80>age</th><th>distance (en km)</th><th>Popularité</th><th>Tags correspondants</th></tr>
@@ -14,7 +26,7 @@
     <tbody>
 {% for candidat in candidats %}
 
-<tr><td><img src={{candidat.photo}} alt="" height="80"></td><td><a class="lien" href="{{ url_for('consultation', login=candidat.nom)}}">{{candidat.nom}} </a></td><td align="center">{{candidat.age}}</td> <td align="right">{{candidat.distance}}</td><td align="right">{{candidat.popularity}}</td>
+<tr data-age={{candidat.age}} data-pop={{candidat.popularity}} data-dist={{candidat.distance}}><td><img src={{candidat.photo}} alt="" height="80"></td><td><a class="lien" href="{{ url_for('consultation', login=candidat.nom)}}">{{candidat.nom}} </a></td><td align="center">{{candidat.age}}</td> <td align="right">{{candidat.distance}}</td><td align="right">{{candidat.popularity}}</td>
 <td>{% for tag in candidat.tags %} {{tag}}, {% endfor %} </td></tr>
 
 {% endfor %}
@@ -23,6 +35,7 @@
 </table><br>
 <a href="{{ url_for('recherche')}}">
     <button type="button" class="btn btn-primary btn-lg mb-2" >retour</button></a>
+    
     <script>
   const compare = (ids, asc) => (row1, row2) => {
   const tdValue = (row, ids) => row.children[ids].textContent;
@@ -37,6 +50,30 @@ thx.forEach(th => th.addEventListener('click', () => {
   let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
   classe.forEach(tr => tbody.appendChild(tr));
 }));
+
+function filtrer()
+    {
+        var row = document.getElementsByTagName('tr');
+        var agemin = document.getElementById("agemin").value;
+        var agemax = document.getElementById("agemax").value;
+        var popmax = document.getElementById("popmax").value;
+        var popmin = document.getElementById("popmin").value;
+        var dist= document.getElementById("dist").value;
+        if(agemin==='') agemin=18;
+        if(agemax==='') agemax=120;
+        if(dist==='') dist=20000;
+
+        for (var i = 0; i < row.length; i++) // Tu parcours toutes les lignes du tableau
+        {
+            if(parseInt(row[i].dataset.age) <= agemin) row[i].style.display = 'none'; 
+            if(parseInt(row[i].dataset.age) >= agemax) row[i].style.display = 'none'; 
+            if(parseInt(row[i].dataset.pop) >= popmax) row[i].style.display = 'none'; 
+            if(parseInt(row[i].dataset.pop) <= popmin) row[i].style.display = 'none'; 
+            if(parseInt(row[i].dataset.dist) >= dist) row[i].style.display = 'none'; 
+
+        }
+    }
+
     </script>
     
 {% endblock %}
