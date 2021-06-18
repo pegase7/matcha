@@ -5,7 +5,7 @@
     <ul class="navbar-nav">
 
         <li class="nav-item">
-            <a class="nav-link"> {{session['user']['name']}}</a>
+            <a id="nav-username" class="nav-link">{{session['user']['name']}}</a>
         </li>
         <li class="nav-item">
             <a href="{{ url_for('accueil')}}" class="nav-link">Accueil</a>

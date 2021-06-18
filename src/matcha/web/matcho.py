@@ -18,7 +18,7 @@ from matcha.model.Users_room import Users_room
 from matcha.model.Notification import Notification
 from matcha.orm.reflection import dispatcher
 from matcha.web.util2 import *
-# from matcha.web.util3 import *
+from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
 import urllib
 
@@ -108,38 +108,30 @@ def accueil():
                                              orderby='v.last_update desc', limit='3')
         visits_made = DataAccess().fetch('Visit', conditions=[('visitor_id', us.id)], joins=('visited_id', 'V3'), 
                                                   orderby='v.last_update desc', limit='3')
-        print('visits_madeeeeeeeeeeeeeeeee', *visits_made)
         likes = DataAccess().fetch('Visit', conditions=[('visited_id', us.id),('islike', True)])
         matchs = DataAccess().fetch('Users_room', conditions=[('master_id', us.id), ('R.active', True)], joins=('room_id', 'R'))
-        #######################  recommandations  ###########################
-        # compute_recommendations(us)
-        # reco =DataAccess().fetch('Users_recommendation', conditions=('sender_id', us.id),joins='receiver_id')
-        print('#################################################')
-        # suggest=[]
-        # for rec in reco:
-        #     info={}
-        #     info["pseudo"]=rec.receiver_id.user_name
-        #     info["popul"] = rec.receiver_id.popularity
-        #     if (rec.receiver_id.birthday):
-        #         info["age"] = calculate_age(rec.receiver_id.birthday)
-        #     else:
-        #         info["age"] = 0
-        #     if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
-        #         info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
-        #     else:
-        #         info['photo'] = ('/static/nophoto.jpg')
-        #     print(info)
-        #     suggest.append(info)
-        print('#################################################')
-        #####################################################################
-        like = 0
-        match = 0
-        for l in likes:
-            like = like + 1
-            
-        for m in matchs:
-            match = match + 1
         
+        #######################  recommandations  ###########################
+        compute_recommendations(us)
+        reco =DataAccess().fetch('Users_recommendation', conditions=('sender_id', us.id),joins='receiver_id', limit='3')
+        suggest=[]
+        for rec in reco:
+            info={}
+            info["pseudo"]=rec.receiver_id.user_name
+            info["popul"] = rec.receiver_id.popularity
+            if (rec.receiver_id.birthday):
+                info["age"] = calculate_age(rec.receiver_id.birthday)
+            else:
+                info["age"] = 0
+            if os.path.isfile("./static/photo/" + rec.receiver_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + rec.receiver_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            suggest.append(info)
+
+        #####################################################################
+        like = sum(1 for _ in likes)
+        match = sum(1 for _ in matchs)
         visitors = []
         visited_infos = []
         matching = True
@@ -150,10 +142,9 @@ def accueil():
             info["pseudo"] = visit.visitor_id.user_name
             info["popul"] = visit.visitor_id.popularity
             if (visit.visitor_id.birthday):
-                print('birthdayaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',visit.visitor_id.birthday)
                 info["age"] = calculate_age(visit.visitor_id.birthday)
             else:
-                info["age"] = 0
+                info["age"] = '??'
             info["date"] = visit.last_update.date().isoformat()
             if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
                 info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
@@ -165,17 +156,19 @@ def accueil():
         for visited in visits_made:
             
             info = {}
-            info['age'] = calculate_age(visited.visited_id.birthday)
-            info['date'] = visited.visited_id.last_update.date().isoformat()
+            if visited.visited_id.birthday:
+                info['age'] = calculate_age(visited.visited_id.birthday)
+            else:
+                info['age'] = '??'
+            info['date'] = visited.last_update.date().isoformat()
             info['popul'] = visited.visited_id.popularity
             info['pseudo'] = visited.visited_id.user_name
-            print('visited-username : ', visited.visited_id.user_name)
             if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
                 info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
             else:
                 info['photo'] = ('/static/nophoto.jpg')
             visited_infos.append(info)
-        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching)
+        return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching, suggest=suggest)
     else:
         return redirect(url_for('homepage'))   
 
@@ -335,6 +328,7 @@ def consultation(login):
                         openRoom(visitor.id,us.id)
                     
         #################################
+    
     return render_template('consultation.html', profil=us, photos=liste_photo, naissance=naissance, tags=tags, last_connection=last_connection, visit=visit, nb_photo=nb_photo, liked=liked, fake=fake)
 
 
@@ -368,39 +362,39 @@ def recherche():
     user = session['user']['name']
     us = DataAccess().find('Users', conditions=('user_name', user))
     tops = DataAccess().fetch('Topic')
-    topics = []
+    topics=[]
     for topic in tops:
         topics.append(topic.tag)
-    if us.gender == None or us.description == None or us.orientation == None or us.birthday == None:
+    if us.gender==None or us.description==None or us.orientation==None or us.birthday==None:
         msg = 'Merci de bien remplir votre fiche avant de chercher un profil compatible'
-        return render_template('alerte.html', msg=msg)
+        return render_template('alerte.html',msg=msg)
     if us.orientation != "Hetero":
-        sex_to_find = us.gender
+        sex_to_find=us.gender
     else:
-        if us.gender == "Male":
-            sex_to_find = "Female"
+        if us.gender=="Male":
+            sex_to_find="Female"
         else:
-            sex_to_find = "Male"
+            sex_to_find="Male"
     latitude=us.latitude
     longitude=us.longitude
-    ##### Criteres de recherches ##################
-    if request.method == "POST":
-        coordonnee = request.form.get('longlat')
+    ##### Criteres de recherches
+    if request.method=="POST":
+        coordonnee=request.form.get('longlat')
         if (coordonnee):
-            latitude = coordonnees(coordonnee)[0]
-            longitude = coordonnees(coordonnee)[1]
+            latitude=coordonnees(coordonnee)[0]
+            longitude=coordonnees(coordonnee)[1]
         else:
-            latitude = us.latitude
-            longitude = us.longitude
-        criteres = {}
-        criteres['sexe'] = request.form.get('sexe')
+            latitude=us.latitude
+            longitude=us.longitude
+        criteres={}
+        criteres['sexe']=request.form.get('sexe')
         if us.orientation:
-            criteres['orientation'] = us.orientation
+            criteres['orientation']=us.orientation
         else:
-            criteres['orientation'] = 'Bi'
-        criteres['sexe_chercheur'] = us.gender
-        criteres['latitude'] = latitude
-        criteres['longitude'] = longitude
+            criteres['orientation']='Bi'
+        criteres['sexe_chercheur']=us.gender
+        criteres['latitude']=latitude
+        criteres['longitude']=longitude
         if request.form.get('km'):
             criteres['dist_max']=request.form.get('km')
         else:
@@ -715,7 +709,6 @@ def refresh_notif():
     print("ajax")
     if "user" in session:
         username = session['user']['name']
-        # us = DataAccess().find('Users', conditions=[('user_name', username)])
         (like, msg, visit, dislike) = notif_cache.get_unread(username)
         list_notifs = {'like': like, 'msg': msg, 'visit': visit, 'dislike': dislike}
         json_notif = json.dumps(list_notifs, default=dispatcher.encoder_default)
@@ -725,6 +718,35 @@ def refresh_notif():
 ########## Temps réel avec socketio  ###########
 ################################################
 
+# clients = []
+#
+# @socketio.on('connect', namespace='/accueil')
+# def connect():
+#     clients.append(request.namespace)
+#     print('clientsssssssss :', *clients)
+
+
+########### profil consult connect #############
+
+# receive consult page infos
+@socketio.on('profil_user')
+def profil_user(data):
+    print('profil userrrrrrr : ', data['visitor'])
+    print('dataaa :', data)
+    socketio.emit('visited_profil', data, broadcast=True)
+
+
+# visited page response
+@socketio.on('visited_response')
+def visited_response(data):
+    print('visited response :', data)
+    socketio.emit('visitor_reception', data, broadcast=True)
+
+
+############## Connect users ###########
+@socketio.on('login')
+def login(data):
+    print('login = ', data['msg'])
 
 # Connexions des users
 @socketio.on('connect_user')
@@ -768,7 +790,6 @@ def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
         notif.is_read = True
-        # DataAccess().merge(notif)
         notif_cache.merge(notif)
         
         
@@ -796,7 +817,7 @@ def join(data):
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    print('notif_messagsssssssssssssssss', *notif_list)
+    # print('notif_messagsssssssssssssssss', *notif_list)
     for notif in notif_list:
         notif.is_read = True
         notif_cache.merge(notif, autocommit=False)

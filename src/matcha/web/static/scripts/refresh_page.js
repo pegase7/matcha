@@ -1,6 +1,48 @@
+const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+
 window.onload = function() {
     display_notifs();
+    connected_consult();
 }
+
+function connected_consult() {
+    if (document.getElementById('profil-consult')) {
+        let profil_consult_tag = document.getElementById('profil-consult');
+        let nav_username_tag = document.getElementById('nav-username');
+        let profil_visited = profil_consult_tag.firstChild.data;
+        let visitor = nav_username_tag.firstChild.data;
+        // console.log('profil visited :', profil_visited);
+        // console.log('visitor :', visitor);
+
+        socket.emit('profil_user', { 'visitor': visitor, 'visited': profil_visited });
+    }
+}
+
+socket.on('visited_profil', data => {
+    let visited_page_tag = document.getElementById('nav-username');
+    let visited_usr = visited_page_tag.firstChild.data;
+    // console.log('data-visited :', data.visited);
+    // console.log('visitor page :', visited_usr);
+   
+    if (data.visited == visited_usr) {
+        socket.emit('visited_response', data);
+    }
+});
+
+socket.on('visitor_reception', data => {
+    console.log('reception data :', data);
+    let visitor_page_tag = document.getElementById('nav-username');
+    let visitor_usr = visitor_page_tag.firstChild.data;
+
+    if (data.visitor == visitor_usr) {
+        console.log('connecté !!');
+        let state_connect = document.getElementById('consult-profil-connect-state');
+        state_connect.innerHTML = 'connecté !!';
+        state_connect.className = 'state-connect';
+    }
+
+});
 
 let notifs = new Array();
 
@@ -17,6 +59,7 @@ function display_notifs() {
                 nb_mess_dom_element.innerHTML = '?';
                 nb_like_dom_element.innerHTML = '?';
                 nb_visit_dom_element.innerHTML = '?';
+                nb_dislikes_dom_element.innerHTML = '?';
             } else {
 
                 notifs = JSON.parse(xhr.responseText);
@@ -25,10 +68,10 @@ function display_notifs() {
                 let nb_mess = notifs.msg;
                 let nb_visit = notifs.visit;
                 let nb_dislike = notifs.dislike;
-                console.log("nb_like : ", nb_like);
-                console.log("nb_mess : ", nb_mess);
-                console.log("nb_visit : ", nb_visit);
-                console.log("nb_dislike : ", nb_dislike);
+                // console.log("nb_like : ", nb_like);
+                // console.log("nb_mess : ", nb_mess);
+                // console.log("nb_visit : ", nb_visit);
+                // console.log("nb_dislike : ", nb_dislike);
 
 
                 // affichage des notifications //

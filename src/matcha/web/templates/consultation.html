@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %}Consultation{% endblock %} {% block content %} {% include 'nav.html' %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/consultation.css') }}">
 
-<h1>Profil de {{profil.user_name}}</h1><br>
+<h1 id="profil-consult">{{profil.user_name}}</h1><br>
 <form method="post">
 
     <table>
@@ -45,7 +45,7 @@
 
         <h2>{{profil.first_name}} {{profil.last_name}}</h2>
         <h2> Popularité : {{profil.popularity}}</h2>
-        <h3>Dernière connection le : {{last_connection}}</h3>
+        <h3 id="consult-profil-connect-state" >Dernière connection le : {{last_connection}}</h3>
         <h3>Je suis {%if profil.gender=='Male' %}un homme{% else %}{%if profil.gender=='Female' %}une femme {% endif %}{% endif %} {% if profil.orientation==None %}Bi {% else %} {{profil.orientation}} {% endif %}<br> Naissance {{naissance}} <br><br> Ma présentation
             :
         </h3><br> {{profil.description}}
@@ -67,40 +67,25 @@
 
 
         <script>
-            var carte = L.map('macarte').setView([{
-                {
-                    profil.latitude
-                }
-            }, {
-                {
-                    profil.longitude
-                }
-            }], 12);
+            var carte = L.map('macarte').setView([{{profil.latitude}}, {{profil.longitude}}], 12);
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(carte);
-            var marker = L.marker([{
-                {
-                    profil.latitude
-                }
-            }, {
-                {
-                    profil.longitude
-                }
-            }]).addTo(carte);
-
-            function affiche(a) {
-                var modal = document.getElementById("myModal");
-                var modalImg = document.getElementById("img");
-                modal.style.display = "block";
-                modalImg.src = a.src;
+            var marker = L.marker([{{profil.latitude}}, {{profil.longitude}}]).addTo(carte);
+      
+            function affiche(a){
+              var modal = document.getElementById("myModal");
+              var modalImg = document.getElementById("img");
+              modal.style.display = "block";
+              modalImg.src = a.src;
             }
-
-            function ferme(a) {
-                var modal = document.getElementById("myModal");
-                modal.style.display = "none";
+      
+            function ferme(a) { 
+              var modal = document.getElementById("myModal");
+              modal.style.display = "none";
             }
-        </script>
+      
+            </script>
     </div>
 </div>
 {% endblock %}

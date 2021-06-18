@@ -96,3 +96,8 @@ strong {
     text-decoration: none;
     cursor: pointer;
 }
+
+.state-connect {
+    color: red;
+    font-size: 44px;
+}
