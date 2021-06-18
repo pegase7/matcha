@@ -27,9 +27,11 @@ app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
-# SESSION_COOKIE_SECURE=True,
-# SESSION_COOKIE_HTTPONLY=True,
-# SESSION_COOKIE_SAMESITE='Strict'
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Strict',
+    )
 socketio = SocketIO(app)
 
 
@@ -75,28 +77,33 @@ def homepage():
         return render_template('home.html')
     
 
-@app.route('/photo/', methods=['GET', 'POST'])
+@app.route('/photo/',methods=['GET', 'POST'])
 def photo():
     if "user" not in session:
         return redirect(url_for('homepage')) 
-    if request.method == "POST":
+    if request.method=="POST":
         path = 'static/photo'
         f = request.files['maphoto']
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
-        if request.form.get('raz') != None:
-            os.remove('static/photo/' + photo_name)
-            liste_photo = listePhoto(session['user']['name'])
-            return render_template('photo.html', photos=liste_photo)
-        if f:  # verification de la présence d'un fichier
-            if extension_ok(f.filename):  # on vérifie que son extension est valide 
+        if request.form.get('raz')!=None:
+            liste_photo=listePhoto(session['user']['name'])
+            photo_name2 = '/static/photo/'+photo_name
+            print(liste_photo)
+            print(photo_name)
+            if photo_name2 in liste_photo:
+                os.remove('static/photo/'+photo_name)  
+                liste_photo=listePhoto(session['user']['name'])
+            return render_template('photo.html',photos=liste_photo)
+        if f:# verification de la présence d'un fichier
+            if extension_ok(f.filename): # on vérifie que son extension est valide 
                 f.save(os.path.join(path, photo_name))
             else:
                 flash('Seuls les fichier JPG ou JPEG sont autorisés !')
         else:
-            flash('Aucun fichier choisi !')
-    liste_photo = listePhoto(session['user']['name'])
-    return render_template('photo.html', photos=liste_photo)
+                flash('Aucun fichier choisi !')
+    liste_photo=listePhoto(session['user']['name'])
+    return render_template('photo.html',photos=liste_photo)
 
 
 @app.route('/accueil/')
