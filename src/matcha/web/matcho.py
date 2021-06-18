@@ -731,15 +731,12 @@ def refresh_notif():
 # receive consult page infos
 @socketio.on('profil_user')
 def profil_user(data):
-    print('profil userrrrrrr : ', data['visitor'])
-    print('dataaa :', data)
     socketio.emit('visited_profil', data, broadcast=True)
 
 
 # visited page response
 @socketio.on('visited_response')
 def visited_response(data):
-    print('visited response :', data)
     socketio.emit('visitor_reception', data, broadcast=True)
 
 

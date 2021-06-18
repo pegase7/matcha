@@ -12,7 +12,6 @@ from random import *
 from flask import *
 from math import sin, cos, acos, radians
 from matcha.model.Notification import Notification 
-from setuptools.installer import fetch_build_egg
 
 
 class hashit:
@@ -336,7 +335,6 @@ def closeRoom(u1, u2, cache_notifs):
         ############### update message notification is_read = true #############
         whereaddon = ('((sender_id = %s and receiver_id = %s) or (sender_id = %s and receiver_id = %s)) and notif_type = %s and is_read = %s', [u1, u2, u2, u1, 'Message', False])
         msgs = DataAccess().fetch('Notification', whereaddon=whereaddon)
-        print('msgsssssssssssss : ', *msgs)
         for m in msgs:
             m.is_read = True
             cache_notifs.merge(m, autocommit=False)

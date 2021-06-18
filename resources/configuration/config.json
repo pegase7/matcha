@@ -15,7 +15,7 @@
         ]
     },
     "recommendation":{
-        "threshold":6,
+        "threshold":2,
         "nb_recommendations":8
     },
     "orm":{

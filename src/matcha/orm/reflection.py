@@ -25,7 +25,7 @@ class Field:
         return "value '" + str(value) + "' for field '" + self.name + "' " + message
 
     def __msgtypeerror__(self, value, _type, instance=None):
-        return self.__msgerror__(value, self.name, "bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!", instance)
+        return self.__msgerror__(value, self.name + ": bad type, '" + _type + "' is expected rather than '" + str(type(value)) + "'!", instance)
     
     def __raise_error__(self, error, message):
         if Config.LOGGING_INFO:

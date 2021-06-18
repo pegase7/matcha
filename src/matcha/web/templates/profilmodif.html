@@ -80,7 +80,7 @@
         <div class="checkbox_box">
             <fieldset>
                 {% for topic in topics %}
-                <input type="checkbox" id={{topic}} name="interest" value={{topic}} {% for tag in tags %} {% if tag==t opic %}checked{% endif %} {% endfor %} /><label for={{topic}}>{{topic}}</label><br> {% endfor %}
+                <input type="checkbox" id={{topic}} name="interest" value={{topic}} {% for tag in tags %} {% if tag==topic %}checked{% endif %} {% endfor %} /><label for={{topic}}>{{topic}}</label><br> {% endfor %}
             </fieldset>
         </div>
 

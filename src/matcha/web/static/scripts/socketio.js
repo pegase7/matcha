@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
+    console.log('socket connected');
     let room = "";
-    // joinRoom("Lounge");
+
 
     // display incomming message
     socket.on('message', data => {
@@ -29,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("rigthside-pannel").scrollTop;
             if (current_user == data.receiver) {
                 socket.emit('receiver_connect', { 'msg': 'receiver connect', 'test': true, 'notif': data.notif })
-                    // } else {
-                    //     socket.emit('receiver_connect', {'msg': 'receiver non-connect', 'test': false})
             }
 
         } else {
