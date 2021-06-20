@@ -14,7 +14,7 @@
     {% for visitor in visitors %}
     <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
     <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
-        <div class="card-header"> <img src="{{ visitor.photo }}" height="80" alt=""></a></div>
+        <div class="card-header"> <img src="{{ visitor.photo }}" height="80" alt=""></div>
         <div class="card-body">
             <h3>{{ visitor.pseudo }}</h3>
             <p>{{ visitor.age }} ans - Popularité : {{ visitor.popul }}</p>
@@ -29,13 +29,13 @@
 
     {% for visited in visited_infos %}
     <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
-        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
+        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></div>
         <div class="card-body">
-            <h2>{{ visited.pseudo }}</h2>
+            <h3>{{ visited.pseudo }}</h3>
             <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
             <p>le {{ visited.date }}</p>
         </div>
-    </div>
+    </div></a>
     {% endfor %}
 </div>
 
@@ -45,16 +45,16 @@
     <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
     {% else %}
     <div class="container accueil-container">
-        <h3>Nos suggestions... &emsp;&emsp; <a href="{{ url_for('suggestions')}}" class="lien">Toutes nos suggestions</a></h3>
-    
+        <h3>Nos suggestions... &emsp;&emsp; <a href="{{ url_for('suggestions')}}" class="lien">Toutes nos suggestions</a> &emsp;&emsp; <a href="{{ url_for('recalculsuggest')}}" class="lien">Recalculer nos suggestions</a></h3>
+        <div id="like-container" class="container">
         {% for visited in suggest %}
         <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
-            <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
+            <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></div>
             <div class="card-body">
-                <h2>{{ visited.pseudo }}</h2>
+                <h3>{{ visited.pseudo }}</h3>
                 <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
             </div>
-        </div>
+        </div></a>
         {% endfor %}
     </div>
     

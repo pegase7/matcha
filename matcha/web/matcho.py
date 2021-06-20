@@ -1,3 +1,4 @@
+from email.mime import text
 from matcha.web.util1 import *
 from flask import *
 from PIL import Image  
@@ -22,15 +23,16 @@ from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
 import urllib
 
-
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
-# SESSION_COOKIE_SECURE=True,
-# SESSION_COOKIE_HTTPONLY=True,
-# SESSION_COOKIE_SAMESITE='Strict'
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Strict',
+    )
 socketio = SocketIO(app)
 
 dict_users_ids = {}
@@ -50,6 +52,8 @@ def homepage():
     if request.method=="POST":
         login=request.form.get('login')
         pwd=request.form.get('password')
+        if login ==None  or pwd ==None:
+            return render_template('home.html')
         us = DataAccess().find('Users', conditions=('user_name', login))
         if us==None:
             rep='Utilisateur inconnu, merci de vous inscrire'
@@ -83,8 +87,11 @@ def photo():
         num = request.form.get('numphoto')
         photo_name = session['user']['name'] + num + '.jpg'
         if request.form.get('raz')!=None:
-            os.remove('static/photo/'+photo_name)
             liste_photo=listePhoto(session['user']['name'])
+            photo_name2 = '/static/photo/'+photo_name
+            if photo_name2 in liste_photo:
+                os.remove('static/photo/'+photo_name)  
+                liste_photo=listePhoto(session['user']['name'])
             return render_template('photo.html',photos=liste_photo)
         if f:# verification de la présence d'un fichier
             if extension_ok(f.filename): # on vérifie que son extension est valide 
@@ -92,7 +99,7 @@ def photo():
             else:
                 flash('Seuls les fichier JPG ou JPEG sont autorisés !')
         else:
-             flash('Aucun fichier choisi !')
+                flash('Aucun fichier choisi !')
     liste_photo=listePhoto(session['user']['name'])
     return render_template('photo.html',photos=liste_photo)
         
@@ -112,8 +119,11 @@ def accueil():
 
 
     #######################  recommandations  ###########################
-    compute_recommendations(us)
     reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
+    
+    if not reco:
+        compute_recommendations(us)
+        reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
     suggest=[]
     for rec in reco:
         print (rec)
@@ -229,6 +239,15 @@ def visites():
         return render_template('visites.html', username=username, visitors=visitors, pop=us.popularity, message=message)
     else:
         return redirect(url_for('accueil'))
+
+@app.route('/recalcul')
+def recalculsuggest():
+    if "user" not in session:
+        return redirect(url_for('homepage'))
+    username = session['user']['name']
+    us = DataAccess().find('Users', conditions=('user_name', username),joins='topics')
+    compute_recommendations(us)
+    return redirect(url_for('accueil'))
 
 @app.route('/suggestions/',methods=['GET', 'POST'])
 def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
@@ -504,18 +523,22 @@ def recherche():
 @app.route('/registration/',methods=['GET', 'POST'])
 def registration():
     if request.method=="POST":
-        login=request.form.get('login')
+        login=verifInput(request.form.get('login'),str)
+        mail=verifInput(request.form.get('courriel'),str)
+        pwd=verifInput(request.form.get('password'),str)
+        pwd2 =verifInput(request.form.get('password2'),str)
+        nom=verifInput(request.form.get('name'),str)
+        prenom=verifInput(request.form.get('first_name'),str)
+        if login==None or mail== None or pwd==None or pwd2==None or nom==None or prenom==None:
+            return render_template('registration.html', message = "Merci de remplir tous les champs")
         if verif_login(login) !='ok':
             return render_template('registration.html', message = verif_login(login))
-        mail=request.form.get('courriel')
-        pwd=request.form.get('password')
-        pwd2 =request.form.get('password2')
-        nom=request.form.get('name')
-        prenom=request.form.get('first_name')
         if verif_password(pwd,pwd2) !='ok':
             return render_template('registration.html', message = verif_password(pwd,pwd2))
         if verif_identity(nom,prenom) !='ok':
             return render_template('registration.html', message = verif_identity(nom,prenom))
+        if verifMail(mail) ==False:
+            return render_template('registration.html', message = "email invalide")
         session['user']= {'name' : login, 'email' : mail}   
         lien=lien_unique()
         new = Users()
@@ -534,9 +557,6 @@ def registration():
         new.latitude = request.form.get('latitude')
         new.longitude = request.form.get('longitude')
         new.popularity = 0
-        print('##########################################################################################')
-        print(new)
-        print('##########################################################################################')
         DataAccess().persist(new)
         ft_send(lien,'registration')
         session.clear()
@@ -553,20 +573,21 @@ def forgot():
         user=''
     if request.method=="POST":
         user=request.form.get('login')
-        mail = rep =''
-        us = DataAccess().find('Users', conditions=('user_name', user))
-        if us == None:
-            rep='Utilisateur inconnu !'
-            return render_template('forgot_password.html',rep=rep)
-        else :
-            lien=lien_unique()
-            mail=us.email
-            session['user']= {'name' : user, 'email' : mail}
-            nature='password'
-            us.confirm=lien
-            DataAccess().merge(us)  
-            ft_send(lien, nature)
-            return redirect(url_for('logout')) 
+        if user:
+            mail = rep =''
+            us = DataAccess().find('Users', conditions=('user_name', user))
+            if us == None:
+                rep='Utilisateur inconnu !'
+                return render_template('forgot_password.html',rep=rep)
+            else :
+                lien=lien_unique()
+                mail=us.email
+                session['user']= {'name' : user, 'email' : mail}
+                nature='password'
+                us.confirm=lien
+                DataAccess().merge(us)  
+                ft_send(lien, nature)
+                return redirect(url_for('logout')) 
     return render_template('forgot_password.html',user=user)
 
 
@@ -606,6 +627,8 @@ def newpassword(code):
     if request.method=="POST":
         pwd=request.form.get('password')
         pwd2=request.form.get('password2')
+        if pwd == None or pwd2 == None:
+            return render_template('newpassword.html', login=us.user_name)
         if verif_password(pwd,pwd2) !='ok':
             return render_template('newpassword.html', message = verif_password(pwd,pwd2))
         else:
@@ -641,18 +664,31 @@ def profilmodif():
         longitude=0
     if request.method=="POST":
         coordonnee=request.form.get('longlat')
-        if (coordonnee):
-            us.latitude=coordonnees(coordonnee)[0]
-            us.longitude=coordonnees(coordonnee)[1]
+        if verifInput(coordonnee,str) != None:
+            if verifCoor(coordonnee):
+                us.latitude=coordonnees(coordonnee)[0]
+                us.longitude=coordonnees(coordonnee)[1]
         interets=request.form.getlist('interest')
+        if verifInput(interets,list) == None:
+            return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
         dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
-        us.first_name=request.form.get('first_name')
-        us.last_name=request.form.get('name')
-        us.gender=request.form.get('sexe')
-        us.orientation=request.form.get('orientation')
-        us.description=request.form.get('bio')
+        if request.form.get('first_name'):
+            us.first_name=request.form.get('first_name')
+        if request.form.get('courriel'):   
+            if verifMail(request.form.get('courriel')):
+                us.email=request.form.get('courriel')
+        
+        if request.form.get('name'):   
+            us.last_name=request.form.get('name')
+        if request.form.get('sexe') and request.form.get('sexe') in ['Male','Female']:
+            us.gender=request.form.get('sexe')
+        if request.form.get('orientation') and request.form.get('orientation') in ['Bi','Homo','Hetero']:
+            us.orientation=request.form.get('orientation')
+        if request.form.get('bio'):
+            us.description=request.form.get('bio')
         if not(request.form.get('birthday')==''):
-            us.birthday=request.form.get('birthday')
+            if verifDate(request.form.get('birthday')):
+                us.birthday=request.form.get('birthday')
         DataAccess().merge(us)
         tagset = set()
         if (request.form.get('interet')):

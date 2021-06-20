@@ -72,26 +72,6 @@ create sequence USERS_RECOMMENDATION_ID_SEQ increment by 1 cache 1;
 alter table USERS_RECOMMENDATION_ID_SEQ owner to MATCHAADMIN;
 
 ---
---- table USERS_RECOMMENDATION
----
-create table USERS_RECOMMENDATION (
-    id              integer DEFAULT nextval('USERS_RECOMMENDATION_ID_SEQ'::regclass) NOT NULL,
-    sender_id		integer NOT NULL,
-    receiver_id		integer NOT NULL,
-    age_diff		numeric(4,2),
-    distance		numeric(9,2),
-    dist_ratio		numeric(2),
-    topics_ratio	numeric(9,2),
-    last_consult 	timestamp,    
-    is_rejected     boolean DEFAULT False NOT NULL,
-    created         timestamp without time zone DEFAULT now() NOT NULL,
-    last_update 	timestamp without time zone DEFAULT now() NOT NULL
-);
-alter table USERS_RECOMMENDATION owner to MATCHAADMIN;
-
-
-
----
 --- sequence ROOM_ID_SEQ
 ---
 create sequence ROOM_ID_SEQ increment by 1 cache 1;
@@ -167,6 +147,39 @@ create table USERS_TOPIC(
 );
 alter table USERS_TOPIC owner to MATCHAADMIN;
 
+
+
+---
+--- table USERS_RECOMMENDATION
+---
+create table USERS_RECOMMENDATION (
+    id                  integer DEFAULT nextval('USERS_RECOMMENDATION_ID_SEQ'::regclass) NOT NULL,
+    sender_id           integer NOT NULL,
+    receiver_id         integer NOT NULL,
+    weighting           integer,
+    age_diff            integer,
+    age_ratio           integer,
+    distance            numeric(9,2),
+    dist_ratio          numeric(2),
+    topics_ratio        numeric(9,2),
+    popularity_ratio    integer,
+    last_consult        timestamp,    
+    is_rejected         boolean DEFAULT False NOT NULL,
+    created             timestamp without time zone DEFAULT now() NOT NULL,
+    last_update         timestamp without time zone DEFAULT now() NOT NULL
+);
+alter table USERS_RECOMMENDATION owner to MATCHAADMIN;
+
+
+
+---
+--- table RECOMMENDATION_TOPIC
+---
+create table RECOMMENDATION_TOPIC(
+    recommend_id    integer NOT NULL,
+    tag             character varying(45) NOT NULL
+);
+alter table RECOMMENDATION_TOPIC owner to MATCHAADMIN;
 
 
 ---
@@ -279,5 +292,26 @@ create or replace procedure INSERT_TOPICS(usersid int, topic_array  text[]) AS $
 	end;
     $$ language plpgsql;
 alter procedure INSERT_TOPICS owner to MATCHAADMIN;
+
+
+---
+--- Create Trigger on NOTIFICATION to automatically:
+---		 when inserting Like/Dislike Notification, delete all notifications whith same couple (Receiver,Sender) and notif_type = ('Like', 'Dislike')
+---
+create or replace function ON_INSERT_NOTIFICATION() returns trigger as $$
+begin
+  IF TG_OP = 'INSERT' AND new.notif_type IN ('Like', 'Dislike') THEN
+  	delete from NOTIFICATION where sender_id = new.sender_id and receiver_id = new.receiver_id and notif_type in ('Like', 'Dislike');
+  END IF;
+  return new;
+end;
+$$ language PLPGSQL;
+alter function ON_INSERT_NOTIFICATION owner to MATCHAADMIN;
+
+
+create trigger TRIGGER_INSERT_NOTIFICATION before insert on NOTIFICATION
+for each row execute function ON_INSERT_NOTIFICATION(); 
+
+
 
 commit;

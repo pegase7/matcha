@@ -1,4 +1,5 @@
 import hashlib
+from logging import NullHandler
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -13,6 +14,8 @@ from random import *
 from flask import *
 from math import sin, cos, acos, radians
 from matcha.model.Notification import Notification 
+import re
+
 
 class hashit:
     def hashing(self,texte,hash_type):
@@ -338,3 +341,18 @@ def openRoom(u1,u2):
         room = DataAccess().find('Room', conditions=('id', existroom.room_id))
         room.active=True
         DataAccess().merge(room)
+
+def verifInput(var,type):
+    #retourne None si ce n'est pas le type attendu
+    if var and isinstance(var, type) != True or not var:
+        var=None
+    return var
+
+def verifMail(mail):
+    return bool((re.match('[^@]+@[^@]+\.[^@]+',mail)))
+
+def verifDate(birthday):
+    return bool((re.match('^\d{4}-\d{2}-\d{2}$',birthday)))  
+
+def verifCoor(coor):
+    return bool((re.match('^LatLng\(-?\d{1,3}\.\d{1,6}, -?\d{1,3}\.\d{1,6}\)$',coor)))

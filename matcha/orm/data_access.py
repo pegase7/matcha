@@ -197,7 +197,7 @@ class DataAccess():
             for record in records:
                 (modelobject, _) = self.populate(record, setjoin[2], 0)
                 objects.append(modelobject)
-        return objects;
+        return objects
 
     def __get_model_attr(self, record, field):
         try:
@@ -207,7 +207,7 @@ class DataAccess():
                 attr = fieldmodel.get_id(attr)
             return attr
         except (AttributeError):
-            setattr(record, field, None)
+            setattr(record, field.name, None)
             return None
             
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby, limit):
