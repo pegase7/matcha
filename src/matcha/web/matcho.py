@@ -21,11 +21,12 @@ from matcha.web.util2 import *
 from matcha.web.util3 import *
 from matcha.web.notification_cache import NotificationCache
 import urllib
+# import enchant
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=600)  # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
 app.config.update(
     SESSION_COOKIE_SECURE=True,
@@ -583,7 +584,10 @@ def profilmodif():
         DataAccess().merge(us)
         tagset = set()
         if (request.form.get('interet')):
-            tagset.add(request.form.get('interet'))
+            new_tag = request.form.get('interet')
+            if verif_word(new_tag):
+                new_tag = format_word(new_tag)                
+                tagset.add(new_tag)
         for inte in interets:
             tagset.add(inte)
         dataAccess.call_procedure(procedure='insert_topics', parameters=(us.id, list(tagset)))
@@ -627,7 +631,7 @@ def like():
     like_list = DataAccess().fetch('Visit', conditions=[('visited_id', us_id),
                                                                ('islike', True)],
                                                    joins=('visitor_id', 'V2'), 
-                                                   orderby='V.id desc')
+                                                   orderby='V.last_update desc')
     ############# update notification table and cache file #########
     like_list2 = DataAccess().fetch('Notification', conditions=[('receiver_id', us_id),
                                                                 ('notif_type', 'Like'),
@@ -724,13 +728,6 @@ def refresh_notif():
 ################################################
 ########## Temps réel avec socketio  ###########
 ################################################
-
-# clients = []
-#
-# @socketio.on('connect', namespace='/accueil')
-# def connect():
-#     clients.append(request.namespace)
-#     print('clientsssssssss :', *clients)
 
 
 ########### profil consult connect #############
