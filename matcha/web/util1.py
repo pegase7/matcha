@@ -356,3 +356,7 @@ def verifDate(birthday):
 
 def verifCoor(coor):
     return bool((re.match('^LatLng\(-?\d{1,3}\.\d{1,6}, -?\d{1,3}\.\d{1,6}\)$',coor)))
+
+def verifInt(nbr):
+    return bool((re.match('^\d{,5}$',nbr)))
+    
