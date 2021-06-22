@@ -702,6 +702,9 @@ def profilmodif():
                 us.latitude=coordonnees(coordonnee)[0]
                 us.longitude=coordonnees(coordonnee)[1]
         interets=request.form.getlist('interest')
+        for interet in interets:
+            if interet not in topics:
+                interets.remove(interet)
         if verifInput(interets,list) == None:
             return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
         dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
