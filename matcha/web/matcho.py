@@ -26,7 +26,7 @@ import urllib
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = 'd66HR8dç"f_-àgjYYic*dh'
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=6000)  # definie une duree au cookie de session
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=600)  # definie une duree au cookie de session
 app.debug = True  # a supprimer en production
 app.config.update(
     SESSION_COOKIE_SECURE=True,
@@ -120,7 +120,6 @@ def accueil():
 
     #######################  recommandations  ###########################
     reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
-    
     if not reco:
         compute_recommendations(us)
         reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
@@ -249,7 +248,7 @@ def recalculsuggest():
     compute_recommendations(us)
     return redirect(url_for('accueil'))
 
-@app.route('/suggestions/',methods=['GET', 'POST'])
+@app.route('/suggestions/')
 def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
     if "user" not in session:
         return redirect(url_for('homepage'))
@@ -262,6 +261,13 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
     suggests=[]
     for suggest in reco:
         liste_tag = [rec_topi.tag for rec_topi in suggest.topics]
+        print(suggest.receiver_id)
+        print('---------------------------------------')
+        print (suggest.topics)
+        for rec_topi in suggest.topics:
+            print('-',rec_topi.tag)
+        print('@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@')
+        print(liste_tag)
         info={}
         info["tag"]=liste_tag
         info["pseudo"]=suggest.receiver_id.user_name
@@ -302,9 +308,12 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
             if dist and sug['distance'] > int(dist):
                 continue
             if len(interest) >0:
+                
                 to_remove=0
                 for topic in interest:
+                    print(topic, '------')
                     for tag in sug['tag']:
+                        print(tag)
                         if tag == topic:
                             to_remove += 1
                 if to_remove==0:
@@ -479,14 +488,15 @@ def recherche():
     ##### Criteres de recherches
     if request.method=="POST":
         coordonnee=request.form.get('longlat')
-        if (coordonnee):
+        if (coordonnee) and verifCoor(coordonnee):
             latitude=coordonnees(coordonnee)[0]
             longitude=coordonnees(coordonnee)[1]
         else:
             latitude=us.latitude
             longitude=us.longitude
         criteres={}
-        criteres['sexe']=request.form.get('sexe')
+        if request.form.get('sexe') and request.form.get('sexe') in ['Male','Female']:
+            criteres['sexe']=request.form.get('sexe')
         if us.orientation:
             criteres['orientation']=us.orientation
         else:
@@ -494,23 +504,23 @@ def recherche():
         criteres['sexe_chercheur']=us.gender
         criteres['latitude']=latitude
         criteres['longitude']=longitude
-        if request.form.get('km'):
+        if request.form.get('km') and verifInt(request.form.get('km')):
             criteres['dist_max']=request.form.get('km')
         else:
             criteres['dist_max']=20000
-        if request.form.get('agemin'):
+        if request.form.get('agemin') and verifInt(request.form.get('agemin')):
             criteres['age_min']=int(request.form.get('agemin'))
         else:
             criteres['age_min']=18
-        if request.form.get('agemax'):
+        if request.form.get('agemax') and verifInt(request.form.get('agemax')):
             criteres['age_max']=int(request.form.get('agemax'))
         else:
             criteres['age_max']=110
-        if request.form.get('popmin'):
+        if request.form.get('popmin') and verifInt(request.form.get('popmin')):
             criteres['pop_min']=request.form.get('popmin')
         else:
             criteres['pop_min']=0
-        if request.form.get('popmax'):
+        if request.form.get('popmax') and verifInt(request.form.get('popmax')):
             criteres['pop_max']=request.form.get('popmax')
         else:
             criteres['pop_max']=100
@@ -677,7 +687,6 @@ def profilmodif():
         if request.form.get('courriel'):   
             if verifMail(request.form.get('courriel')):
                 us.email=request.form.get('courriel')
-        
         if request.form.get('name'):   
             us.last_name=request.form.get('name')
         if request.form.get('sexe') and request.form.get('sexe') in ['Male','Female']:
@@ -692,7 +701,12 @@ def profilmodif():
         DataAccess().merge(us)
         tagset = set()
         if (request.form.get('interet')):
-            tagset.add(request.form.get('interet'))
+            new_tag = request.form.get('interet')
+            if verif_word(new_tag):
+                new_tag = format_word(new_tag)                
+                tagset.add(new_tag)
+            else:
+                return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics,message=new_tag + " n'est pas correct !")
         for inte in interets:
             tagset.add(inte)
         dataAccess.call_procedure(procedure='insert_topics', parameters=(us.id, list(tagset)))
