@@ -1,87 +1,67 @@
-{% extends 'base.html' %} {% block title %}Mon profil{% endblock %} {% block content %} {% include 'nav.html' %}
-<style>
-    #conteneur {
-        display: flex;
-    }
-    
-    #colonne {
-        flex: 3;
-        padding: 20px;
-        column-count: auto;
-    }
-    
-    #profil {
-        flex: 1;
-    }
-    
-    p {
-        font-size: 1rem;
-        text-align: justify;
-    }
-</style>
-<br><br>
-<h1>Mon profil </h1>
+{% extends 'base.html' %}
 
-<div id='conteneur'>
-    <div id='profil'>
-        <img src={{ph1}} alt="" width=200px>
+{% block title %}Mon profil{% endblock %}
+{% block content %}
+{% include 'nav.html' %}
+
+<br><br><h1>Mon profil </h1>
+
+<div class='container-fluid'>
+    <div class="row">
+        <div class="col-3">
+
+       <img src={{ph1}} alt="" width=300px  class="rounded img-fluid"> 
     </div>
-    <div id='colonne'>
+    <div class="col-6">
+        <div class="row">
+        <div class="col">
         <h5>
             <table>
-                <colgroup>
-                    <col style="color: #9fe8e9">
-                </colgroup>
-                <tr>
-                    <td> Prénom:</t>
-                        <td>{{profil.first_name}}</td>
-                </tr>
-                <tr>
-                    <td> Nom :</td>
-                    <td>{{profil.last_name}}</td>
-                </tr>
-                <tr>
-                    <td>Naissance : </td>
-                    <td>{{naissance}}</td>
-                </tr>
-                <tr>
-                    <td> Sexe :</td>
-                    <td>{%if profil.gender=='Male' %}Masculin{% else %} {%if profil.gender=='Female' %}Féminin{% endif %}{% endif %}</td>
-                </tr>
-                <tr>
-                    <td> Orientation sexuelle :</td>
-                    <td>{{profil.orientation}}</td>
-                </tr>
-            </table>
-
-            Présentation : </h5>
-        <p>{{profil.description}}</p>
-        <h5>
+            <tr>
+            <td> Prénom:</t>
+            <td>{{profil.first_name}}</td></tr>
+            <tr>
+            <td> Nom :</td>
+            <td>{{profil.last_name}}</td></tr>
+           
+            <tr>
+            <td> Sexe :</td>
+            <td>{%if profil.gender=='Male' %}Masculin{% else %} {%if profil.gender=='Female' %}Féminin{% endif %}{% endif %}</td></tr>
+            <tr>
+            <td> Orientation sexuelle :</td>
+            <td>{{profil.orientation}}</td></tr>
+            </table></div>
+            <div class="col">
             <table>
-                <td> Email :</td>
-                <td>{{profil.email}}</td>
-                </tr>
-                <tr>
-                    <td> Latitude :</td>
-                    <td>{{profil.latitude}}</td>
-                </tr>
-                <tr>
-                    <td> Longitude :</td>
-                    <td>{{profil.longitude}}</td>
-                </tr>
-            </table>
-        </h5>
-
+            <td> Email :</td>
+            <td>{{profil.email}}</td></tr>
+            <tr>
+            <td>Naissance : </td>
+            <td>{{naissance}}</td></tr>
+            <tr>
+            <td> Latitude :</td>
+            <td>{{profil.latitude}}</td></tr>
+            <tr>
+            <td> Longitude :</td>
+            <td>{{profil.longitude}}</td></tr>
+            </table></div>
+            </h5>
+        </div> 
+           <h5>Présentation : </h5>
+            <p>{{profil.description}}</p>
+            <h5>
+           
+                           
     </div>
-    <div id='colonne'>
-        Mes centres d'intérêts :<br><br>
-
-        <ul>
-            {% for tag in tags %}
-            <li> {{tag}}</li>
-            {% endfor %}
-        </ul>
-
+     <div class="col-3">
+        <h2>Mes centres d'intérêts :</h2><br><br>
+       <h3>
+                {% for tag in tags %}
+                <span class="badge rounded-pill bg-primary">{{tag}}</span> 
+                {% endfor %}
+        </h3>    
+        
+    </div>
     </div>
 </div>
 
@@ -95,4 +75,7 @@
         <button type="button" class="btn btn-primary btn-lg mb-2">Modifier mon mot de passe</button></a>
     <br><br>
 </h1>
-<br><br> {% endblock %}
+<br><br>
+
+
+{% endblock %}

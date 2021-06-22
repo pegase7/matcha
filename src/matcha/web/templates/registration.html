@@ -2,22 +2,37 @@
 
 {% block title %}Inscription{% endblock %}
 {% block content %}
-
+<div class="center">
 <br><br>
 <h1>Je m'inscris</h1>
 <br><br><br><br>
-<div id="center">
-    <form method="post" >
+ <form method="post" >
 <p>Login<br><input type="text" name="login" /></p>
 <p>Mot de passe<br><input type="password" name="password" /></p>
 <p>Confirmation mot de passe<br><input type="password" name="password2" /></p>
 <h4>{{message}}</h4>
 <p>Nom<br><input type="text" name="name" /></p>
 <p>Prénom<br><input type="text" name="first_name" /></p>
-<p>E-Mail valide, <br> votre compte ne sera créé qu'apres confirmation <br> du lien qui vous sera envoyé<br><input type="email" name="courriel" /></p>
-<button type="submit" class="btn btn-primary btn-lg mb-2" >Inscription</button>
+<p>E-Mail valide, <br><input type="email" id='mail' name="courriel" /> <h4>votre compte ne sera créé qu'apres confirmation <br> du lien qui vous sera envoyé<br></h4></p>
+<input type="hidden" name="longitude" id='coor_lo'/> <input type="hidden" name="latitude" id='coor_la'/>
+<button id="btn_reg" class="btn btn-primary btn-lg mb-2" >Inscription</button>
 </form>
 <a href="{{ url_for('homepage')}}">
     <button type="button" class="btn btn-primary btn-lg mb-2" id='envoyer'>Retour</button></a>
 </div>
+
+<script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
+
+<script>
+    document.getElementById('btn_reg').addEventListener('click',() =>{
+        coordonnees();
+});
+    
+    function coordonnees(){
+        document.getElementById('coor_lo').value=geoplugin_longitude();
+        document.getElementById('coor_la').value=geoplugin_latitude();
+        submit();
+    }
+
+</script>
 {% endblock %}

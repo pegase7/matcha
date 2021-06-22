@@ -4,6 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import time
 from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
 import os
 from matcha.orm.data_access import DataAccess
 from matcha.model.Users import Users
@@ -11,7 +12,8 @@ from matcha.model.Connection import Connection
 from random import *
 from flask import *
 from math import sin, cos, acos, radians
-from matcha.model.Notification import Notification 
+from matcha.model.Notification import Notification
+import re
 
 
 class hashit:
@@ -141,89 +143,79 @@ def distanceGPS(latA, longA, latB, longB):
  
 
 def find_profil(criteres):
-    liste = DataAccess().fetch('Users')
+    conditions = [('active', True), ('id', '!=', criteres['id'])]
+    whereaddonstr = 'not exists ( select null from visit V where visited_id = U.id and visitor_id = %s and isblocked = true )'
+    whereaddonstr += ' and not exists ( select null from visit V where visited_id = %s and visitor_id = U.id and isblocked = true )' 
+    whereaddonparameters = [criteres['id'], criteres['id']]
+        
+    # Orientation sexuelle
+    conditions.append(('gender', criteres['sexe']))
+            
+    if 'Bi' == criteres['orientation']:
+        whereaddonstr += " and (U.orientation = 'Bi'  or  U.orientation = %s)"
+        orientation = 'Homo' if criteres['sexe'] == criteres['sexe_chercheur'] else 'Hetero'
+        whereaddonparameters.append(orientation)
+    else:
+        whereaddonstr += " and (U.orientation = 'Bi'  or  U.orientation = %s)"
+        whereaddonparameters.append(criteres['orientation'])
+
+    # age
+    if 'age_min' in criteres.keys() or 'age_max' in criteres.keys():
+        if not 'age_min' in criteres.keys():
+            criteres['age_min'] = 0
+        if not 'age_max' in criteres.keys():
+            criteres['age_max'] = 300
+        datemin = date.today() - relativedelta(years=criteres['age_max'])
+        datemax = date.today() - relativedelta(years=criteres['age_min'])
+        whereaddonstr += ' and U.birthday between %s and %s'
+        whereaddonparameters.append(datemin)
+        whereaddonparameters.append(datemax)
+        
+        # Critere interets
+    if len(criteres['interets']) > 0:
+        taglist = ''
+        for tag in criteres['interets']:
+            taglist += (", '" + tag + "'")
+        whereaddonstr += ' and exists ( select null from Users_topic where users_id = U.id and tag in (' + taglist[2:] + '))'
+            
+    # Critere popularité
+    if criteres['pop_min'] != "" or criteres['pop_max'] != "":
+        if "" == criteres['pop_min']:
+            criteres['pop_min'] = "0"
+        if "" == criteres['pop_max']:
+            criteres['pop_max'] = "100"
+        whereaddonstr += " and U.popularity between " + str(criteres['pop_min']) + " and " + str(criteres['pop_max'])
+    liste = DataAccess().fetch('Users', conditions=conditions, whereaddon=(whereaddonstr, whereaddonparameters))
+                   
     profil_found = []
     for user in liste:
-        info = {}
-        info['nom'] = user.user_name
-        ok = 1
-        #Ne pas se selectionner soi même !!!!
-        if session['user']['name'] == user.user_name:
-            ok = 0
-        # Si l'utilisateur a bloqué
-        visit = DataAccess().find('Visit', conditions=[('visited_id', user.id), ('visitor_id', criteres['id'])])
-        if (visit):
-            if(visit.isblocked == True):
-                ok = 0
-        # Si l'utilisateur a été bloqué
-        visit = DataAccess().find('Visit', conditions=[('visited_id', criteres['id']), ('visitor_id', user.id)])
-        if (visit):
-            if(visit.isblocked == True):
-                ok = 0
-        # profil actif
-        if user.active == False:
-            ok = 0
-        # Sexe
-        if ok == 1:
-            if user.gender != criteres['sexe']:
-                ok = 0
-            else:
-                if user.orientation:
-                    orientation = user.orientation
-                else:
-                    orientation = 'Bi'
-                if orientation == 'Bi':
-                    ok = 1
-                elif user.gender == criteres['sexe_chercheur'] and user.orientation == 'Hetero':
-                    ok = 0
-                elif user.gender != criteres['sexe_chercheur'] and user.orientation == 'Homo':
-                    ok = 0
-        # Critere Age
-        if ok == 1:
-            if user.birthday:
-                age = calculate_age(user.birthday)
-            else:
-                age = 0
-            info['age'] = age
-            if criteres['age_min'] == "" and criteres['age_max'] == "":
-                ok = 1
-            else:
-                if age < int(criteres['age_min']) or age > int(criteres['age_max']):
-                        ok = 0
         # Critere Distance
-        if ok == 1:
-            info['distance'] = int(distanceGPS(float(criteres['latitude']), float(criteres['longitude']), float(user.latitude), float(user.longitude)))
-            if distanceGPS(float(criteres['latitude']), float(criteres['longitude']), float(user.latitude), float(user.longitude)) > int(criteres['dist_max']):
-                ok = 0
-        # Critere interets
-        if ok == 1 and len(criteres['interets']) > 0:
-            tags = DataAccess().fetch('Users_topic', conditions=('users_id', user.id))
-            nb_int = 0
-            tag_correspondant = []
+        info = {}
+        info['distance'] = int(distanceGPS(float(criteres['latitude']), float(criteres['longitude']), float(user.latitude), float(user.longitude)))
+        if distanceGPS(float(criteres['latitude']), float(criteres['longitude']), float(user.latitude), float(user.longitude)) <= int(criteres['dist_max']):
+            info['nom'] = user.user_name
+            info['id'] = user.id
+            if user.birthday:
+                age=calculate_age(user.birthday)
+            else:
+                age=0
+            info['age']=age      
+            tags = DataAccess().fetch('Users_topic', conditions=('users_id',user.id))
+            nb_int=0
+            tag_correspondant=[]
             for interet in criteres['interets']:
                 for tag in tags:
-                    if interet == tag.tag:
+                    if interet==tag.tag:
                         tag_correspondant.append(interet)
-                        nb_int = nb_int + 1
-            info['tags'] = tag_correspondant
-            if nb_int == 0:
-                ok = 0
-        # Critere popularité
-        if ok == 1:
-            if (user.popularity):
-                pop = user.popularity
+                        nb_int=nb_int+1
+            info['tags']=tag_correspondant    
+            info['popularity']=user.popularity
+            if os.path.isfile("./static/photo/" + user.user_name + '1' + ".jpg"):
+                photo = "/static/photo/" + user.user_name + '1' + ".jpg"
             else:
-                pop = 0
-            if criteres['pop_min'] == "" and criteres['pop_max'] == "":
-                info['popularity'] = user.popularity
-                ok = 1
-            else:
-                if pop < int(criteres['pop_min']) or pop > int(criteres['pop_max']):
-                    ok = 0
-        # Selection du user
-        if ok == 1:
+                photo = '/static/nophoto.jpg'
+            info["photo"] = photo
             profil_found.append(info)
-           # profil_found = sorted(profil_found, key=lambda k: k['age'])
     return profil_found
 
 
@@ -347,3 +339,25 @@ def openRoom(u1, u2):
         room = DataAccess().find('Room', conditions=('id', existroom.room_id))
         room.active = True
         DataAccess().merge(room)
+
+def verifInput(var,type):
+    #retourne None si ce n'est pas le type attendu
+    if var and isinstance(var, type) != True or not var:
+        var=None
+    return var
+
+
+def verifMail(mail):
+    return bool((re.match('[^@]+@[^@]+\.[^@]+',mail)))
+
+
+def verifDate(birthday):
+    return bool((re.match('^\d{4}-\d{2}-\d{2}$',birthday)))  
+
+
+def verifCoor(coor):
+    return bool((re.match('^LatLng\(-?\d{1,3}\.\d{1,6}, -?\d{1,3}\.\d{1,6}\)$',coor)))
+
+
+def verifInt(nbr):
+    return bool((re.match('^\d{,5}$',nbr)))

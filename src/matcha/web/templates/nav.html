@@ -20,7 +20,7 @@
             <a href="{{ url_for('like')}}" >Likes  
             <span id="nb_likes" class="badge badge-pill badge-warning count-notif"></span></a>
         
-            <a href="{{ url_for('visites')}}" >Visites
+            <a href="{{ url_for('visites', like='no')}}" >Visites
                     <span id="nb_visites" class="badge badge-pill badge-warning count-notif"></span></a>
         
             <a href="{{ url_for('dislike')}}" >Dislikes

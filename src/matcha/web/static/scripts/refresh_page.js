@@ -36,7 +36,7 @@ socket.on('visitor_reception', data => {
     let visitor_usr = visitor_page_tag.firstChild.data;
 
     if (data.visitor == visitor_usr) {
-        console.log('connecté !!');
+        // console.log('connecté !!');
         let state_connect = document.getElementById('consult-profil-connect-state');
         state_connect.innerHTML = 'connecté !!';
         state_connect.className = 'state-connect';

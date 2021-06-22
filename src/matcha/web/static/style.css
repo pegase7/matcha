@@ -32,25 +32,27 @@ body {
 html {
     position: relative;
     min-height: 100%;
-    color: midnightblue
+    color:midnightblue
 }
 
 .lien {
     color: greenyellow;
 }
 
-.center {
+.lienRed {
+    color: rgb(255, 47, 47);
+}
+.center
+{
     text-align: center;
 }
-
+        
 .alert {
     color: orangered;
     font-weight: bold;
 }
 
-
 /* ##################### tableau ################## */
-
 table {
     border: medium solid #0b3688;
     border-collapse: collapse;
@@ -72,14 +74,12 @@ th {
 th:hover {
     background: lightblue;
 }
-
-
 /* ##################### fin tableau ################## */
 
-.note {
+.note{
     font-size: 0.5rem;
-}
-
+  }
+  
 .footer {
     position: absolute;
     bottom: 0;

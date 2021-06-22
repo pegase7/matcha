@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect('http://' + document.domain + ':' + location.port);
-    console.log('socket connected');
+    // console.log('socket connected');
     let room = "";
 
 
     // display incomming message
     socket.on('message', data => {
-        console.log(data);
+        // console.log(data);
         const current_user = sessionStorage.getItem("current_user");
         const p = document.createElement('p');
         p.className = "msg_p";
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Send message
     document.querySelector('#send_message').onclick = () => {
 
-        console.log('receiver :' + document.getElementById('chat-receiver-name').innerHTML);
+        // console.log('receiver :' + document.getElementById('chat-receiver-name').innerHTML);
         socket.send({
             'msg': document.querySelector('#user_message').value,
             'sender': username,
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // test receiver connection
     socket.on('test_receiver', data => {
-        console.log('user = ' + sessionStorage.getItem("current_user"));
-        console.log(data);
+        // console.log('user = ' + sessionStorage.getItem("current_user"));
+        // console.log(data);
         sender = data.username;
         current_user = sessionStorage.getItem("current_user");
         if (sender != current_user) {
