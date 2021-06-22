@@ -248,7 +248,7 @@ def recalculsuggest():
     compute_recommendations(us)
     return redirect(url_for('accueil'))
 
-@app.route('/suggestions/')
+@app.route('/suggestions/',methods=['GET', 'POST'])
 def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
     if "user" not in session:
         return redirect(url_for('homepage'))
@@ -261,13 +261,6 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
     suggests=[]
     for suggest in reco:
         liste_tag = [rec_topi.tag for rec_topi in suggest.topics]
-        print(suggest.receiver_id)
-        print('---------------------------------------')
-        print (suggest.topics)
-        for rec_topi in suggest.topics:
-            print('-',rec_topi.tag)
-        print('@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@+@')
-        print(liste_tag)
         info={}
         info["tag"]=liste_tag
         info["pseudo"]=suggest.receiver_id.user_name
@@ -286,13 +279,34 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
         info['id']=suggest.receiver_id.id
         suggests.append(info)
     if request.method=="POST":
-        sex=request.form.get('sexe')
-        agemin=request.form.get('agemin')
-        agemax=request.form.get('agemax')
-        popmax=request.form.get('popmax')
-        popmin=request.form.get('popmin')
-        dist=request.form.get('dist')
-        interest=request.form.getlist('interest')
+        if request.form.get('sexe') and request.form.get('sexe') in['Male','Female']:
+            sex=request.form.get('sexe')
+        else:
+            sex= None
+        if request.form.get('agemin') and verifInt(request.form.get('agemin')):
+            agemin=request.form.get('agemin')
+        else:
+            agemin=0
+        if request.form.get('agemax') and verifInt(request.form.get('agemax')):
+            agemax=request.form.get('agemax')
+        else:
+            agemax=110
+        if request.form.get('popmax') and verifInt(request.form.get('popmax')):
+            popmax=request.form.get('popmax')
+        else:
+            popmax=100
+        if request.form.get('popmin') and verifInt(request.form.get('popmin')):
+            popmin=request.form.get('popmin')
+        else:
+            popmin=0
+        if request.form.get('dist') and verifInt(request.form.get('dist')):
+            dist=request.form.get('dist')
+        else:
+            dist=None
+        if  request.form.getlist('interest') and verifInput(request.form.getlist('interest'),list) != None:  
+            interest=request.form.getlist('interest')
+        else:
+            interest=[]
         filtered=[]
         for sug in suggests:
             if sex != None and sug['sex'] != sex:
@@ -308,12 +322,9 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
             if dist and sug['distance'] > int(dist):
                 continue
             if len(interest) >0:
-                
                 to_remove=0
                 for topic in interest:
-                    print(topic, '------')
                     for tag in sug['tag']:
-                        print(tag)
                         if tag == topic:
                             to_remove += 1
                 if to_remove==0:
