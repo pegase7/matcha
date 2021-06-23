@@ -7,6 +7,9 @@ Otherwise, database would be queried every 5 seconds.
     - merge and persist on Notification must use NotificationCache functions instead of DataAccess functions.
     - get_unread gives numbers of unread notifications split in Like, Message, Visit, Dislike types for an User Id.
 '''
+
+
+
 class NotificationCache():
       
     def init(self):
