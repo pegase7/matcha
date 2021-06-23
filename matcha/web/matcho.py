@@ -336,13 +336,14 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
     else:
         return redirect(url_for('accueil'))
     
-@app.route('/rejection/<reject>/',methods=['GET', 'POST'])
-def rejection(reject):
+@app.route('/rejection/',methods=['POST'])
+def rejection():
     if "user" not in session:
         return redirect(url_for('homepage'))
+    rej_id = request.form.get('reject_id')
     username = session['user']['name']
-    us = DataAccess().find('Users', conditions=('user_name', username))
-    rejected =DataAccess().find('Users_recommendation', conditions=[('sender_id',us.id), ('receiver_id', reject)])
+    us_id = get_user_id(username)
+    rejected =DataAccess().find('Users_recommendation', conditions=[('sender_id',us_id), ('receiver_id', rej_id)])
     rejected.is_rejected=True
     DataAccess().merge(rejected)
     return redirect(url_for('accueil'))
@@ -410,6 +411,7 @@ def consultation(login):
             like=False
         if block:
             block=True
+            like=False
         else:
             block=False
         if fake:
@@ -508,6 +510,8 @@ def recherche():
         criteres={}
         if request.form.get('sexe') and request.form.get('sexe') in ['Male','Female']:
             criteres['sexe']=request.form.get('sexe')
+        else:
+            criteres['sexe']=None
         if us.orientation:
             criteres['orientation']=us.orientation
         else:
@@ -690,6 +694,9 @@ def profilmodif():
                 us.latitude=coordonnees(coordonnee)[0]
                 us.longitude=coordonnees(coordonnee)[1]
         interets=request.form.getlist('interest')
+        for interet in interets:
+            if interet not in topics:
+                interets.remove(interet)
         if verifInput(interets,list) == None:
             return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics)
         dataAccess.call_procedure('INSERT_TOPICS', parameters=[us.id, interets])
@@ -859,15 +866,32 @@ def refresh_notif():
 ########## Temps réel avec socketio  ###########
 ################################################
 
+########### profil consult connect #############
+
+# receive consult page infos
+@socketio.on('profil_user')
+def profil_user(data):
+    socketio.emit('visited_profil', data, broadcast=True)
+
+
+# visited page response
+@socketio.on('visited_response')
+def visited_response(data):
+    socketio.emit('visitor_reception', data, broadcast=True)
+
+
+############## Connect users ###########
+@socketio.on('login')
+def login(data):
+    print('login = ', data['msg'])
+
 # Connexions des users
 @socketio.on('connect_user')
 def login_connect(data):
     print('login-connect = ', data['msg'])
 
-
 ############# Chat  ###################
-
-#receive and send message
+# receive and send message
 @socketio.on('message')
 def message(data):
     # print(f"\n\n{data}\n\n")
@@ -875,10 +899,10 @@ def message(data):
     msg.chat = data['msg']
     msg.room_id = data['room']
     msg.sender_id = data['user_id']
-    receiver = DataAccess().find('Users', conditions=('user_name', data['receiver']))
+    receiver_id = get_user_id(data['receiver'])
     notif = Notification()
     notif.sender_id = data['user_id']
-    notif.receiver_id = receiver.id
+    notif.receiver_id = receiver_id
     notif.notif_type = 'Message'
     notif.is_read = False
     DataAccess().persist(msg)
@@ -895,17 +919,16 @@ def message(data):
         )
     
     
-#test receiver connection
+# test receiver connection
 @socketio.on('receiver_connect')
 def test_connect(data):
     if data['test'] == True:
         notif = DataAccess().find('Notification', conditions=('id', data['notif']))
         notif.is_read = True
-        # DataAccess().merge(notif)
         notif_cache.merge(notif)
         
         
-#join room
+# join room
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
@@ -918,7 +941,7 @@ def join(data):
     if room_data.slave_id == user.id:
         receiver_id = room_data.master_id
         sender_id = room_data.slave_id
-    receiver = DataAccess().find('Users', conditions=('id', receiver_id))
+    receiver = notif_cache.get_user_name(receiver_id)
     
     msgs_json = json.dumps(msgs, default=dispatcher.encoder_default)
     
@@ -929,24 +952,23 @@ def join(data):
                                                                 ('notif_type', 'Message'),
                                                                 ('is_read', False)
                                                                 ])
-    print('notif_messagsssssssssssssssss', *notif_list)
     for notif in notif_list:
         notif.is_read = True
         notif_cache.merge(notif, autocommit=False)
     DataAccess().commit()
-        
+    #################################################################################
     emit('display_old_messages', {
            'username': data['username'],
            'msgs_list': msgs_json,
            'user_id': user.id,
-           'receiver': receiver.user_name,
-           'receiver_id': receiver.id,
+           'receiver': receiver,
+           'receiver_id': receiver_id,
           },
         room=data['room']
         )
           
    
-#leave room       
+# leave room       
 @socketio.on('leave')
 def leave(data):
     leave_room(data['room'])
@@ -955,7 +977,8 @@ def leave(data):
     # msg_json = json.dumps(msg, default=dispatcher.encoder_default)
     # enregistrer la date de deconnexion pour les notifications
     # send({msg}, room=data['room'])  # msg optionnel
-
+    
+    
 # Lance les serveurs
 if __name__ == '__main__':
     socketio.run(app)

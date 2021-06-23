@@ -33,6 +33,11 @@
     
     /* overflow:scroll; */
   }
+  .warning{
+    color: red;
+    font-size: 2rem;
+    font-weight: bold;
+  }
   
 </style>
 <div>
@@ -95,12 +100,14 @@
       
       <strong> Rajouter un centre d'interet :</strong>
       <p class="note"> (Majuscule en début de mot)</p>
+      <div class="warning">{{message}}</div>
       <input type="text" name="interet" pattern="[A-Z]{1}\p{Ll}*">
     
   </div>
   
   <div class='carte'>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" /> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/leaflet.css') }}">
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <div id="macarte" style="width:80%; height:100%"></div>
   
