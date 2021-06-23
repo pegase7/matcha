@@ -1,4 +1,4 @@
-from matcha.orm.reflection import ModelObject, metamodelclass, ManyToOneField, dispatcher
+from matcha.orm.reflection import ModelObject, metamodelclass, ManyToOneField,ListField, dispatcher
 
 @dispatcher
 @metamodelclass

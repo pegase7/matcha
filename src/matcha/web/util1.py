@@ -220,15 +220,18 @@ def find_profil(criteres):
 
 
 def calculate_age(born):
-    today = date.today()
-    try: 
-        birthday = born.replace(year=today.year)
-    except ValueError: 
-        birthday = born.replace(year=today.year, month=born.month + 1, day=1)
-    if birthday > today:
-        return today.year - born.year - 1
+    if born:
+        today = date.today()
+        try: 
+            birthday = born.replace(year=today.year)
+        except ValueError: 
+            birthday = born.replace(year=today.year, month=born.month+1, day=1)
+        if birthday > today:
+            return today.year - born.year - 1
+        else:
+            return today.year - born.year
     else:
-        return today.year - born.year
+        return '??'
 
 
 def comptage_photo(ph1, ph2, ph3, ph4, ph5):

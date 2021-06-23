@@ -207,7 +207,7 @@ class DataAccess():
                 attr = fieldmodel.get_id(attr)
             return attr
         except (AttributeError):
-            setattr(record, field.name, None)
+            setattr(record, field, None)
             return None
             
     def __fetch_records(self, model, conditions, leftjoins, whereaddon, orderby, limit):
@@ -359,3 +359,6 @@ class DataAccess():
         
     def commit(self):
         DataAccess.__connection.commit()
+
+    def get_connection(self):
+        return DataAccess.__connection

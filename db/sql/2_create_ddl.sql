@@ -293,4 +293,27 @@ create or replace procedure INSERT_TOPICS(usersid int, topic_array  text[]) AS $
     $$ language plpgsql;
 alter procedure INSERT_TOPICS owner to MATCHAADMIN;
 
+
+---
+--- Create Trigger on NOTIFICATION to automatically:
+---      when inserting Like/Dislike Notification, delete all notifications whith same couple (Receiver,Sender) and notif_type = ('Like', 'Dislike')
+---
+create or replace function ON_INSERT_NOTIFICATION() returns trigger as $$
+begin
+  IF TG_OP = 'INSERT' AND new.notif_type IN ('Like', 'Dislike') THEN
+    delete from NOTIFICATION where sender_id = new.sender_id and receiver_id = new.receiver_id and notif_type in ('Like', 'Dislike');
+  END IF;
+  return new;
+end;
+$$ language PLPGSQL;
+alter function ON_INSERT_NOTIFICATION owner to MATCHAADMIN;
+
+
+create trigger TRIGGER_INSERT_NOTIFICATION before insert on NOTIFICATION
+for each row execute function ON_INSERT_NOTIFICATION(); 
+
+
+
+
+
 commit;
