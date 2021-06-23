@@ -163,7 +163,7 @@ def accueil():
         if (visit.visitor_id.birthday):
             info["age"] = calculate_age(visit.visitor_id.birthday)
         else:
-            info["age"] = 0
+            info["age"] = "??"
         info["date"] = visit.last_update.date().isoformat()
         if os.path.isfile("./static/photo/" + visit.visitor_id.user_name + '1' + ".jpg"):
             info['photo'] = ("/static/photo/" + visit.visitor_id.user_name + '1' + ".jpg")
@@ -421,6 +421,7 @@ def consultation(login):
             like = False
         if block:
             block = True
+            like = False
         else:
             block = False
         if fake:
@@ -521,6 +522,8 @@ def recherche():
         criteres={}
         if request.form.get('sexe') and request.form.get('sexe') in ['Male','Female']:
             criteres['sexe']=request.form.get('sexe')
+        else:
+            criteres['sexe'] = None
         if us.orientation:
             criteres['orientation']=us.orientation
         else:
