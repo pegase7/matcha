@@ -278,7 +278,7 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
         if (suggest.receiver_id.birthday):
             info["age"]=calculate_age(suggest.receiver_id.birthday)
         else:
-           info["age"]=0
+            info["age"]=0
         if os.path.isfile("./static/photo/"+suggest.receiver_id.user_name+'1'+".jpg"):
             photo="/static/photo/"+suggest.receiver_id.user_name+'1'+".jpg"
         else:
@@ -345,13 +345,14 @@ def suggestions():  # sourcery skip: last-if-guard, merge-dict-assign
         return redirect(url_for('accueil'))
     
 
-@app.route('/rejection/<reject>/',methods=['GET', 'POST'])
-def rejection(reject):
+@app.route('/rejection/',methods=['POST'])
+def rejection():
     if "user" not in session:
         return redirect(url_for('homepage'))
+    rej_id = request.form.get('reject_id')
     username = session['user']['name']
-    us = DataAccess().find('Users', conditions=('user_name', username))
-    rejected =DataAccess().find('Users_recommendation', conditions=[('sender_id',us.id), ('receiver_id', reject)])
+    us_id = get_user_id(username)
+    rejected =DataAccess().find('Users_recommendation', conditions=[('sender_id',us_id), ('receiver_id', rej_id)])
     rejected.is_rejected=True
     DataAccess().merge(rejected)
     return redirect(url_for('accueil'))

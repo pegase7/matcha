@@ -66,6 +66,7 @@
         <tbody>
 
             {% for suggest in suggests %}
+            <form action="{{ url_for('rejection')}}" method="POST">
             <tr class="visiteur_ligne">
                 <td><img src={{suggest.photo}} alt="" height="80"></td>
                 <td><a href="{{ url_for('consultation', login=suggest.pseudo)}}" class="lien">{{suggest.pseudo}}</a>
@@ -75,8 +76,10 @@
                 <td align="center">{{suggest.popul}}</td>
                 <td align="right">{{suggest.distance}}</td>
                 <td>{%for ta  in suggest.tag %}{{ta}} {% endfor %}</td>
-                <td><a href="{{ url_for('rejection', reject=suggest.id)}}" class="lienRed">Refuser</a></td>
+                <td><button  type="submit" name= "reject_id" value="{{ suggest.id }}">Refuser</button></td>
+            </form>
             </tr>
+        
             {% endfor %}
         </tbody>
     </table>
