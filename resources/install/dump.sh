@@ -1,0 +1,1 @@
+pg_dump --column-inserts --inserts -d matchadb --file dump_matchadb_`date +"%y%m%d"`.sql

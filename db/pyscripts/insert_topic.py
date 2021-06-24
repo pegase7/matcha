@@ -6,7 +6,7 @@ import logging
 def populate():
     topics = []
     topic_dict = {}
-    with open('../csv/topic.csv', newline='') as csvfile:
+    with open('../csv/topic.csv', newline='') as csvfile: # topic.csv Comprend une liste des topic avec une distribution difference entre hommes et femmes
         topicreader = csv.reader(csvfile, delimiter=',', quoting=csv.QUOTE_NONE)
         for row in topicreader:
             topic = row[0].split(' (')[0]

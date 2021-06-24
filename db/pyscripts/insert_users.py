@@ -4,7 +4,9 @@ from faker import Faker
 from matcha.model.Users import Users
 from unidecode import unidecode
 from matcha.orm.data_access import DataAccess
+from matcha.orm.reflection import ModelDict
 from matcha.web.util1 import hash_pwd
+from datetime import datetime, timedelta
 
 mail_providers = ['free.fr','gmail.com', 'hotmail.com', 'yahoo.com', 'gmx.fr', 'gmail.com', 'gmail.com', 'gmail.com', 'free.fr', 'orange.fr', 'numericable.fr']
 coordinates = []
@@ -77,16 +79,20 @@ def complete_users(users,fake, coordsize, usernames):
     users.confirm = None
     users.popularity = randint(0,100)
 
-def populate():    
+def populate(gender_count=1000):    
     userslist = []
     fake = Faker(['fr_FR', 'fr_CA', 'fr_QC'])
     read_towns()
     usernames = set()
     coordsize = len(coordinates)
+    # Change 'created' field so that it is no longer computed and can be set in this module 
+    usersmodel = ModelDict().get_model_class('Users')
+    usersmodel.get_field('created').iscomputed = False
+
     '''
     Creer 1000 femmes puis 1000 hommes
     '''
-    for _ in range(1000):
+    for _ in range(gender_count):
         female = Users()
         female.is_recommendable = True
         female.gender = 'Female'
@@ -105,6 +111,9 @@ def populate():
     shuffle(userslist)
     dataAccess = DataAccess()
     for users in userslist:
+        delta = randint(2592000, 157680000)
+        created = datetime.now() - timedelta(seconds=delta)
+        users.created = created
         dataAccess.persist(users, autocommit=False)
     dataAccess.commit()
     logging.info('End Users populate')

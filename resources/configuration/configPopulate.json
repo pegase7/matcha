@@ -14,12 +14,13 @@
         ]
     },
     "recommendation":{
-        "threshold":0,
-        "nb_recommendations":8000
+        "threshold":5,
+        "nb_recommendations":8
     },
     "populate":{
     	"#test_data":"both__",
-        "test_data":"faker__"
+        "test_data":"faker",
+        "gender_count":250
     },
     "orm":{
         "raise_error":false,

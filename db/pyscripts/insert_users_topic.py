@@ -12,7 +12,7 @@ def insert_topics(dataAccess, users_id, keys, values):
         usersTopic.tag = topic
         dataAccess.persist(usersTopic, autocommit=False)
     
-def populate(men_topic_dict, women_topic_dict):
+def populate(men_topic_dict, women_topic_dict, ):
     dataAccess = DataAccess()
     userslist = dataAccess.fetch('Users')
     womenkeys = np.array(list(women_topic_dict.keys()))
