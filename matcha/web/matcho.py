@@ -374,11 +374,16 @@ def consultation(login):
     liked=fake=False
     if visited:
         liked=visited.islike
+        block1=visited.isblocked
+    else:
+        block1=False
     if visit:
         visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
         fake=visit.isfake
+        block2=visit.isblocked
     else:
+        block2=False
         visit = Visit()
         visit.visited_id = us.id
         visit.visitor_id = visitor.id
@@ -386,9 +391,10 @@ def consultation(login):
         visit.islike=False
         visit.isblocked=False
         visit.isfake=False
+        
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
-    if visited.isblocked==True or visit.isblocked==True:
+    if block1==True or block2==True:
         pass
     else:
         ############## Notification de la visite ###################
