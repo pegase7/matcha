@@ -396,6 +396,7 @@ def consultation(login):
         visit.islike = False
         visit.isblocked = False
         visit.isfake = False
+        block2 = False
         
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
