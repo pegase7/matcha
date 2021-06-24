@@ -125,7 +125,6 @@ def accueil():
         reco =DataAccess().fetch('Users_recommendation', conditions=[('sender_id', us.id),('is_rejected',False)],joins='receiver_id', limit='3')
     suggest=[]
     for rec in reco:
-        print (rec)
         info = {
             "pseudo": rec.receiver_id.user_name,
             "popul": rec.receiver_id.popularity,
@@ -172,17 +171,20 @@ def accueil():
             visitors.append(info)
 
     for visited in visits_made:
-        info = {}
-        info['age'] = calculate_age(visited.visited_id.birthday)
-        info['date'] = visited.visited_id.last_update.date().isoformat()
-        info['popul'] = visited.visited_id.popularity
-        info['pseudo'] = visited.visited_id.user_name
-        print('visited-username : ', visited.visited_id.user_name)
-        if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
-            info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
-        else:
-            info['photo'] = ('/static/nophoto.jpg')
-        visited_infos.append(info)
+        # print ("#####################################################################################")
+        # print (visited.visited_id, visited.visitor_id, visited.isblocked)
+        # print ("#####################################################################################")
+        if(visited.isblocked == False):
+            info = {}
+            info['age'] = calculate_age(visited.visited_id.birthday)
+            info['date'] = visited.visited_id.last_update.date().isoformat()
+            info['popul'] = visited.visited_id.popularity
+            info['pseudo'] = visited.visited_id.user_name
+            if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
+                info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
+            else:
+                info['photo'] = ('/static/nophoto.jpg')
+            visited_infos.append(info)
     return render_template('accueil.html', match = match, like = like, visited_infos = visited_infos, username=username, visitors=visitors, pop=us.popularity, matching=matching, suggest=suggest, userid=us.id)   
 
 @app.route('/visites/')
@@ -220,10 +222,10 @@ def visites():
         else:
             photo='/static/nophoto.jpg'
         info["photo"]=photo
-        if (visit.isblocked == False and visit.isfake == False) and (
-            like == 'no' or visit.islike == True
-        ):
-            visitors.append(info)
+        # if (visit.isblocked == False and visit.isfake == False) and (
+        #     like == 'no' or visit.islike == True
+        # ):
+        visitors.append(info)
     ############# update notification table and cached file ##############
     notifs = DataAccess().fetch('Notification', conditions=[('receiver_id', us.id),
                                                             ('notif_type', 'Visit'),
@@ -386,11 +388,14 @@ def consultation(login):
         visit.isfake=False
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
-    ############## Notification de la visite ###################
-    notif(visitor.id,us.id,'Visit', notif_cache)
-    us.popularity=calculPopularite(us.id)
-    DataAccess().merge(us)
-    ###########
+    if visited.isblocked==True or visit.isblocked==True:
+        pass
+    else:
+        ############## Notification de la visite ###################
+        notif(visitor.id,us.id,'Visit', notif_cache)
+        us.popularity=calculPopularite(us.id)
+        DataAccess().merge(us)
+        ###########
     tags=[]
    
     for t in tag:
@@ -852,7 +857,6 @@ def add_header(r):
 ###### mise à jour asynchrone des notifications ##########
 @app.route("/ajax/")
 def refresh_notif():
-    print("ajax")
     if "user" in session:
         username = session['user']['name']
         # us = DataAccess().find('Users', conditions=[('user_name', username)])
