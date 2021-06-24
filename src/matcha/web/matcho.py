@@ -178,7 +178,6 @@ def accueil():
         info['date'] = visited.visited_id.last_update.date().isoformat()
         info['popul'] = visited.visited_id.popularity
         info['pseudo'] = visited.visited_id.user_name
-        print('visited-username : ', visited.visited_id.user_name)
         if os.path.isfile("./static/photo/" + visited.visited_id.user_name + '1' + ".jpg"):
             info['photo'] = ("/static/photo/" + visited.visited_id.user_name + '1' + ".jpg")
         else:
@@ -381,10 +380,14 @@ def consultation(login):
     liked = fake = False
     if visited:
         liked = visited.islike
+        block1=visited.isblocked
+    else:
+        block1=False
     if visit:
         visit.visits_number = visit.visits_number + 1
         dataAccess.merge(visit)
         fake = visit.isfake
+        block2=visit.isblocked
     else:
         visit = Visit()
         visit.visited_id = us.id
@@ -393,13 +396,17 @@ def consultation(login):
         visit.islike = False
         visit.isblocked = False
         visit.isfake = False
+        
         dataAccess.persist(visit)
     visits = DataAccess().fetch('Visit', conditions=('visited_id', us.id))
+    if block1==True or block2==True:
+        pass
+    else:
     ############## Notification de la visite ###################
-    notif(visitor.id,us.id,'Visit', notif_cache)
+        notif(visitor.id,us.id,'Visit', notif_cache)
     ############################################################
-    us.popularity=calculPopularite(us.id)
-    DataAccess().merge(us)
+        us.popularity=calculPopularite(us.id)
+        DataAccess().merge(us)
     ###########
     tags = []
    
@@ -736,6 +743,8 @@ def profilmodif():
             if verif_word(new_tag):
                 new_tag = format_word(new_tag)                
                 tagset.add(new_tag)
+            else:
+                return render_template('profilmodif.html',profil=us,naissance=naissance,tags=tags,topics=topics,message=new_tag + " n'est pas correct !")
         for inte in interets:
             tagset.add(inte)
         dataAccess.call_procedure(procedure='insert_topics', parameters=(us.id, list(tagset)))
@@ -805,8 +814,6 @@ def like():
         else:
             info['photo'] = ('/static/nophoto.jpg')
         like_infos.append(info)
-        
-       
     return render_template('like.html', liste = like_infos)
         
 
