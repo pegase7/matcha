@@ -355,6 +355,15 @@ def rejection():
 def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
+    ########### Test de l'existance du login #############
+    liste_users=DataAccess().fetch('Users')
+    exist=0
+    for u in liste_users:
+        if u.user_name==login:
+            exist=1
+    if exist==0:
+        return redirect(url_for('accueil'))
+    #######################################################
     user = session['user']['name']
     dataAccess = DataAccess()
     visitor = dataAccess.find('Users', conditions=('user_name', user))
@@ -434,7 +443,7 @@ def consultation(login):
                 notif(visitor.id, us.id, 'Dislike', notif_cache)
                 closeRoom(visitor.id,us.id, notif_cache)
             else:
-                if like==True:
+                if like==True and block1 == False:
                     notif(visitor.id, us.id, 'Like', notif_cache)
             visit.islike = like #modifier le score popularité 
         if block != visit.isblocked:
