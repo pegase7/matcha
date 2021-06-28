@@ -23,7 +23,7 @@ def read_towns():
 
 def compute_users(users, coordsize, usernames):
     provider = mail_providers[randint(0,len(mail_providers) - 1)]
-    methodid = randint(0,101)
+    methodid = randint(0,10)
     '''
     1/100 Bi, 10/100 Homo reste Hetero
     '''
@@ -75,7 +75,7 @@ def complete_users(users,fake, coordsize, usernames):
     users.password = hash_pwd('PasseMot0', users.user_name)    
     users.active = (randint(0,100) < 96)
     users.birthday = fake.date_between(start_date='-75y', end_date='-18y')
-    users.description = None
+    users.description = fake.sentence()
     users.confirm = None
     users.popularity = randint(0,100)
 

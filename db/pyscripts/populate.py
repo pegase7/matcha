@@ -45,6 +45,11 @@ if __name__ == "__main__":
         info('END SQL - start add photos: ')
         insert_users_photo.populate(populateconfig['test_data'])
         info('END POPULATE: ')
+        users10list = data_access.fetch('Users', conditions=('id', '<=','10'))
+        print('id\tuser_name\t\tName')
+        for users in users10list:
+            print(users.id, '\t', users.user_name, '\t', users.first_name + ' ' + users.last_name)
+        
     except (Exception) as e:
         traceback.print_exc()
         logging.error(str(e))

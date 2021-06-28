@@ -20,7 +20,7 @@ def populate():
     dataAccess = DataAccess()
     for tag in topics:
         topic = Topic()
-        topic.tag = tag
+        topic.tag = tag.capitalize()
         dataAccess.persist(topic, autocommit=False)
     dataAccess.commit()
     logging.info('End Topic populate')

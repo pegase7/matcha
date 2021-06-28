@@ -9,7 +9,7 @@ def insert_topics(dataAccess, users_id, keys, values):
     for topic in topics:
         usersTopic = Users_topic()
         usersTopic.users_id = users_id
-        usersTopic.tag = topic
+        usersTopic.tag = topic.capitalize()
         dataAccess.persist(usersTopic, autocommit=False)
     
 def populate(men_topic_dict, women_topic_dict, ):
