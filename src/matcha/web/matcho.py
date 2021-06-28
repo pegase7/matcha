@@ -361,6 +361,15 @@ def rejection():
 def consultation(login):
     if "user" not in session:
         return redirect(url_for('homepage'))
+    ########### Test de l'existance du login #############
+    liste_users=DataAccess().fetch('Users')
+    exist=0
+    for u in liste_users:
+        if u.user_name==login:
+            exist=1
+    if exist==0:
+        return redirect(url_for('accueil'))
+    #######################################################
     user = session['user']['name']
     dataAccess = DataAccess()
     visitor = dataAccess.find('Users', conditions=('user_name', user))
