@@ -1,94 +1,106 @@
 {% extends 'base.html' %} {% block title %}Accueil{% endblock %} {% block content %} {% include 'nav.html' %}
-<style>
-    table {
-        border: medium solid #0b3688;
-        border-collapse: collapse;
-        /* width: 50%; */
-    }
+​
+​
+<h1> Mon Tableau de bord</h1> <br>
+<div class="container accueil-container">
+    <span class="accueil-pop"> Ma popularité : {{pop}} </span>
+    <span class="accueil-like"><i class="fas fa-heart"></i>{{ like }} </span>
+    <span class="accueil-match"> Mes matchs : {{ match }}</span>
+</div>
+​
+<div class="container accueil-container">
     
-    td,
-    th {
-        border: thin solid #6495ed;
-        /* width: 50%; */
-        padding: 5px;
-    }
-    
-    th {
-        text-align: center;
-        cursor: pointer;
-    }
-    
-    th:hover {
-        background: lightblue;
-    }
-    
-    .lien {
-        color: greenyellow;
-    }
-    
-    .alert {
-        color: orangered;
-        font-weight: bold;
-    }
-</style>
-
-<br>
-
-<h1> Tableau de bord <br> {{session['user']['name']}} </h1> <br>
-<h3> Popularité : {{pop}} </h3><br>
-<br>
-<h3>Qui a consulté mon profil ?</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Sexe</th>
-            <th>Age</th>
-            <th>Popularité</th>
-            <th>distance</th>
-            <th>Date</th>
-            <th>A liké</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        {% for visitor in visitors %}
-        <tr class="visiteur_ligne">
-            <td><a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">{{visitor.pseudo}}</a></td>
-            <td align="center">{% if visitor.sex=='Male' %}M{% else %}F{% endif %}</td>
-            <td align="right">{{visitor.age}}</td>
-            <td align="center">{{visitor.popul}}</td>
-            <td align="right">{{visitor.distance}}</td>
-            <td>{{visitor.date}}</td>
-            <td align="center">{% if visitor.like==True %}oui{% endif %}</td>
-        </tr>
-        {% endfor %}
-
-    </tbody>
-</table>
-
-<br><br>
+    <h3>Mes 3 derniers visiteurs : &emsp;&emsp; <a href="{{ url_for('visites', like='no')}}" class="lien">Tous mes visiteurs</a></h3>
+    {% for visitor in visitors %}
+    <a href="{{ url_for('consultation', login=visitor.pseudo)}}" class="lien">
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header"> <img src="{{ visitor.photo }}" height="80" alt=""></a></div>
+        <div class="card-body">
+            <h3>{{ visitor.pseudo }}</h3>
+            <p>{{ visitor.age }} ans - Popularité : {{ visitor.popul }}</p>
+            <p>A visité le : {{ visitor.date }}</p>
+        </div>
+    </div></a>
+    {% endfor %}
+</div>
+​
+<div class="container accueil-container">
+    <h3>Mes 3 dernières visites</h3>
+​
+    {% for visited in visited_infos %}
+    <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+        <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
+        <div class="card-body">
+            <h2>{{ visited.pseudo }}</h2>
+            <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
+            <p>le {{ visited.date }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+​
 <div>
+    
+    {% if matching==False %}
+    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
+    {% else %}
+    <div class="container accueil-container">
+        <h3>Nos suggestions... &emsp;&emsp; <a href="{{ url_for('suggestions')}}" class="lien">Toutes nos suggestions</a></h3>
+    
+        {% for visited in suggest %}
+        <div class="accueil-cards card" style="background-color: rgba(245, 245, 245, 0.4); ">
+            <div class="card-header"><a href="{{ url_for('consultation', login=visited.pseudo)}}" class="lien"><img src="{{ visited.photo }}" height="80" alt=""></a></div>
+            <div class="card-body">
+                <h2>{{ visited.pseudo }}</h2>
+                <p>{{ visited.age }} ans - Popularité : {{ visited.popul }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div>
+    
+    
+    
+    
+    {% endif %}
+​
     <script>
         sessionStorage.setItem("current_user", "{{session['user']['name']}}");
     </script>
-    {% if matching==False %}
-    <p class="alert">Completez votre profil pour avoir accès à des propositions de rencontres !</p>
-    {% else %} {% include 'matching.html' %} {% endif %}
 </div>
-<script>
-    const compare = (ids, asc) => (row1, row2) => {
-        const tdValue = (row, ids) => row.children[ids].textContent;
-        const tri = (v1, v2) => v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
-        return tri(tdValue(asc ? row1 : row2, ids), tdValue(asc ? row2 : row1, ids));
-    };
-
-    const tbody = document.querySelector('tbody');
-    const thx = document.querySelectorAll('th');
-    const trxb = tbody.querySelectorAll('tr');
-    thx.forEach(th => th.addEventListener('click', () => {
-        let classe = Array.from(trxb).sort(compare(Array.from(thx).indexOf(th), this.asc = !this.asc));
-        classe.forEach(tr => tbody.appendChild(tr));
-    }));
-</script>
+​
 {% endblock %}
+Collapse
+
+
+
+white_check_mark
+eyes
+heart
+
+
+
+
+
+
+
+Message ogasnier
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thread
+42lyon_global_general
+

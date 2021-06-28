@@ -47,8 +47,12 @@ def users_match_age(usr1, usr2):
             return 20
         elif 7300 < diff_age: # 20 years
             return 10
+        elif 7300 < diff_age: # 20 years
+            return 0
+        elif 10950 < diff_age: # 20 years
+            return -20
         else:
-            return 1
+            return -40
     else:
         return 0
     

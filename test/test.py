@@ -1,8 +1,10 @@
 from matcha.config import Config
 from matcha.model.Notification import Notification
 from matcha.web.notification_cache import NotificationCache
-from random import randint
+import random
 import logging
+from faker import Faker
+
 # from test2 import test2
 from matcha.orm.data_access import DataAccess
 # from matcha.model.Room import Room
@@ -25,20 +27,16 @@ if __name__ == "__main__":
     #     print(users.first_name, users.last_name, users.user_name)
     #     print(notification_cache.get_unread(users.id))
     
+    for i in range(5):
+        print('i: ', i)
+
+    fake = Faker(['fr_FR', 'fr_CA', 'fr_QC'])
+    fake = Faker(['fr_CA'])
     
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
-    print('Ok' if randint(0,1) else 'KO')
+    for i in range(1,10):
+        print('range' + str(i), fake.sentence())
+        
+    users10list = data_access.fetch('Users', conditions=('id', '<=','10'))
+    print('id\tuser_name\t\tName')
+    for users in users10list:
+        print(users.id, '\t', users.user_name, '\t', users.first_name + ' ' + users.last_name)

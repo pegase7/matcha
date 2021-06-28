@@ -10,27 +10,27 @@ class NotificationCacheTestCase(unittest.TestCase):
 
     def runTest(self):
         print("\n")
-        logging.info('   +-------------------------+')
+        logging.info('   +------------------------------+')
         logging.info('   | Test Notification dict_users |')
-        logging.info('   +-------------------------+')
+        logging.info('   +------------------------------+')
         self.data_access = DataAccess()
         notification_cache = NotificationCache()
         notification_cache.init()
         self.assertEqual(21, len(notification_cache.dict_users), 'dict_users must contain 21 entry key!')
-        self.assertEqual((2,0,5,1), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (2,0,5,1) unread notifications for entry key marcopapolo!')
+        self.assertEqual((1,0,5,0), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (1,0,5,0) unread notifications for entry key marcopapolo!')
         newnotification = Notification()
         newnotification.sender_id = 1
         newnotification.receiver_id = 4
         newnotification.notif_type = 'Visit'
         newnotification.is_read = False
         notification_cache.persist(newnotification)
-        self.assertEqual((2,0,6,1), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (2,0,6,1) unread notifications for entry key marcopapolo after persist!')
+        self.assertEqual((1, 0, 6, 0), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (1, 0, 6, 0) unread notifications for entry key marcopapolo after persist!')
         self.newid = newnotification.id
         notif10 = self.data_access.find('Notification', 10)
         self.assertEqual(False, notif10.is_read, 'All notifications in dict_users must have unread status!')
         notif10.is_read = True
         notification_cache.merge(notif10)
-        self.assertEqual((2,0,5,1), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (2,0,5,1) unread notifications for entry key marcopapolo! after merge')
+        self.assertEqual((1, 0, 5, 0), notification_cache.get_unread('marcopapolo'), 'dict_users must contain (1, 0, 5, 0) unread notifications for entry key marcopapolo! after merge')
 
     def cleanup(self):
         notif10 = self.data_access.find('Notification', 10)
