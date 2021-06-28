@@ -441,7 +441,7 @@ def consultation(login):
                 notif(visitor.id, us.id, 'Dislike', notif_cache)
                 closeRoom(visitor.id,us.id, notif_cache)
             else:
-                if like==True:
+                if like==True and block1 == False:
                     notif(visitor.id, us.id, 'Like', notif_cache)
             visit.islike = like  # modifier le score popularité et envoyer une notification
         if block != visit.isblocked:
@@ -922,14 +922,16 @@ def message(data):
     msg.room_id = data['room']
     msg.sender_id = data['user_id']
     receiver_id = get_user_id(data['receiver'])
+    blocked_sender = DataAccess().find('Visit', conditions=[('visitor_id', receiver_id),
+                                                            ('visited_id', msg.sender_id),
+                                                            ('isblocked', True)]) # verifie si l'envoyer est bloqué
     notif = Notification()
     notif.sender_id = data['user_id']
     notif.receiver_id = receiver_id
     notif.notif_type = 'Message'
-    notif.is_read = False
+    if blocked_sender: # si l'envoyeur n'est pas bloqué la notif est créée
+        notif_cache.persist(notif)
     DataAccess().persist(msg)
-    notif_cache.persist(notif)
-    # print('notif_cache.cache : ', *notif_cache.cache)
     send({
           'msg': data['msg'],
           'sender': data['sender'],
