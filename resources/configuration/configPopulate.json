@@ -20,8 +20,11 @@
     "populate":{
         "#test_data":"both__",
         "test_data":"faker",
-        "gender_count":250    },
+        "gender_count":250
+    },
     "orm":{
         "raise_error":false,
+        "logging_info":false,
+        "logging_error":true
     }
 }

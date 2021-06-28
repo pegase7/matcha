@@ -934,12 +934,18 @@ def message(data):
     blocked_sender = DataAccess().find('Visit', conditions=[('visitor_id', receiver_id),
                                                             ('visited_id', msg.sender_id),
                                                             ('isblocked', True)]) # verifie si l'envoyer est bloqué
+    print('block:', blocked_sender)
     notif = Notification()
     notif.sender_id = data['user_id']
     notif.receiver_id = receiver_id
     notif.notif_type = 'Message'
-    if blocked_sender: # si l'envoyeur n'est pas bloqué la notif est créée
+    notif.is_read = False
+    
+    if not blocked_sender: # la notif est créée dans le cache uniquement si l'envoyeur n'est pas bloqué 
         notif_cache.persist(notif)
+    else:
+        notif.is_read = True
+        DataAccess().persist(notif)
     DataAccess().persist(msg)
     send({
           'msg': data['msg'],

@@ -1,0 +1,23 @@
+{
+    "postgresql":{
+        "host":"localhost",
+        "database":"matchadb",
+        "user":"matchaadmin",
+        "password":"bWF0Y2hhcGFzc3NhbGFnZW1hdGNoYXBhc3M=",
+        "loggingConnection":"sql"
+    },
+    "logging":{
+        "level":10,
+        "dateFormat":"%Y-%m-%d:%H:%M:%S", 
+        "handlers": [
+            
+            { "logger_file":"resources/traces/standard_error.log" },
+            { "name":"sql", "logger_file":"resources/traces/sql.log" }
+        ]
+    },
+    "orm":{
+        "raise_error":true,
+        "logging_info":true,
+        "logging_error":false
+    }
+}

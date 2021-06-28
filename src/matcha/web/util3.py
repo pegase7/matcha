@@ -7,11 +7,11 @@ from dateutil.relativedelta import relativedelta
 from matcha.model.Users_recommendation import Users_recommendation
 from matcha.model.Recommendation_topic import Recommendation_topic
 
-RATIO_KMS = [1, 10, 25, 50, 100, 200, 500] # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
-RECOMMENDATION = Config().config['recommendation']
-THRESHOLD = RECOMMENDATION['threshold']
-NB_RECOMMENDATIONS = RECOMMENDATION['nb_recommendations']
-DATA_ACCESS = DataAccess()
+RATIO_KMS = -1  # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
+RECOMMENDATION = None
+THRESHOLD = -1
+NB_RECOMMENDATIONS = -1
+DATA_ACCESS = None
 
 
 def is_recommadable(user):
@@ -69,6 +69,17 @@ def users_match_topics(topics1, size, topics2):
     return matched_tags, (1 - ((minimum - match) / minimum)) * 100  * (minimum / maximum)
     
 def compute_recommendations(usr, global_topics=None, delete_existing_recommendation=True):
+    global RATIO_KMS # Ratio distance return 1 if distance < 1KM, 2 if < 10Km, 3 if <2km, ... 
+    global RECOMMENDATION
+    global THRESHOLD
+    global NB_RECOMMENDATIONS
+    global DATA_ACCESS
+    if RECOMMENDATION is None:
+        RATIO_KMS = [1, 10, 25, 50, 100, 200, 500]
+        RECOMMENDATION = Config().config['recommendation']
+        THRESHOLD = RECOMMENDATION['threshold']
+        NB_RECOMMENDATIONS = RECOMMENDATION['nb_recommendations']
+        DATA_ACCESS = DataAccess()
     '''
     Retrieve needed recommendation
         global_topics is a dictionary of list of topics 
@@ -125,8 +136,8 @@ def compute_recommendations(usr, global_topics=None, delete_existing_recommendat
         if weighting >= THRESHOLD:
             delta = abs(relativedelta(usr.birthday, users.birthday).years)
             recommendations.append((weighting, delta, age_ratio, ratio_km, distance, topics_ratio, users.id, matched_tags))
-    if 0 != len(recommendations):
-        i = 0
+    i = 0
+    try:
         for recommendation in sorted(recommendations, reverse=True):
             if i == NB_RECOMMENDATIONS:
                 break
@@ -148,4 +159,6 @@ def compute_recommendations(usr, global_topics=None, delete_existing_recommendat
                 DATA_ACCESS.persist(recommendation_topic, autocommit=False)
                
             i = i + 1  
-    DATA_ACCESS.commit()   
+        DATA_ACCESS.commit()   
+    except (Exception):
+        DATA_ACCESS.rollback()   
