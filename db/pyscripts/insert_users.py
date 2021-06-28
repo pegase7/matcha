@@ -4,6 +4,9 @@ from faker import Faker
 from matcha.model.Users import Users
 from unidecode import unidecode
 from matcha.orm.data_access import DataAccess
+from matcha.orm.reflection import ModelDict
+from matcha.web.util1 import hash_pwd
+from datetime import datetime, timedelta
 
 mail_providers = ['free.fr','gmail.com', 'hotmail.com', 'yahoo.com', 'gmx.fr', 'gmail.com', 'gmail.com', 'gmail.com', 'free.fr', 'orange.fr', 'numericable.fr']
 coordinates = []
@@ -24,8 +27,8 @@ def compute_users(users, coordsize, usernames):
     '''
     1/100 Bi, 10/100 Homo reste Hetero
     '''
-    if 100 == methodid:
-        users.orientation = 'Bi'
+    if 98 < methodid:
+        users.orientation = 'Bi' if randint(0,1) else None
     elif methodid < 9:
         users.orientation = 'Homo'
     else:
@@ -67,24 +70,29 @@ def compute_users(users, coordsize, usernames):
 
 def complete_users(users,fake, coordsize, usernames):
     users.last_name = fake.last_name()
-    users.password = fake.password(special_chars=False, upper_case=False)        
     compute_users(users, coordsize, usernames)
+    # users.password = fake.password(special_chars=False, upper_case=False)
+    users.password = hash_pwd('PasseMot0', users.user_name)    
     users.active = (randint(0,100) < 96)
     users.birthday = fake.date_between(start_date='-75y', end_date='-18y')
     users.description = None
     users.confirm = None
-    users.popularity = None
+    users.popularity = randint(0,100)
 
-def populate():    
+def populate(gender_count=1000):    
     userslist = []
     fake = Faker(['fr_FR', 'fr_CA', 'fr_QC'])
     read_towns()
     usernames = set()
     coordsize = len(coordinates)
+    # Change 'created' field so that it is no longer computed and can be set in this module 
+    usersmodel = ModelDict().get_model_class('Users')
+    usersmodel.get_field('created').iscomputed = False
+
     '''
     Creer 1000 femmes puis 1000 hommes
     '''
-    for _ in range(1000):
+    for _ in range(gender_count):
         female = Users()
         female.is_recommendable = True
         female.gender = 'Female'
@@ -103,6 +111,9 @@ def populate():
     shuffle(userslist)
     dataAccess = DataAccess()
     for users in userslist:
+        delta = randint(2592000, 157680000)
+        created = datetime.now() - timedelta(seconds=delta)
+        users.created = created
         dataAccess.persist(users, autocommit=False)
     dataAccess.commit()
     logging.info('End Users populate')

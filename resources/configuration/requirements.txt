@@ -4,6 +4,7 @@ flask
 flask_socketio
 pillow
 
+
 #For populate
 faker
 unidecode

@@ -1,0 +1,2 @@
+mkdir -p ~/Documents/Library/Python/3.9/lib/site-packages
+python3 -m pip install -t ~/Documents//Library/Python/3.9/lib/site-packages  -r ~/Documents/Matcha_project/resources/configuration/requirements.txt

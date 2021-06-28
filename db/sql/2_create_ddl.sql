@@ -25,7 +25,6 @@ create type mpaa_notif_type as enum (
     'Like',
     'Visit',
     'Message',
-    'Like_too',
     'Dislike'
     );
 alter type mpaa_notif_type owner to MATCHAADMIN;
@@ -311,9 +310,3 @@ alter function ON_INSERT_NOTIFICATION owner to MATCHAADMIN;
 
 create trigger TRIGGER_INSERT_NOTIFICATION before insert on NOTIFICATION
 for each row execute function ON_INSERT_NOTIFICATION(); 
-
-
-
-
-
-commit;
